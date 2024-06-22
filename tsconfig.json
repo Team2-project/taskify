@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"], //사용할 라이브러리 목록: DOM API, DOM 반복 가능 객체, 최신 ECMAScript 기능
+    "allowJs": true, //JavaScript 파일도 컴파일할 수 있게 허용
+    "skipLibCheck": true, //라이브러리 타입 체크를 건너뜀으로써 컴파일 속도를 높임
+    "strict": true, //엄격한 타입 체크 모드 활성화
+    "noEmit": true, //컴파일된 결과물을 생성하지 않음
+    "esModuleInterop": true, //ES 모듈 간의 상호 운용성 지원
+    "module": "esnext", //모듈 시스템을 ESNext로 설정
+    "moduleResolution": "bundler", //모듈 해석 전략을 번들러로 설정
+    "resolveJsonModule": true, //JSON 모듈을 임포트
+    "isolatedModules": true, //각 파일을 개별 모듈로 취급
+    "jsx": "preserve", //JSX 구문을 유지
+    "incremental": true, //
+    "baseUrl": ".",
+    "paths": {
+      "pages/*": ["pages/*"],
+      "components/*": ["components/*"],
+      "utils/*": ["utils/*"],
+      "public/*": ["public/*"],
+      "constants/*": ["constants/*"],
+      "hooks/*": ["hooks/*"],
+      "api/*": ["pages/api/*"],
+      "context/*": ["context/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"], //컴파일러가 포함해야 할 파일들
+  "exclude": ["node_modules"] //컴파일러가 무시할 파일들
+}
+
