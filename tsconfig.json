@@ -12,9 +12,16 @@
     "isolatedModules": true, //각 파일을 개별 모듈로 취급
     "jsx": "preserve", //JSX 구문을 유지
     "incremental": true, //
+    "baseUrl": ".",
     "paths": {
-      //경로 별칭을 설정
-      "@/*": ["./*"]
+      "pages/*": ["pages/*"],
+      "components/*": ["components/*"],
+      "utils/*": ["utils/*"],
+      "public/*": ["public/*"],
+      "constants/*": ["constants/*"],
+      "hooks/*": ["hooks/*"],
+      "api/*": ["pages/api/*"],
+      "context/*": ["context/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"], //컴파일러가 포함해야 할 파일들
