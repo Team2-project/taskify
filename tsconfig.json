@@ -14,17 +14,9 @@
     "incremental": true, //
     "baseUrl": ".",
     "paths": {
-      "pages/*": ["pages/*"],
-      "components/*": ["components/*"],
-      "utils/*": ["utils/*"],
-      "public/*": ["public/*"],
-      "constants/*": ["constants/*"],
-      "hooks/*": ["hooks/*"],
-      "api/*": ["pages/api/*"],
-      "context/*": ["context/*"]
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"], //컴파일러가 포함해야 할 파일들
   "exclude": ["node_modules"] //컴파일러가 무시할 파일들
 }
-
