@@ -22,22 +22,24 @@ const MyDashboard: FC = () => {
           </div>
 
           {/*Nav 우측: 관리 + 초대하기 + 프로필 + 이름*/}
-          <div className='ml-auto mr-2 flex items-center justify-end space-x-8 tablet:mr-10 desktop:mr-20'>
+          <div className='ml-auto mr-2 flex items-center justify-end space-x-8 text-sm tablet:mr-10 tablet:text-base desktop:mr-20 desktop:text-base'>
             {/*관리 + 초대하기 */}
-            <div className='flex space-x-8'>
+            <div className='flex space-x-8 whitespace-nowrap font-medium text-gray-50'>
               {/*관리 버튼*/}
               <Link href='/'>
                 <button
-                  className='relative inline-flex items-center justify-center rounded-lg border border-gray-30'
-                  style={{ width: "88px", height: "40px" }}
+                  className='relative inline-flex items-center justify-center rounded-lg border border-gray-30 p-3 tablet:p-4 desktop:p-4'
+                  style={{ height: "40px" }}
                 >
-                  <Image
-                    src='icon/ic_setting.svg'
-                    alt='setting'
-                    width={20}
-                    height={20}
-                    className='mr-2'
-                  />
+                  <div className='hidden tablet:inline-block desktop:inline-block'>
+                    <Image
+                      src='icon/ic_setting.svg'
+                      alt='setting'
+                      width={20}
+                      height={20}
+                      className='mr-2'
+                    />
+                  </div>
                   관리
                 </button>
               </Link>
@@ -45,16 +47,18 @@ const MyDashboard: FC = () => {
               {/*초대하기 버튼*/}
               <Link href='/'>
                 <button
-                  className='relative inline-flex items-center justify-center rounded-lg border border-gray-30'
-                  style={{ width: "116px", height: "40px" }}
+                  className='relative inline-flex items-center justify-center rounded-lg border border-gray-30 p-3 tablet:p-4 desktop:p-4'
+                  style={{ height: "40px" }}
                 >
-                  <Image
-                    src='icon/ic_add.svg'
-                    alt='setting'
-                    width={20}
-                    height={20}
-                    className='mr-2'
-                  />
+                  <div className='hidden tablet:inline-block desktop:inline-block'>
+                    <Image
+                      src='icon/ic_add.svg'
+                      alt='setting'
+                      width={20}
+                      height={20}
+                      className='mr-2'
+                    />
+                  </div>
                   초대하기
                 </button>
               </Link>
@@ -66,10 +70,12 @@ const MyDashboard: FC = () => {
             <div className='flex items-center space-x-8'>
               <div className='relative inline-block'>
                 <div className='flex h-10 w-10 items-center justify-center rounded-full bg-green'>
-                  <span className='text-gray-700 text-sm font-bold'>B</span>
+                  <span className='font-bold text-white'>B</span>
                 </div>
               </div>
-              <div className='text-base font-medium'>배유철</div>
+              <div className='hidden font-medium tablet:inline desktop:inline'>
+                배유철
+              </div>
             </div>
           </div>
         </div>
