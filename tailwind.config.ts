@@ -6,6 +6,17 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    extend: {
+      width: {
+        "351": "351px",
+        "520": "520px",
+      },
+      height: {
+        "50": "50px",
+        "77": "77px",
+      },
+    },
+
     screens: {
       tablet: "768px",
       desktop: "1280px",
