@@ -27,7 +27,7 @@ type UserData = {
 const mockUserData: UserData = {
   id: 0,
   email: "test@example.com",
-  nickname: "배유철",
+  nickname: "곽철이",
   profileImageUrl:
     "https://item.kakaocdn.net/do/87a69128f299762e65fdbf5c9bcaa70e7154249a3890514a43687a85e6b6cc82",
   createdAt: "2024-06-23T10:39:04.348Z",
@@ -113,11 +113,12 @@ const MyDashboard: FC = () => {
             {/*프로필 + 이름 - 드롭다운 연결: 로그아웃, 내정보, 내 대시보드*/}
             <DropdownMenu
               buttonLabel={
-                <div className='flex items-center space-x-8'>
+                <div className='flex items-center space-x-3'>
                   <div className='relative inline-block'>
                     <UserBadge
                       nickname={profileInitial}
                       bgColor='bg-green-10'
+                      textColor='text-white'
                     />
                   </div>
                   <div className='hidden font-medium tablet:inline desktop:inline'>

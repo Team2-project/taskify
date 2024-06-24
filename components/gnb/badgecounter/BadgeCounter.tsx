@@ -1,32 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
-
-/*
-
-
-const fetchMembersResponse = async (): Promise<MembersResponse> => {
-  // 현재 코드는 실제 API 호출을 대신하여 mock 데이터를 반환 - 추후 Data fetch 예정
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockMembersData);
-    }, 1000);
-  });
-};
-
-const MyDashboard: FC = () => {
-  const { data, error, isLoading } = useQuery<MembersResponse>({
-    queryKey: ["MembersResponse"],
-    queryFn: fetchMembersResponse,
-  });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error loading data</div>;
-  }
-
-  */
+/*우선 MockData랑 연결*/
 
 import { FC } from "react";
 import UserBadge from "@/components/gnb/userbadge/UserBadge";
@@ -144,19 +116,19 @@ const BadgeCounter: FC = () => {
       {members.slice(0, maxDisplayCount).map((member, index) => (
         <UserBadge
           key={member.id}
-          nickname={member.nickname.slice(0, 1)}
+          nickname={member.nickname}
           bgColor={bgColorOptions[index % bgColorOptions.length]}
+          textColor='text-white'
         />
       ))}
-      {/* Display remaining count if more members exist */}
+      {/* 4명(MaxDisplayCount)이상일 경우 나머지 인원 +숫자로 표기 */}
       {totalCount > maxDisplayCount && (
-        <div className='text-xs'>
-          <UserBadge
-            key={members[maxDisplayCount].id}
-            nickname={`+${totalCount - maxDisplayCount}`}
-            bgColor={bgColorOptions[maxDisplayCount % bgColorOptions.length]}
-          />
-        </div>
+        <UserBadge
+          key={members[maxDisplayCount].id}
+          customValue={`+${totalCount - maxDisplayCount}`}
+          bgColor={bgColorOptions[maxDisplayCount % bgColorOptions.length]}
+          textColor='text-red-20'
+        />
       )}
     </div>
   );
