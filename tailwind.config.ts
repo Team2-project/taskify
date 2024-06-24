@@ -53,6 +53,7 @@ const config: Config = {
       red: {
         DEFAULT: "#D6173A",
         10: "#F4D7DA",
+        20: "#D25B68",
       },
       sand: "#C4B1A2",
       violet: {
