@@ -12,7 +12,7 @@ export default function DefaultButton({
   size = "md",
   className = "",
   disabled = false,
-  children,
+  children = "",
   onClick,
 }: DefaultButtonProps) {
   const baseClasses =

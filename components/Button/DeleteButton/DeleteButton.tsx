@@ -10,10 +10,10 @@ type DeleteButtonProps = {
 
 export default function DeleteButton({
   onDelete,
-  children,
+  children = "",
   size = "sm",
   className = "",
-  disabled,
+  disabled = false,
 }: DeleteButtonProps) {
   const baseClasses =
     "box-border bg-gray-10 border-[1px] border-gray-30 rounded-[8px] font-medium";
