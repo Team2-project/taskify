@@ -1,26 +1,43 @@
 /*
 Navbar 프로필 버튼 클릭시 나타나는 Dropdown Menu
-Dropdown menu 쓰는 곳이 우리 프로젝트에서 Nav bar 유일.
 */
-import { useState } from "react";
+
+import { useState, useEffect, useRef } from "react";
 
 interface DropdownMenuProps {
-  buttonLabel: string; // 버튼 텍스트를 prop으로 받음
+  buttonLabel: React.ReactNode;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({ buttonLabel }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+  // Dropdown 이외의 영역 클릭 시 Dropdown 닫기
+  const handleClickOutside = (event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className='relative'>
+    <div className='relative' ref={dropdownRef}>
       <button onClick={toggleDropdown}>{buttonLabel}</button>{" "}
-      {/* 버튼 텍스트 prop 사용 */}
       {isOpen && (
-        <div className='w-51 absolute right-5 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 tablet:right-10 desktop:right-20'>
+        <div className='absolute right-0 mt-8 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5'>
           <div
             className='block px-4 py-1 py-2 text-base text-black-30 hover:bg-gray-10 hover:text-black-30'
             role='menu'
