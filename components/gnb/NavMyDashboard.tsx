@@ -10,6 +10,7 @@ import Link from "next/link";
 import { FC } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import UserBadge from "./userbadge/UserBadge";
 
 //User data type 정의
 type UserData = {
@@ -111,9 +112,7 @@ const MyDashboard: FC = () => {
             {/*프로필 + 이름 - 드롭다운 연결: 로그아웃, 내정보, 내 대시보드*/}
             <div className='flex items-center space-x-8'>
               <div className='relative inline-block'>
-                <div className='flex h-10 w-10 items-center justify-center rounded-full bg-green'>
-                  <span className='font-bold text-white'>{profileInitial}</span>
-                </div>
+                <UserBadge nickname={profileInitial} bgColor='bg-green-10' />
               </div>
               <div className='hidden font-medium tablet:inline desktop:inline'>
                 {data?.nickname}
