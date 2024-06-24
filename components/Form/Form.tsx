@@ -8,7 +8,7 @@ interface FormProps {
 
 const Form = ({ children, onSubmit }: FormProps) => {
   return (
-    <form onSubmit={onSubmit} className='space-y-5'>
+    <form onSubmit={onSubmit} className='space-y-3'>
       {children}
     </form>
   );

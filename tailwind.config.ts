@@ -3,9 +3,20 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}"
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    extend: {
+      width: {
+        "351": "351px",
+        "520": "520px",
+      },
+      height: {
+        "50": "50px",
+        "77": "77px",
+      },
+    },
+
     screens: {
       tablet: "768px",
       desktop: "1280px",
@@ -42,4 +53,3 @@ const config: Config = {
   plugins: [],
 };
 export default config;
-
