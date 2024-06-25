@@ -4,7 +4,7 @@ MyDashboard 내비게이션 컴포넌트: API 연결해야 함
 import { FC } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import NavbarTitle from "./navbarTitle/NavbarTitle";
+import NavbarTitle from "./NavbarTitle/NavbarTitle";
 import ActionButton from "./ActionButton/ActionButton";
 import BadgeCounter from "./BadgeCounter/BadgeCounter";
 import ProfileDropdown from "./Dropdown/ProfileDropdown";

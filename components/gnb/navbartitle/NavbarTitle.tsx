@@ -18,10 +18,10 @@ const NavbarTitle: FC<NavbarTitleProps> = ({
           {title}
           {createdByMe && (
             <Image
-              src='/icon/ic_crown.svg'
+              src='icon/ic_crown.svg'
               alt='createdByMe'
               width={20}
-              height={20}
+              height={16}
               className='ml-2'
             />
           )}
