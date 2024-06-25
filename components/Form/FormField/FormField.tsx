@@ -84,9 +84,14 @@ const FormField = ({
 interface FormButtonProps {
   children: ReactNode;
   isFormValid?: boolean;
+  onClick?: () => void;
 }
 
-const FormButton = ({ children, isFormValid = true }: FormButtonProps) => {
+const FormButton = ({
+  children,
+  isFormValid = true,
+  onClick,
+}: FormButtonProps) => {
   return (
     <button
       type='submit'
@@ -94,6 +99,7 @@ const FormButton = ({ children, isFormValid = true }: FormButtonProps) => {
         isFormValid ? "bg-violet-20" : "bg-gray-40"
       } text-white tablet:w-520`}
       disabled={!isFormValid}
+      onClick={onClick}
     >
       {children}
     </button>
