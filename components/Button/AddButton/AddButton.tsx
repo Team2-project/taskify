@@ -2,49 +2,30 @@ import Image from "next/image";
 import { MouseEventHandler, ReactNode } from "react";
 
 type AddButtonProps = {
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClick: MouseEventHandler<HTMLButtonElement>;
   children?: ReactNode;
-  size: "sm" | "md" | "lg";
   className?: string;
-  disabled?: boolean;
 };
 
 export default function AddButton({
   onClick,
   children = "",
-  size = "sm",
   className = "",
-  disabled = false,
 }: AddButtonProps) {
   const baseClasses =
-    "box-border bg-white border-[1px] border-gray-30 rounded-[8px] font-semibold flex gap-[12px] justify-center items-center";
-  const sizeClasses = {
-    sm: "w-full text-[14px]",
-    md: "w-full text-[16px]",
-    lg: "w-full text-[16px]",
-  }[size];
-  // 버튼에 맞는 className width, height 지정
+    "box-border flex h-[58px] w-full items-center justify-center gap-[12px] rounded-[8px] border-[1px] border-gray-30 bg-white p-[20px] text-[14px] font-semibold ";
 
-  const imageSizes = {
-    sm: { width: 20, height: 20 },
-    md: { width: 22, height: 22 },
-    lg: { width: 22, height: 22 },
-  }[size];
-
-  const buttonClasses = `${baseClasses} ${sizeClasses} ${className}`;
+  const selectorClasses =
+    "transition-all duration-500 hover:bg-violet-10 tablet:h-[68px] tablet:text-[16px] tablet:basis-1/2 desktop:h-[70px] desktop:basis-4/12";
 
   return (
-    <div>
-      <button onClick={onClick} className={buttonClasses} disabled={disabled}>
-        {children}
-        <Image
-          width={imageSizes.width}
-          height={imageSizes.height}
-          src='icon/ic_add_active.svg'
-          alt='더하기'
-        />
-      </button>
-    </div>
+    <button
+      onClick={onClick}
+      className={`${baseClasses} ${selectorClasses} ${className}`}
+    >
+      {children}
+      <img src='icon/ic_add_card.svg' alt='더하기' />
+    </button>
   );
 }
 
