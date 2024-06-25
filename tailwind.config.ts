@@ -23,14 +23,16 @@ const config: Config = {
     },
 
     colors: {
-      red: "#D6173A",
-      green: "#7AC555",
-      purple: "#760DDE",
-      orange: "#FFA500",
-      pink: "#E876EA",
-      white: "#ffffff",
-      blue: "#76A5EA",
-
+      black: {
+        DEFAULT: "#000000",
+        10: "#4B4B4B",
+        20: "#333236",
+        30: "#171717",
+      },
+      blue: {
+        DEFAULT: "#76A5EA",
+        10: "#9DD7ED",
+      },
       gray: {
         10: "#FAFAFA",
         20: "#EEEEEE",
@@ -38,16 +40,28 @@ const config: Config = {
         40: "#9FA6B2",
         50: "#787486",
       },
-      black: {
-        DEFAULT: "#000000",
-        10: "#4B4B4B",
-        20: "#333236",
-        30: "#171717",
+      green: {
+        DEFAULT: "#7AC555",
+        10: "#A3C4A2",
       },
+      orange: {
+        DEFAULT: "#FFA500",
+        10: "#FFC85A",
+      },
+      pink: "#E876EA",
+      purple: "#760DDE",
+      red: {
+        DEFAULT: "#D6173A",
+        10: "#F4D7DA",
+        20: "#D25B68",
+      },
+      sand: "#C4B1A2",
       violet: {
         10: "#F1EFFD",
         20: "#5534DA",
       },
+      white: "#ffffff",
+      yellow: "#FDD446",
     },
   },
   plugins: [],
