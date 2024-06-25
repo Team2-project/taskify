@@ -4,17 +4,17 @@ MyDashboard 내비게이션 컴포넌트: API 연결해야 함
 import { FC } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import NavbarTitle from "./NavbarTitle/NavbarTitle";
-import ActionButton from "./ActionButton/ActionButton";
-import BadgeCounter from "./BadgeCounter/BadgeCounter";
-import ProfileDropdown from "./Dropdown/ProfileDropdown";
+import NavbarTitle from "@/components/Gnb/NavbarTitle/NavbarTitle";
+import ActionButton from "@/components/Gnb/ActionButton/ActionButton";
+import BadgeCounter from "@/components/Gnb/BadgeCounter/BadgeCounter";
+import ProfileDropdown from "@/components/Gnb/Dropdown/ProfileDropdown";
 import { useRouter } from "next/router";
 import {
   UserData,
   mockUserData,
   DashboardDetail,
   mockDashboardDetail,
-} from "./MockData";
+} from "@/components/Gnb/MockData";
 
 const fetchUserData = async (): Promise<UserData> => {
   // 현재 코드는 실제 API 호출을 대신하여 mock 데이터를 반환 - 추후 Data fetch 예정

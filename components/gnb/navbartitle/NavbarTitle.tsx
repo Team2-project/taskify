@@ -22,6 +22,7 @@ const NavbarTitle: FC<NavbarTitleProps> = ({
               alt='createdByMe'
               width={20}
               height={16}
+              style={{ width: 20, height: 16 }}
               className='ml-2'
             />
           )}
