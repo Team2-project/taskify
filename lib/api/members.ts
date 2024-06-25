@@ -1,11 +1,13 @@
 import { instance } from "./axios";
 
-export const fetchMembers = async (teamId: string) => {
-  const response = await instance.get(`/${teamId}/members`);
+//대시보드 멤버 목록 조회
+export const fetchMembers = async () => {
+  const response = await instance.get(`/members`);
   return response.data;
 };
 
-export const deleteMember = async (teamId: string, memberId: string) => {
-  const response = await instance.delete(`/${teamId}/members/${memberId}`);
+//대시보드 멤버 삭제
+export const deleteMember = async (memberId: string) => {
+  const response = await instance.delete(`/members/${memberId}`);
   return response.data;
 };

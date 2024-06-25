@@ -1,28 +1,29 @@
 import { instance } from "./axios";
 
-export const signUp = async (
-  teamId: string,
-  data: { username: string; password: string },
-) => {
-  const response = await instance.post(`/${teamId}/users`, data);
+//회원가입
+export const signUp = async (data: { username: string; password: string }) => {
+  const response = await instance.post(`/users`, data);
   return response.data;
 };
 
-export const fetchUserProfile = async (teamId: string) => {
-  const response = await instance.get(`/${teamId}/users/me`);
+//내 정보 조회
+export const fetchUserProfile = async () => {
+  const response = await instance.get(`/users/me`);
   return response.data;
 };
 
-export const updateUserProfile = async (
-  teamId: string,
-  data: { username?: string; password?: string },
-) => {
-  const response = await instance.put(`/${teamId}/users/me`, data);
+//내 정보 수정
+export const updateUserProfile = async (data: {
+  username?: string;
+  password?: string;
+}) => {
+  const response = await instance.put(`/users/me`, data);
   return response.data;
 };
 
-export const uploadProfileImage = async (teamId: string, data: FormData) => {
-  const response = await instance.post(`/${teamId}/users/me/image`, data, {
+//프로필 이미지 업로드
+export const uploadProfileImage = async (data: FormData) => {
+  const response = await instance.post(`/users/me/image`, data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },

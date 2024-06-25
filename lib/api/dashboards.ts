@@ -1,71 +1,63 @@
 import { instance } from "./axios";
 
-export const createDashboard = async (
-  teamId: string,
-  data: { title: string },
-) => {
-  const response = await instance.post(`/${teamId}/dashboards`, data);
+//대시보드 생성
+export const createDashboard = async (data: { title: string }) => {
+  const response = await instance.post(`/dashboards`, data);
   return response.data;
 };
 
-export const fetchDashboards = async (teamId: string) => {
-  const response = await instance.get(`/${teamId}/dashboards`);
+//대시보드 목록 조회
+export const fetchDashboards = async () => {
+  const response = await instance.get(`/dashboards`);
   return response.data;
 };
 
-export const fetchDashboardDetails = async (
-  teamId: string,
-  dashboardId: string,
-) => {
-  const response = await instance.get(`/${teamId}/dashboards/${dashboardId}`);
+//대시보드 상세 조회
+export const fetchDashboardDetails = async (dashboardId: string) => {
+  const response = await instance.get(`/dashboards/${dashboardId}`);
   return response.data;
 };
 
+//대시보드 수정
 export const updateDashboard = async (
-  teamId: string,
   dashboardId: string,
   data: { title: string },
 ) => {
-  const response = await instance.put(
-    `/${teamId}/dashboards/${dashboardId}`,
-    data,
-  );
+  const response = await instance.put(`/dashboards/${dashboardId}`, data);
   return response.data;
 };
 
-export const deleteDashboard = async (teamId: string, dashboardId: string) => {
-  const response = await instance.delete(
-    `/${teamId}/dashboards/${dashboardId}`,
-  );
+//대시보드 삭제
+export const deleteDashboard = async (dashboardId: string) => {
+  const response = await instance.delete(`/dashboards/${dashboardId}`);
   return response.data;
 };
 
+//대시보드 초대하기
 export const inviteToDashboard = async (
-  teamId: string,
   dashboardId: string,
   data: { email: string },
 ) => {
   const response = await instance.post(
-    `/${teamId}/dashboards/${dashboardId}/invitations`,
+    `/dashboards/${dashboardId}/invitations`,
     data,
   );
   return response.data;
 };
 
-export const fetchInvitations = async (teamId: string, dashboardId: string) => {
-  const response = await instance.get(
-    `/${teamId}/dashboards/${dashboardId}/invitations`,
-  );
+//대시보드 초대 불러오기
+export const fetchInvitations = async (dashboardId: string) => {
+  const response = await instance.get(`/dashboards/${dashboardId}/invitations`);
   return response.data;
 };
 
+//대시보드 초대 취소
 export const cancelInvitation = async (
-  teamId: string,
   dashboardId: string,
   invitationId: string,
 ) => {
   const response = await instance.delete(
-    `/${teamId}/dashboards/${dashboardId}/invitations/${invitationId}`,
+    `/dashboards/${dashboardId}/invitations/${invitationId}`,
   );
   return response.data;
 };

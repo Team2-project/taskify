@@ -1,17 +1,16 @@
 import { instance } from "./axios";
 
-export const login = async (
-  teamId: string,
-  data: { username: string; password: string },
-) => {
-  const response = await instance.post(`/${teamId}/auth/login`, data);
+//로그인
+export const login = async (data: { username: string; password: string }) => {
+  const response = await instance.post(`/auth/login`, data);
   return response.data;
 };
 
-export const changePassword = async (
-  teamId: string,
-  data: { oldPassword: string; newPassword: string },
-) => {
-  const response = await instance.put(`/${teamId}/auth/password`, data);
+//비밀번호 변경
+export const changePassword = async (data: {
+  oldPassword: string;
+  newPassword: string;
+}) => {
+  const response = await instance.put(`/auth/password`, data);
   return response.data;
 };

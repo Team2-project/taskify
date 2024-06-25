@@ -1,18 +1,16 @@
 import { instance } from "./axios";
 
-export const fetchReceivedInvitations = async (teamId: string) => {
-  const response = await instance.get(`/${teamId}/invitations`);
+//내가 받은 초대 목록 조회
+export const fetchReceivedInvitations = async () => {
+  const response = await instance.get(`/invitations`);
   return response.data;
 };
 
+//초대 응답
 export const respondToInvitation = async (
-  teamId: string,
   invitationId: string,
   data: { status: string },
 ) => {
-  const response = await instance.put(
-    `/${teamId}/invitations/${invitationId}`,
-    data,
-  );
+  const response = await instance.put(`/invitations/${invitationId}`, data);
   return response.data;
 };
