@@ -10,9 +10,10 @@ import Link from "next/link";
 import { FC } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import NavbarTitle from "./navbartitle/NavbarTitle";
-import BadgeCounter from "./badgecounter/BadgeCounter";
-import UserBadge from "./userbadge/UserBadge";
+import NavbarTitle from "./navbarTitle/NavbarTitle";
+import ActionButton from "./actionButton/ActionButton";
+import BadgeCounter from "./badgeCounter/BadgeCounter";
+import UserBadge from "./userBadge/UserBadge";
 import DropdownMenu from "./dropdown/DropdownMenu";
 import { useRouter } from "next/router";
 import {
@@ -60,38 +61,8 @@ const MyDashboard: FC = () => {
           <div className='ml-auto mr-2 flex items-center justify-end space-x-8 text-sm tablet:mr-10 tablet:text-base desktop:mr-20 desktop:text-base'>
             {/*관리 + 초대하기 */}
             <div className='flex space-x-8 whitespace-nowrap font-medium text-gray-50'>
-              {/*관리 버튼 - 동적 라우팅 추가하면 에러나서 우선 링크 해제합니다. Link href={`/dashboard/${dashboardid}/edit */}
-              <button
-                className='relative inline-flex items-center justify-center rounded-lg border border-gray-30 p-3 tablet:p-4 desktop:p-4'
-                style={{ height: "40px" }}
-              >
-                <div className='hidden tablet:inline-block desktop:inline-block'>
-                  <Image
-                    src='icon/ic_setting.svg'
-                    alt='setting'
-                    width={20}
-                    height={20}
-                    className='mr-2'
-                  />
-                </div>
-                관리
-              </button>
-              {/*초대하기 버튼 - 모달창 연결 */}
-              <button
-                className='relative inline-flex items-center justify-center rounded-lg border border-gray-30 p-3 tablet:p-4 desktop:p-4'
-                style={{ height: "40px" }}
-              >
-                <div className='hidden tablet:inline-block desktop:inline-block'>
-                  <Image
-                    src='icon/ic_add.svg'
-                    alt='setting'
-                    width={20}
-                    height={20}
-                    className='mr-2'
-                  />
-                </div>
-                초대하기
-              </button>
+              <ActionButton label='관리' iconSrc='/icon/ic_setting.svg' />
+              <ActionButton label='초대하기' iconSrc='/icon/ic_add.svg' />
             </div>
 
             <BadgeCounter />
