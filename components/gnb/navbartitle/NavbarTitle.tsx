@@ -14,7 +14,7 @@ const NavbarTitle: FC<NavbarTitleProps> = ({
   return (
     <Link href='/mydashboard'>
       <div className='flex hidden desktop:inline desktop:content-start desktop:text-xl desktop:font-bold'>
-        <p className='flex desktop:ml-80'>
+        <p className='flex items-center desktop:ml-80'>
           {title}
           {createdByMe && (
             <Image
