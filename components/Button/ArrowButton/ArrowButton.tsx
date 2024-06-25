@@ -3,29 +3,29 @@ import { MouseEventHandler } from "react";
 type ArrowButtonProps = {
   direction: "left" | "right";
   onClick: MouseEventHandler<HTMLButtonElement>;
-  disabled?: boolean;
-  size: "md" | "lg";
 };
 
 export default function ArrowButton({
   direction = "left",
   onClick,
-  disabled = false,
-  size = "md",
 }: ArrowButtonProps) {
   const baseClasses =
-    "box-border border-[1px] border-gray-30 bg-white font-medium";
+    "box-border h-[36px] w-[36px] border-[1px] border-gray-30 bg-white tablet:h-[40px] tablet:w-[40px]";
 
-  const sizeClasses = size === "md" ? "w-[36px] h-[36px]" : "w-[40px] h-[40px]";
-  const buttonClasses = `${baseClasses} ${sizeClasses}`;
+  const directionClasses = {
+    left: "rounded-l-[4px]",
+    right: "rounded-r-[4px]",
+  }[direction];
 
-  return (
-    <button className={buttonClasses} onClick={onClick} disabled={disabled}>
-      {direction === "left" ? (
-        <div className='hover:font-black'>{"<"}</div>
-      ) : (
-        <div className='hover:font-black'>{">"}</div>
-      )}
+  const imgClasses = "m-auto w-6/12";
+
+  return direction === "left" ? (
+    <button onClick={onClick} className={`${baseClasses} ${directionClasses}`}>
+      <img className={imgClasses} src='icon/ic_arrow_back.svg' alt='이전' />
+    </button>
+  ) : (
+    <button onClick={onClick} className={`${baseClasses} ${directionClasses}`}>
+      <img className={imgClasses} src='icon/ic_arrow_forward.svg' alt='다음' />
     </button>
   );
 }
