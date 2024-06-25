@@ -51,20 +51,22 @@ const MyDashboard: FC = () => {
           />
 
           {/*Nav 우측: 버튼(관리, 초대하기) + 계정 프로필 (뱃지, 이름)*/}
-          <div className='ml-auto mr-2 flex items-center justify-end space-x-8 text-sm tablet:mr-10 tablet:text-base desktop:mr-20 desktop:text-base'>
-            <div className='flex space-x-8 whitespace-nowrap font-medium text-gray-50'>
+          <div className='tex t-sm ml-auto mr-2 flex items-center justify-end space-x-4 tablet:mr-10 tablet:space-x-8 tablet:text-base desktop:mr-20 desktop:space-x-10 desktop:text-base'>
+            <div className='flex space-x-2 whitespace-nowrap font-medium text-gray-50 tablet:space-x-3 desktop:space-x-8'>
               <ActionButton label='관리' iconSrc='/icon/ic_setting.svg' />
               <ActionButton label='초대하기' iconSrc='/icon/ic_add.svg' />
             </div>
 
-            <BadgeCounter />
+            <div className='flex items-center space-x-3 tablet:space-x-6 desktop:space-x-8'>
+              <BadgeCounter />
 
-            <span className='font-bold'>|</span>
+              <span className='font-bold'>|</span>
 
-            <ProfileDropdown
-              nickname={data.nickname}
-              profileInitial={profileInitial}
-            />
+              <ProfileDropdown
+                nickname={data.nickname}
+                profileInitial={profileInitial}
+              />
+            </div>
           </div>
         </div>
       </div>
