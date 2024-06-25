@@ -1,4 +1,7 @@
-/*우선 MockData랑 연결*/
+/*
+my dashboard에서 member들 보여주는 카운터
+우선 MockData와 연결
+*/
 import { FC } from "react";
 import UserBadge from "@/components/gnb/userbadge/UserBadge";
 import { mockMembersData } from "../MockData";
@@ -8,7 +11,6 @@ const BadgeCounter: FC = () => {
   const { members, totalCount } = mockMembersData;
   const maxDisplayCount = useMaxDisplayCount();
 
-  // 뱃지의 배경색 배열
   const bgColorOptions = [
     "bg-orange-10",
     "bg-yellow",
@@ -28,7 +30,7 @@ const BadgeCounter: FC = () => {
           textColor='text-white'
         />
       ))}
-      {/* 4명(MaxDisplayCount)이상일 경우 나머지 인원 +숫자로 표기 */}
+      {/* MaxDisplayCount이상일 경우 나머지 인원 +숫자로 표기 */}
       {totalCount > maxDisplayCount && (
         <UserBadge
           key={members[maxDisplayCount].id}

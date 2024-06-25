@@ -1,4 +1,4 @@
-/* MyDashboard 내비게이션 컴포넌트: UI만 완성
+/* MyDashboard 내비게이션 컴포넌트: API 연결해야 함
 
 - MyDashboard 페이지에서 사용하는 내비게이션
 - 관리버튼
@@ -10,29 +10,17 @@ import Link from "next/link";
 import { FC } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import UserBadge from "@/components/gnb/userbadge/UserBadge";
-import DropdownMenu from "@/components/gnb/dropdown/DropdownMenu";
-
-//User data type 정의
-type UserData = {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-//Mock user data
-const mockUserData: UserData = {
-  id: 0,
-  email: "test@example.com",
-  nickname: "곽철이",
-  profileImageUrl:
-    "https://item.kakaocdn.net/do/87a69128f299762e65fdbf5c9bcaa70e7154249a3890514a43687a85e6b6cc82",
-  createdAt: "2024-06-23T10:39:04.348Z",
-  updatedAt: "2024-06-23T10:39:04.348Z",
-};
+import NavbarTitle from "./navbartitle/NavbarTitle";
+import BadgeCounter from "./badgecounter/BadgeCounter";
+import UserBadge from "./userbadge/UserBadge";
+import DropdownMenu from "./dropdown/DropdownMenu";
+import { useRouter } from "next/router";
+import {
+  UserData,
+  mockUserData,
+  DashboardDetail,
+  mockDashboardDetail,
+} from "./MockData";
 
 const fetchUserData = async (): Promise<UserData> => {
   // 현재 코드는 실제 API 호출을 대신하여 mock 데이터를 반환 - 추후 Data fetch 예정
@@ -63,12 +51,10 @@ const MyDashboard: FC = () => {
     <>
       <div className='h-16 content-center border-b border-gray-30 p-4 tablet:h-20 desktop:h-20'>
         <div className='flex items-center justify-between'>
-          {/*Nav 좌측*/}
-          <Link href='/mydashboard'>
-            <div className='flex hidden desktop:ml-80 desktop:inline desktop:content-start desktop:text-xl desktop:font-bold'>
-              내 대시보드
-            </div>
-          </Link>
+          <NavbarTitle
+            title={mockDashboardDetail.title}
+            createdByMe={mockDashboardDetail.createdByMe}
+          />
 
           {/*Nav 우측: 관리 + 초대하기 + 프로필 + 이름*/}
           <div className='ml-auto mr-2 flex items-center justify-end space-x-8 text-sm tablet:mr-10 tablet:text-base desktop:mr-20 desktop:text-base'>
@@ -107,6 +93,8 @@ const MyDashboard: FC = () => {
                 초대하기
               </button>
             </div>
+
+            <BadgeCounter />
 
             <span className='font-bold'>|</span>
 
