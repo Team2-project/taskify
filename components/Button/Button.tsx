@@ -2,27 +2,35 @@ import { MouseEventHandler, ReactNode } from "react";
 
 type DefaultButtonProps = {
   size?: "md" | "lg";
+  children: ReactNode;
   disabled?: boolean;
   className?: string;
-  children: ReactNode;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function DefaultButton({
-  size = "md",
-  className = "",
-  disabled = false,
+  size,
   children = "",
+  disabled = false,
+  className = "",
   onClick,
 }: DefaultButtonProps) {
   const baseClasses =
-    "bg-violet-20 rounded-[8px] text-[14px] font-medium text-white select-none border-box";
+    "border-box select-none rounded-[8px] bg-violet-20 text-[14px] font-medium text-white";
 
-  const sizeClasses = size === "md" ? "w-content" : "w-full";
-  const buttonClasses = `${baseClasses} ${sizeClasses} ${className}`;
+  const sizeClasses = size
+    ? {
+        md: "w-content",
+        lg: "w-full",
+      }[size]
+    : "";
 
   return (
-    <button className={buttonClasses} onClick={onClick} disabled={disabled}>
+    <button
+      disabled={disabled}
+      className={`${baseClasses} ${sizeClasses} ${className}`}
+      onClick={onClick}
+    >
       {children}
     </button>
   );
