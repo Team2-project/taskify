@@ -1,5 +1,5 @@
 /*
-Users 타입 -> User
+Users: 사용자 타입 정의
 */
 
 export interface User {

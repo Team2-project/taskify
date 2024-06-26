@@ -1,56 +1,66 @@
-import { requestToBodyStream } from "next/dist/server/body-streams";
-import { instance } from "../axios";
+/*
+invitations: 초대목록 조회 + 응답 타입 정의
+*/
 
-// 내가 받은 초대 목록 조회 응답 타입
-export interface Inviter {
-  nickname: string;
-  email: string;
-  id: number;
+// 조회 요청 타입 정의
+export interface InvitationsRequest {
+  size?: number;
+  cursorId?: number;
+  title?: string;
 }
 
-export interface Dashboard {
-  title: string;
-  id: number;
+// 초대 응답 요청 타입 정의
+export interface InvitationResponseRequest {
+  inviteAccepted: boolean;
 }
 
-export interface Invitee {
-  nickname: string;
-  email: string;
-  id: number;
-}
-
+// 조회 응답 타입 정의
 export interface Invitation {
   id: number;
-  inviter: Inviter;
+  inviter: {
+    nickname: string;
+    email: string;
+    id: number;
+  };
   teamId: string;
-  dashboard: Dashboard;
-  invitee: Invitee;
+  dashboard: {
+    title: string;
+    id: number;
+  };
+  invitee: {
+    nickname: string;
+    email: string;
+    id: number;
+  };
   inviteAccepted: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface FetchReceivedInvitationsResponse {
+export interface InvitationsResponse {
   cursorId: number;
   invitations: Invitation[];
 }
 
-//내가 받은 초대 목록 조회
-export const fetchReceivedInvitations =
-  async (): Promise<FetchReceivedInvitationsResponse> => {
-    const response =
-      await instance.get<FetchReceivedInvitationsResponse>("/invitations");
-    return response.data;
+// 초대 응답 결과 타입 정의
+export interface InvitationResponse {
+  id: number;
+  inviter: {
+    nickname: string;
+    email: string;
+    id: number;
   };
-
-//초대 응답
-export const respondToInvitation = async (
-  invitationId: number,
-  data: { inviteAccepted: boolean },
-): Promise<Invitation> => {
-  const response = await instance.put<Invitation>(
-    `/invitations/${invitationId}`,
-    data,
-  );
-  return response.data;
-};
+  teamId: string;
+  dashboard: {
+    title: string;
+    id: number;
+  };
+  invitee: {
+    nickname: string;
+    email: string;
+    id: number;
+  };
+  inviteAccepted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

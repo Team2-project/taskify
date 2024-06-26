@@ -1,11 +1,11 @@
 /*
-Members 타입 정의
+Members: 대시보드 멤버 타입 정의
 */
 
 // 요청 타입 정의
 export interface MembersRequest {
-  page: number;
-  size: number;
+  page?: number;
+  size?: number;
   dashboardId: number;
 }
 
