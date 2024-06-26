@@ -1,85 +1,72 @@
-import { instance } from "../axios";
+/*
+columns: 컬럼 생성 + 목록 조회 + 수정 + 삭제 + 카드 이미지 업로드 타입 정의
+*/
 
-//컬럼 생성 데이터 타입
-export interface CreateColumn {
+// 컬럼 생성 요청 타입 정의
+export interface CreateColumnRequest {
   title: string;
   dashboardId: number;
 }
 
-//컬럼 목록 조회 데이터 타입
-export interface FetchColumns {
-  result: "SUCCESS";
-  data: [
-    {
-      id: number;
-      title: string;
-      teamId: string;
-      createdAt: string;
-      updatedAt: string;
-    },
-  ];
-}
-
-//컬럼 수정 데이터 타입
-export interface UpdateColumn {
+// 컬럼 응답 타입 정의
+export interface ColumnResponse {
+  id: number;
   title: string;
+  teamId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-//컬럼 삭제 데이터 타입
-export interface DeleteColumn {
-  columnId: number;
-}
-
-//카드이미지업로드 데이터 타입
-export interface UploadCardImage {
+// 카드 이미지 업로드 요청 타입 정의
+export interface UploadCardImageRequest {
   columnId: number;
   image: File;
 }
 
-//컬럼 생성
-export const createColumn = async (data: CreateColumn): Promise<any> => {
-  const response = await instance.post(`/columns`, data);
-  return response.data;
-};
+// 카드 이미지 업로드 응답 타입 정의
+export interface UploadCardImageResponse {
+  imageUrl: string;
+}
 
-//컬럼 목록 조회
-export const fetchColumns = async (): Promise<FetchColumns> => {
-  const response = await instance.get(`/columns`);
-  return response.data;
-};
+// 댓글 목록 조회 요청 타입 정의
+// 댓글 관련 타입 정의는 types/comments.ts에 이미 정의되어 있음
+export interface GetCommentsRequest {
+  size?: number;
+  cursorId?: number;
+  cardId: number;
+}
 
-//컬럼 수정
-export const updateColumn = async (
-  columnId: number,
-  data: UpdateColumn,
-): Promise<any> => {
-  const response = await instance.put(`/columns/${columnId}`, data);
-  return response.data;
-};
+// 댓글 응답 타입 정의
+// types/comments.ts에 이미 정의되어 있음
+export interface CommentResponse {
+  id: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  cardId: number;
+  author: {
+    profileImageUrl: string;
+    nickname: string;
+    id: number;
+  };
+}
 
-//컬럼 삭제
-export const deleteColumn = async (columnId: number): Promise<any> => {
-  const response = await instance.delete(`/columns/${columnId}`);
-  return response.data;
-};
+// 댓글 목록 조회 응답 타입 정의
+// types/comments.ts에 이미 정의되어 있음
+export interface CommentsResponse {
+  cursorId: number;
+  comments: CommentResponse[];
+}
 
-//카드 이미지 업로드
-export const uploadCardImage = async (
-  columnId: number,
-  image: File,
-): Promise<any> => {
-  const formData = new FormData();
-  formData.append("columnId", columnId.toString());
-  formData.append("image", image);
+// 댓글 수정 요청 타입 정의
+//types/comments.ts에 이미 정의되어 있음
+export interface UpdateCommentRequest {
+  content: string;
+}
 
-  const response = await instance.post(
-    `/columns/${columnId}/card-image`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    },
-  );
-  return response.data;
-};
+// 댓글 삭제 요청 타입 정의
+// 파라미터로 commentId 사용
+// types/comments.ts에 이미 정의되어 있음
+export interface DeleteCommentRequest {
+  commentId: number;
+}
