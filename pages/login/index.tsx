@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { instance } from "@/lib/api/axios";
 import { validateEmail, validatePassword } from "@/lib/validation";
-import Modal from "@/components/modal/BasicModal";
+import Modal from "@/components/Modal/BasicModal";
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -46,15 +46,13 @@ const LoginPage = () => {
     const response = await instance.post("/auth/login", { email, password });
     const accessToken = response.data.accessToken;
 
-    //document.cookie = `accessToken=${accessToken}; path=/`;
-    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("accessToken", accessToken); // 토큰 저장
     return response.data;
   }
 
   const mutation = useMutation(login, {
     onSuccess: (data) => {
       console.log("로그인 성공:", data);
-      //localStorage.setItem("accessToken", data.accessToken); // 토큰 저장
       router.push("/mydashboard");
     },
     onError: (error) => {
@@ -102,7 +100,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='mt-36 flex items-center justify-center tablet:mt-60 desktop:m-56'>
+    <div className='flex h-screen items-center justify-center'>
       <div>
         <Link href='/'>
           <div className='flex justify-center'>

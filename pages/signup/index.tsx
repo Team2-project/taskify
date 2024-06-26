@@ -10,7 +10,7 @@ import {
   validatePassword,
 } from "@/lib/validation";
 import { useMutation } from "react-query";
-import Modal from "@/components/modal/BasicModal";
+import Modal from "@/components/Modal/BasicModal";
 import { useRouter } from "next/router";
 
 interface SignupData {
@@ -67,7 +67,6 @@ const SignupPage = () => {
           router.push("/login");
         }, 2000);
       });
-      // Additional actions on success if needed
     },
     onError: (error) => {
       if (axios.isAxiosError(error)) {
@@ -123,7 +122,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className='mb-10 mt-36 flex items-center justify-center tablet:mt-60 desktop:m-56 desktop:mb-5'>
+    <div className='flex h-screen items-center justify-center'>
       <div>
         <Link href='/'>
           <div className='flex justify-center'>

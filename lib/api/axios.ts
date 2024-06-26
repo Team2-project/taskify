@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance} from "axios";
 
 const baseURL: string = process.env.NEXT_PUBLIC_BASE_URL as string;
 
@@ -10,7 +10,7 @@ export const instance: AxiosInstance = axios.create({
   },
 });
 
-// 요청 인터셉터 추가
+/* 요청 인터셉터 추가
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token"); // 토큰 가져오기
@@ -23,3 +23,4 @@ instance.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+*/
