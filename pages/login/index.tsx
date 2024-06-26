@@ -5,7 +5,7 @@ import Image from "next/image";
 import { instance } from "@/lib/api/axios";
 import { validateEmail, validatePassword } from "@/lib/validation";
 import Modal from "@/components/Modal/BasicModal";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/router";
 
