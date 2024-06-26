@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NavMain from "@/components/gnb/NavMain";
+import NavMain from "@/components/Gnb/NavMain";
 import Link from "next/link";
 import LinkButton from "@/components/Button/LinkButton/LinkButton";
 
@@ -24,7 +24,7 @@ export default function Home() {
             </span>
           </span>
           <h4 className='mb-[63px] mt-[21px] text-center text-[12px] text-white tablet:text-[16px] desktop:text-[18px]'>
-            서비스의 메인 설명 들어갑니다.
+            스마트하게 나의 일정을 관리해보자!
           </h4>
           <div className='text-center'>
             <LinkButton
