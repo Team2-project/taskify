@@ -1,4 +1,4 @@
-import NavMyDashboard from "@/components/Nav/NavMyDashboard";
+import NavMyDashboard from "@/components/Gnb/NavMyDashboard";
 
 export default function MyDashBoard() {
   return (

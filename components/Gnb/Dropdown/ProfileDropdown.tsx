@@ -1,6 +1,6 @@
 import { FC } from "react";
-import UserBadge from "@/components/Nav/UserBadge/UserBadge";
-import DropdownMenu from "@/components/Nav/Dropdown/DropdownMenu";
+import UserBadge from "@/components/Gnb/UserBadge/UserBadge";
+import DropdownMenu from "@/components/Gnb/Dropdown/DropdownMenu";
 
 interface ProfileDropdownProps {
   nickname: string;
