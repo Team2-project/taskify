@@ -1,22 +1,79 @@
-import { useState, useEffect } from "react";
-import Form from "@/components/Form/Form";
+import React, { useState, useEffect } from "react";
+import Form from "@/components/Form/FormField/FormField";
 import Link from "next/link";
 import Image from "next/image";
 import { instance } from "@/lib/api/axios";
-import axios from "axios";
 import { validateEmail, validatePassword } from "@/lib/validation";
+import Modal from "@/components/modal/BasicModal";
+import { useMutation } from "react-query";
+import axios from "axios";
+import { useRouter } from "next/router";
+
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  accessToken: string;
+  user: {
+    // 사용자 정보에 대한 타입 정의
+  };
+}
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string>("");
 
-  const [showEmailError, setShowEmailError] = useState(false);
-  const [showPasswordError, setShowPasswordError] = useState(false);
+  const [showEmailError, setShowEmailError] = useState<boolean>(false);
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
-  const [isFormValid, setIsFormValid] = useState(false);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
+  const [modalButtonText, setModalButtonText] = useState<string>("");
+  const [modalButtonAction, setModalButtonAction] = useState<() => void>(
+    () => {},
+  );
+
+  const router = useRouter();
+
+  async function login({ email, password }: LoginData) {
+    const response = await instance.post("/auth/login", { email, password });
+    const accessToken = response.data.accessToken;
+
+    //document.cookie = `accessToken=${accessToken}; path=/`;
+    localStorage.setItem("accessToken", accessToken);
+    return response.data;
+  }
+
+  const mutation = useMutation(login, {
+    onSuccess: (data) => {
+      console.log("로그인 성공:", data);
+      //localStorage.setItem("accessToken", data.accessToken); // 토큰 저장
+      router.push("/mydashboard");
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          setIsModalOpen(true);
+          setModalMessage(`${error.response.data.message}`);
+          setModalButtonText("확인");
+          setModalButtonAction(() => {});
+        } else if (error.request) {
+          console.error("서버로부터 응답이 없습니다:", error.request);
+        } else {
+          console.error("로그인 요청 중 에러 발생:", error.message);
+        }
+      } else {
+        console.error("예상치 못한 에러 발생:", error);
+      }
+    },
+  });
 
   useEffect(() => {
     const emailValidation = validateEmail(email);
@@ -25,11 +82,7 @@ const LoginPage = () => {
     setEmailError(emailValidation);
     setPasswordError(passwordValidation);
 
-    if (!emailValidation && !passwordValidation) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
+    setIsFormValid(!emailValidation && !passwordValidation);
   }, [email, password]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,23 +95,9 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await instance.post("/auth/login", {
-        email,
-        password,
-      });
-      console.log("로그인 성공:", response.data);
+      await mutation.mutateAsync({ email, password });
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.error("로그인 실패:", error.response.data);
-        } else if (error.request) {
-          console.error("서버로부터 응답이 없습니다:", error.request);
-        } else {
-          console.error("로그인 요청 중 에러 발생:", error.message);
-        }
-      } else {
-        console.error("예상치 못한 에러 발생:", error);
-      }
+      console.error(error);
     }
   };
 
@@ -115,6 +154,13 @@ const LoginPage = () => {
             </Link>
           </div>
         </Form>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          message={modalMessage}
+          buttonText={modalButtonText}
+          buttonAction={modalButtonAction}
+        />
       </div>
     </div>
   );

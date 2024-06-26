@@ -1,14 +1,23 @@
 import { useState, useEffect } from "react";
-import Form from "@/components/Form/Form";
+import Form from "@/components/Form/FormField/FormField";
 import Link from "next/link";
 import Image from "next/image";
+import axios, { AxiosError } from "axios";
 import { instance } from "@/lib/api/axios";
-import axios from "axios";
 import {
   validateEmail,
   validateNickname,
   validatePassword,
 } from "@/lib/validation";
+import { useMutation } from "react-query";
+import Modal from "@/components/modal/BasicModal";
+import { useRouter } from "next/router";
+
+interface SignupData {
+  email: string;
+  nickname: string;
+  password: string;
+}
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");
@@ -30,6 +39,54 @@ const SignupPage = () => {
 
   const [isFormValid, setIsFormValid] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
+  const [modalButtonText, setModalButtonText] = useState<string>("");
+  const [modalButtonAction, setModalButtonAction] = useState<() => void>(
+    () => {},
+  );
+
+  const router = useRouter();
+
+  async function signup({ email, nickname, password }: SignupData) {
+    const response = await instance.post("/users", {
+      email,
+      nickname,
+      password,
+    });
+    return response.data;
+  }
+
+  const mutation = useMutation(signup, {
+    onSuccess: (data) => {
+      setIsModalOpen(true);
+      setModalMessage("가입이 완료되었습니다!");
+      setModalButtonText("확인");
+      setModalButtonAction(() => {
+        setTimeout(() => {
+          router.push("/login");
+        }, 2000);
+      });
+      // Additional actions on success if needed
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          setIsModalOpen(true);
+          setModalMessage(`${error.response.data.message}`);
+          setModalButtonText("확인");
+          setModalButtonAction(() => {});
+        } else if (error.request) {
+          console.error("서버로부터 응답이 없습니다:", error.request);
+        } else {
+          console.error("회원가입 요청 중 에러 발생:", error.message);
+        }
+      } else {
+        console.error("예상치 못한 에러 발생:", error);
+      }
+    },
+  });
+
   useEffect(() => {
     const emailValidation = validateEmail(email);
     const nicknameValidation = validateNickname(nickname);
@@ -42,20 +99,16 @@ const SignupPage = () => {
     setPasswordError(passwordValidation);
     setConfirmPasswordError(confirmPasswordValidation);
 
-    if (
+    setIsFormValid(
       !emailValidation &&
-      !nicknameValidation &&
-      !passwordValidation &&
-      !confirmPasswordValidation &&
-      isAgreed
-    ) {
-      setIsFormValid(true);
-    } else {
-      setIsFormValid(false);
-    }
+        !nicknameValidation &&
+        !passwordValidation &&
+        !confirmPasswordValidation &&
+        isAgreed,
+    );
   }, [email, nickname, password, confirmPassword, isAgreed]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!isFormValid) {
@@ -66,26 +119,7 @@ const SignupPage = () => {
       return;
     }
 
-    try {
-      const response = await instance.post("users", {
-        email,
-        nickname,
-        password,
-      });
-      console.log("회원가입 성공:", response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          console.error("회원가입 실패:", error.response.data);
-        } else if (error.request) {
-          console.error("서버로부터 응답이 없습니다:", error.request);
-        } else {
-          console.error("회원가입 요청 중 에러 발생:", error.message);
-        }
-      } else {
-        console.error("예상치 못한 에러 발생:", error);
-      }
-    }
+    mutation.mutate({ email, nickname, password });
   };
 
   return (
@@ -177,6 +211,13 @@ const SignupPage = () => {
             </Link>
           </div>
         </Form>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          message={modalMessage}
+          buttonText={modalButtonText}
+          buttonAction={modalButtonAction}
+        />
       </div>
     </div>
   );
