@@ -20,7 +20,7 @@ export default function DefaultButton({
 
   const sizeClasses = size
     ? {
-        md: "w-content",
+        md: "w-max",
         lg: "w-full",
       }[size]
     : "";
