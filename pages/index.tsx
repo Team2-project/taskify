@@ -1,5 +1,5 @@
 import Image from "next/image";
-import NavMain from "@/components/Gnb/NavMain";
+import NavMain from "@/components/Nav/NavMain";
 import Link from "next/link";
 import LinkButton from "@/components/Button/LinkButton/LinkButton";
 

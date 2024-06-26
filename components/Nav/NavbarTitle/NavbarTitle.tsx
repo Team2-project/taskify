@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,10 +7,12 @@ interface NavbarTitleProps {
   createdByMe: boolean;
 }
 
-const NavbarTitle: FC<NavbarTitleProps> = ({
-  title = "내 대시보드",
-  createdByMe = false,
-}) => {
+const NavbarTitle: FC<NavbarTitleProps> = ({ title, createdByMe }) => {
+  useEffect(() => {
+    console.log("NavbarTitle Props - Title:", title);
+    console.log("NavbarTitle Props - CreatedByMe:", createdByMe);
+  }, [title, createdByMe]);
+
   return (
     <Link href='/mydashboard'>
       <div className='flex hidden desktop:inline desktop:content-start desktop:text-xl desktop:font-bold'>
