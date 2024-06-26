@@ -1,4 +1,6 @@
-// Users 타입 -> User
+/*
+Users 타입 -> User
+*/
 
 export interface User {
   id: number;
