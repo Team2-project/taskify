@@ -15,7 +15,6 @@ const UserBadge: FC<UserBadgeProps> = ({
   nickname,
   bgColor = "bg-green-10",
   textColor = "text-black",
-  size = "h-[38px] w-[38px]",
   borderColor = "border-white",
   fontSize = "text-base",
 }) => {
@@ -23,7 +22,7 @@ const UserBadge: FC<UserBadgeProps> = ({
 
   return (
     <div
-      className={`flex items-center justify-center rounded-full border-2 ${borderColor} ${bgColor} ${size}`}
+      className={`flex items-center justify-center rounded-full border-2 ${borderColor} ${bgColor} h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]`}
     >
       <span className={`${fontSize} font-bold ${textColor}`}>
         {displayValue}
