@@ -1,4 +1,4 @@
-import axios, { AxiosInstance} from "axios";
+import axios, { AxiosInstance } from "axios";
 
 const baseURL: string = process.env.NEXT_PUBLIC_BASE_URL as string;
 
