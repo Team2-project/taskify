@@ -1,6 +1,7 @@
 import Image from "next/image";
 import NavMain from "@/components/Gnb/NavMain";
 import Link from "next/link";
+import LinkButton from "@/components/Button/LinkButton/LinkButton";
 
 export default function Home() {
   return (
@@ -9,10 +10,11 @@ export default function Home() {
       <div className='mx-auto mb-[84px] mt-[42px] w-[287px] tablet:mb-[200px] tablet:mt-[74px] tablet:w-[768px] desktop:mb-[200px] desktop:mt-[74px] desktop:w-[1000px]'>
         <Image
           className='mx-auto mb-[21px] tablet:mb-[30px] tablet:w-[537px] desktop:mb-[30px] desktop:w-[722px]'
-          src='/img_landing/illustration.svg'
+          src='/img_landing/illustration.png'
           alt='illustration'
           width={287}
           height={168}
+          sizes='(max-width: 768px) 287px, (max-width: 1200px) 537px, 722px'
         />
         <div className='text-center'>
           <span className='text-[36px] font-bold text-white tablet:text-[56px] desktop:text-[76px]'>
@@ -25,7 +27,11 @@ export default function Home() {
             스마트하게 나의 일정을 관리해보자!
           </h4>
           <div className='text-center'>
-            <button className='text-white'>로그인하기 버튼</button>
+            <LinkButton
+              to='/login'
+              children='로그인하기'
+              className='h-[42px] w-[235.2px] text-[14px] font-medium tablet:h-[50px] tablet:w-[280px] tablet:text-[16px]'
+            />
           </div>
         </div>
       </div>
