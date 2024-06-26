@@ -1,19 +1,20 @@
 /*
 공용 fetcher
 */
-
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { instance } from "./axios";
 
 export const request = <T>(
   config: AxiosRequestConfig,
-  onSuccess?: (value: AxiosResponse<T>) => void,
-  onError?: (reason: any) => void,
-) => {
+): Promise<AxiosResponse<T>> => {
   const client = instance;
-  return client(config).then(onSuccess).catch(onError);
+  return client(config);
 };
 
-const fetcher = async (args: AxiosRequestConfig) => await request({ ...args });
+const fetcher = async <T>(
+  args: AxiosRequestConfig,
+): Promise<AxiosResponse<T>> => {
+  return await request<T>(args);
+};
 
 export default fetcher;
