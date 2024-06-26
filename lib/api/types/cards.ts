@@ -1,4 +1,6 @@
-import { instance } from "../axios";
+/*
+ 컬럼 생성 + 목록 조회 + 수정 + 삭제 + 카드 이미지 업로드 타입 정의
+ */
 
 // 카드 생성 시 요청하는 데이터 타입
 export interface CreateCardData {
