@@ -9,7 +9,7 @@ import {
   validateNickname,
   validatePassword,
 } from "@/lib/validation";
-import Modal from "@/components/Modal/BasicModal";
+import Modal from "@/components/Modal/AlarmModal";
 import { useRouter } from "next/router";
 
 interface SignupData {

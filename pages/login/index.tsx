@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { instance } from "@/lib/api/axios";
 import { validateEmail, validatePassword } from "@/lib/validation";
-import Modal from "@/components/Modal/BasicModal";
+import Modal from "@/components/Modal/AlarmModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 
