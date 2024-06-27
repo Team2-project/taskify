@@ -1,3 +1,4 @@
 export default function MyPage() {
-  return <></>;
+  return <>
+  </>;
 }

@@ -5,8 +5,8 @@ import Image from "next/image";
 import { instance } from "@/lib/api/axios";
 import { validateEmail, validatePassword } from "@/lib/validation";
 import Modal from "@/components/Modal/BasicModal";
-import { useRouter } from "next/router";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 interface LoginData {
   email: string;
