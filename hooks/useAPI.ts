@@ -9,6 +9,7 @@ export const apiDataAtom = atom<any>(null);
 
 // API 요청 함수
 const fetchAPI = async <T>(config: AxiosRequestConfig): Promise<T> => {
+  console.log("Fetching API with config:", config);
   const response: AxiosResponse<T> = await fetcher<T>(config);
   return response.data;
 };
@@ -19,12 +20,12 @@ export const useAPI = <T>(
   config: AxiosRequestConfig | null,
 ): UseQueryResult<T> => {
   const [, setApiData] = useAtom(apiDataAtom);
-  const queryKey = [key, config];
+  const queryKey = key ? [key, config] : [];
 
   const queryResult = useQuery<T>({
-    queryKey: queryKey,
-    queryFn: () =>
-      config ? fetchAPI<T>(config) : Promise.reject("No config provided"),
+    queryKey: queryKey as [string, AxiosRequestConfig],
+    queryFn: () => fetchAPI<T>(config as AxiosRequestConfig),
+    enabled: !!key && !!config,
   });
 
   useEffect(() => {
@@ -32,6 +33,12 @@ export const useAPI = <T>(
       setApiData(queryResult.data);
     }
   }, [queryResult.data, setApiData]);
+
+  useEffect(() => {
+    if (queryResult.error) {
+      console.error("Error fetching API:", queryResult.error);
+    }
+  }, [queryResult.error]);
 
   return queryResult;
 };
