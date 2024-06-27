@@ -1,12 +1,11 @@
-import SideMenu from "@/components/SideMenu/SideMenu";
-import NavMyDashboard from "@/components/Navbar/NavMyDashboard";
+import DashboardLayout from "@/components/Layout/DashboardLayout";
 
 export default function MyDashBoard() {
   return (
     <>
-      <SideMenu/>
-      <NavMyDashboard />
-      my dashboard
+      <DashboardLayout>
+        <div></div>
+      </DashboardLayout>
     </>
   );
 }
