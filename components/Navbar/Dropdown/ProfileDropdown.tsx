@@ -1,5 +1,5 @@
 import { FC } from "react";
-import UserBadge from "@/components/Gnb/UserBadge/UserBadge";
+import UserBadge from "@/components/Navbar/UserBadge/UserBadge";
 import DropdownMenu from "@/components/Gnb/Dropdown/DropdownMenu";
 
 interface ProfileDropdownProps {

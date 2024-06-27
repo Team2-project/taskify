@@ -1,13 +1,13 @@
 /* 
-MyDashboard 내비게이션 컴포넌트: API 연결해야 함
+MyDashboard 내비게이션 컴포넌트: API 연결 추후 수정 예정
  */
 
 import { FC, useEffect } from "react";
 import { AxiosRequestConfig } from "axios";
 import { useAPI } from "@/hooks/useAPI"; //
-import NavbarTitle from "./NavbarTitle/NavbarTitle";
-import ActionButton from "./ActionButton/ActionButton";
-import BadgeCounter from "./BadgeCounter/BadgeCounter";
+import NavbarTitle from "./NavbarTitle";
+import ActionButton from "./ActionButton";
+import BadgeCounter from "./BadgeCounter";
 import ProfileDropdown from "./Dropdown/ProfileDropdown";
 import { User } from "@/lib/api/types/users";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
