@@ -64,7 +64,7 @@ const MyDashboard: FC = () => {
 
   return (
     <>
-      <div className='h-[60px] content-center border-b border-gray-30 p-4 tablet:h-[70px] desktop:h-[80px]'>
+      <div className='h-[60px] content-center border-b border-gray-30 bg-white p-4 tablet:h-[70px] desktop:h-[80px]'>
         <div className='flex items-center justify-between'>
           <NavbarTitle
             title={dashboardData.title}
