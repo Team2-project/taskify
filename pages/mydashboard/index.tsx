@@ -1,5 +1,5 @@
-import NavMyDashboard from "@/components/gnb/NavMyDashboard";
 import SideMenu from "@/components/SideMenu/SideMenu";
+import NavMyDashboard from "@/components/Gnb/NavMyDashboard";
 
 export default function MyDashBoard() {
   return (

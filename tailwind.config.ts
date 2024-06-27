@@ -1,5 +1,18 @@
 import type { Config } from "tailwindcss";
 
+const px0_50 = Object.fromEntries(
+  Array.from({ length: 51 }, (_, i) => [i, `${i}px`]),
+);
+const px0_100 = Object.fromEntries(
+  Array.from({ length: 101 }, (_, i) => [i, `${i}px`]),
+);
+const px0_200 = Object.fromEntries(
+  Array.from({ length: 201 }, (_, i) => [i, `${i}px`]),
+);
+const px0_1920 = Object.fromEntries(
+  Array.from({ length: 1921 }, (_, i) => [i, `${i}px`]),
+);
+
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,29 +21,33 @@ const config: Config = {
   theme: {
     extend: {
       width: {
-        "351": "351px",
-        "520": "520px",
+        ...px0_50, // 0px ~ 50px
+        ...px0_100, // 0px ~ 100px
+        ...px0_200, // 0px ~ 200px
+        ...px0_1920, // 0px ~ 1920px
       },
       height: {
-        "50": "50px",
-        "77": "77px",
+        ...px0_50, // 0px ~ 50px
+        ...px0_100, // 0px ~ 100px
+        ...px0_200, // 0px ~ 200px
+        ...px0_1920, // 0px ~ 1920px
       },
     },
-
     screens: {
       tablet: "768px",
       desktop: "1280px",
     },
-
     colors: {
-      red: "#D6173A",
-      green: "#7AC555",
-      purple: "#760DDE",
-      orange: "#FFA500",
-      pink: "#E876EA",
-      white: "#ffffff",
-      blue: "#76A5EA",
-
+      black: {
+        DEFAULT: "#000000",
+        10: "#4B4B4B",
+        20: "#333236",
+        30: "#171717",
+      },
+      blue: {
+        DEFAULT: "#76A5EA",
+        10: "#9DD7ED",
+      },
       gray: {
         10: "#FAFAFA",
         20: "#EEEEEE",
@@ -38,18 +55,31 @@ const config: Config = {
         40: "#9FA6B2",
         50: "#787486",
       },
-      black: {
-        DEFAULT: "#000000",
-        10: "#4B4B4B",
-        20: "#333236",
-        30: "#171717",
+      green: {
+        DEFAULT: "#7AC555",
+        10: "#A3C4A2",
       },
+      orange: {
+        DEFAULT: "#FFA500",
+        10: "#FFC85A",
+      },
+      pink: "#E876EA",
+      purple: "#760DDE",
+      red: {
+        DEFAULT: "#D6173A",
+        10: "#F4D7DA",
+        20: "#D25B68",
+      },
+      sand: "#C4B1A2",
       violet: {
         10: "#F1EFFD",
         20: "#5534DA",
       },
+      white: "#ffffff",
+      yellow: "#FDD446",
     },
   },
   plugins: [],
 };
+
 export default config;
