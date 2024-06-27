@@ -141,13 +141,7 @@ const SignupPage = () => {
       <div>
         <Link href='/'>
           <div className='relative m-auto flex h-168 w-120 items-center justify-center tablet:h-279 tablet:w-200'>
-            <Image
-              src='logo/logo_img-text.svg'
-              alt='logo'
-              layout='fill'
-              priority
-              className='form-logo-image object-contain'
-            />
+            <Image src='logo/logo_img-text.svg' alt='logo' fill priority />
           </div>
         </Link>
         <h1 className='mb-10 mt-2 text-center text-xl font-medium'>
