@@ -7,6 +7,7 @@ const MyPage = () => {
       showActionButton={false}
       showBadgeCounter={false}
       showProfileDropdown={true}
+      fetchDashboardData={false}
     >
       <div>{/* MyPage의 콘텐츠 */}</div>
     </DashboardLayout>
