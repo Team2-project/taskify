@@ -37,7 +37,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ buttonLabel }) => {
     <div className='relative' ref={dropdownRef}>
       <button onClick={toggleDropdown}>{buttonLabel}</button>{" "}
       {isOpen && (
-        <div className='absolute right-0 mt-8 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5'>
+        <div className='absolute right-0 mt-8 w-[160px] origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5'>
           <div
             className='block px-4 py-1 py-2 text-base text-black-30 hover:bg-gray-10 hover:text-black-30'
             role='menu'

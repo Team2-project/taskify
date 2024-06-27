@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+
+/* 해당 주석은 오류 방지를 위해 api관련 함수와 컴포넌트를 묶어둔 것입니다
+
 import { instance } from "@/lib/api/axios";
 import { json } from "stream/consumers";
 import { AxiosResponse } from "axios";
-
-/* 해당 주석은 오류 방지를 위해 api관련 함수와 컴포넌트를 묶어둔 것입니다
 
 interface UserData {    
   cursorId: number,
@@ -40,38 +41,44 @@ async function fetchData(): Promise<UserData> {
 */
     
 const SideMenu = () =>{
+  //로고 컴포넌트
   const LogoButton = () => {
     return(
-      <button className="w-109px h-33px fixed left-26px top-20px max-tablet:left-22">
-        <div style={{ width: 23, height: 27 }}>
-          <Image src="/logo/logo_img.svg" layout="fill" alt="image-logo" />
-        </div>
-        <div style={{ width: 80, height: 22 }} className="max-tablet:hidden">
-          <Image src="/logo/logo_txt.svg" layout="fill" alt="txt-logo" />
-        </div>      
+      <button className="flex items-center w-[109px] h-[33px] fixed top-[20px] left-[24px] max-tablet:w-[67px]">
+          <img src="/logo/logo_img.svg" className="w-[30px] h-auto max-tablet:w-[24px]"/>
+          <img src="/logo/logo_txt.svg" className="w-[80px] h-[22px] max-tablet:hidden"/>
       </button>
     )
   }
-  //
+  //버튼 리스트의 추가 버튼 컴포넌트
+  const AddButton = () => {
+    return(
+      <button className="flex justify-between items-center w-[276px] h-[20px] max-tablet:justify-center max-desktop:w-[112px] max-tablet:w-[67px]">
+        <p className="text-[12px] max-tablet:hidden">Dash Boards</p>
+        <img src="/icon/ic_add_dashboard.svg" className="w-[14px] h-[14px] "/>
+      </button>
+    )}
+
+//아래 컴포넌트 수정 예정
+//추후 api 연동해 버튼 렌더링
   const ButtonList = () => {
     return(
-      <div className='flex flex-col items-center'>
-        <button className="flex justify-between items-center w-132px h-20px">
-          <p className="text-12px max-tablet:hidden">Dash Boards</p>
-          <Image src="/icon/ic_add.svg" width={14} height={14} alt="add-button"/>
+      <div className="flex flex-col justify-center items-start w-full h-auto max-tablet:items-center">
+        <button className="flex justify-start items-center gap-[16px] max-tablet:w-[40px] max-tablet:justify-center max-desktop:w-[112px]">
+          <img src="/chip/circle.svg" className="w-[8px] h-[8px]"/>
+          <p className='text-[16px] max-tablet:hidden max-desktop:text-[14px]'>임의의 제목</p>
         </button>
-        <button>
-          <img src="/chip/circle.svg" className="w-8px h-8px"/>
-          <p className='text-16px max-tablet:hidden'>임의의 제목</p>
-        </button>    
       </div>
       )
   }
         
   return(
-    <div className='flex flex-col items-center fixed top-0 left-0 border-r-1px border-gray h-full w-300px max-desktop:w-160px max-tablet:w-67px'>
+    <div className='flex flex-col justify-start items-center gap-[40px] fixed top-0 left-0 border-r-[1px] border-gray-30 h-full w-[300px] max-desktop:w-[160px] max-tablet:w-[67px]'>
       <Link href="/"><LogoButton/></Link>
-      <ButtonList/>
+      <div className="flex flex-col justify-start items-center gap-[22px] fixed left-[12px] top-[110px] w-[276px] h-full max-tablet:top-[60px] max-desktop:w-[134px] max-tablet:w-[67px] max-tablet:left-0">
+        <AddButton/>
+        <ButtonList/>
+      </div>
     </div>
   )
 }

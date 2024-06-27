@@ -3,8 +3,8 @@ my dashboard에서 member들 보여주는 카운터
 우선 MockData와 연결
 */
 import { FC } from "react";
-import UserBadge from "@/components/Gnb/UserBadge/UserBadge";
-import { mockMembersData } from "@/components/Gnb/MockData";
+import UserBadge from "@/components/Navbar/UserBadge/UserBadge";
+import { mockMembersData } from "../MockData";
 import useMaxDisplayCount from "@/hooks/useMaxDisplayCount";
 
 const BadgeCounter: FC = () => {
