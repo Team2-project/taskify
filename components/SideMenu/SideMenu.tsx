@@ -43,8 +43,12 @@ const SideMenu = () =>{
   const LogoButton = () => {
     return(
       <button className="w-109px h-33px fixed left-26px top-20px max-tablet:left-22">
-        <Image src="/logo/logo_img.svg" w-23px h-27px alt="image-logo"/>
-        <Image src="/logo/logo_txt.svg" w-80px h-22px alt="txt-logo" className="max-tablet:hidden"/>
+        <div style={{ width: 23, height: 27 }}>
+          <Image src="/logo/logo_img.svg" layout="fill" alt="image-logo" />
+        </div>
+        <div style={{ width: 80, height: 22 }} className="max-tablet:hidden">
+          <Image src="/logo/logo_txt.svg" layout="fill" alt="txt-logo" />
+        </div>      
       </button>
     )
   }
@@ -54,7 +58,7 @@ const SideMenu = () =>{
       <div className='flex flex-col items-center'>
         <button className="flex justify-between items-center w-132px h-20px">
           <p className="text-12px max-tablet:hidden">Dash Boards</p>
-          <Image src="/icon/ic_add.svg" w-14px h-14px alt="add-button"/>
+          <Image src="/icon/ic_add.svg" width={14} height={14} alt="add-button"/>
         </button>
         <button>
           <img src="/chip/circle.svg" className="w-8px h-8px"/>
