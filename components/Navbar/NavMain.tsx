@@ -15,7 +15,7 @@ const NavMain: FC = () => {
 
   return (
     <div
-      className={`flex h-60 items-center justify-between p-6 tablet:h-70 desktop:h-80 ${isLandingPage ? "bg-black text-white" : "bg-white text-black-20"}`}
+      className={`flex h-[240px] items-center justify-between p-6 tablet:h-[280px] desktop:h-[320px] ${isLandingPage ? "bg-black text-white" : "bg-white text-black-20"}`}
     >
       {/* 로고 */}
       <div className='flex items-center space-x-2'>
