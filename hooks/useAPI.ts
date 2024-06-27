@@ -15,15 +15,16 @@ const fetchAPI = async <T>(config: AxiosRequestConfig): Promise<T> => {
 
 // 공용 훅
 export const useAPI = <T>(
-  key: string,
-  config: AxiosRequestConfig,
+  key: string | null,
+  config: AxiosRequestConfig | null,
 ): UseQueryResult<T> => {
   const [, setApiData] = useAtom(apiDataAtom);
   const queryKey = [key, config];
 
   const queryResult = useQuery<T>({
     queryKey: queryKey,
-    queryFn: () => fetchAPI<T>(config),
+    queryFn: () =>
+      config ? fetchAPI<T>(config) : Promise.reject("No config provided"),
   });
 
   useEffect(() => {
