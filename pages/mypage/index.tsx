@@ -1,11 +1,16 @@
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 
-export default function MyPage() {
+const MyPage = () => {
   return (
-    <>
-      <DashboardLayout>
-        <div></div>
-      </DashboardLayout>
-    </>
+    <DashboardLayout
+      title='계정관리'
+      showActionButton={false}
+      showBadgeCounter={false}
+      showProfileDropdown={true}
+    >
+      <div>{/* MyPage의 콘텐츠 */}</div>
+    </DashboardLayout>
   );
-}
+};
+
+export default MyPage;
