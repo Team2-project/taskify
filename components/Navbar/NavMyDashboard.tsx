@@ -13,7 +13,9 @@ import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface NavMyDashboardProps {
   userData: User;
-  dashboardData: DashboardDetailResponse;
+  dashboardData:
+    | DashboardDetailResponse
+    | { title: string; createdByMe: boolean };
   showCreatedByMeIcon?: boolean;
   showActionButton?: boolean;
   showBadgeCounter?: boolean;

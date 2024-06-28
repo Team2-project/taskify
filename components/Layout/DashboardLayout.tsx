@@ -12,7 +12,7 @@ import { User } from "@/lib/api/types/users";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface DashboardLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
   title?: string;
   dashboardId?: string;
   showActionButton?: boolean;
@@ -42,7 +42,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   };
 
   const dashboardConfig: AxiosRequestConfig = {
-    url: "/dashboards/9807",
+    url: `/dashboards/${dashboardId}`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -63,20 +63,33 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     error: dashboardError,
     isLoading: dashboardLoading,
   } = useQuery<DashboardDetailResponse>({
-    queryKey: ["dashboardData"],
-    queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
+    queryKey: ["dashboardData", dashboardId],
+    queryFn: () =>
+      fetcher<DashboardDetailResponse>({
+        url: `/dashboards/${dashboardId}`,
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    enabled: !!dashboardId,
   });
 
-  if (userLoading || dashboardLoading) {
+  if (userLoading || (dashboardId && dashboardLoading)) {
     return <div>Loading...</div>;
   }
 
-  if (userError || dashboardError || !userData || !dashboardData) {
+  if (
+    userError ||
+    (dashboardId && dashboardError) ||
+    !userData ||
+    (dashboardId && !dashboardData)
+  ) {
     return <div>데이터를 불러오는 중 오류가 발생했습니다</div>;
   }
 
-  const DashboardTitle = title || dashboardData.title;
-  const { createdByMe } = dashboardData;
+  const DashboardTitle = title || (dashboardData ? dashboardData.title : "");
+  const createdByMe = dashboardData ? dashboardData.createdByMe : false;
 
   return (
     <div>
@@ -85,7 +98,11 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
         showBadgeCounter={showBadgeCounter}
         showProfileDropdown={showProfileDropdown}
         userData={userData}
-        dashboardData={{ ...dashboardData, title: DashboardTitle, createdByMe }}
+        dashboardData={
+          dashboardData
+            ? { ...dashboardData, title: DashboardTitle, createdByMe }
+            : { title: DashboardTitle, createdByMe }
+        }
         showCreatedByMeIcon={showCreatedByMeIcon}
       />
       <SideMenu />
