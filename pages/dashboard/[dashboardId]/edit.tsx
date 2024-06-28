@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
-import DashboardLayout from "@/components/Layout/DashboardLayout";
-import { useAPI } from "@/hooks/useAPI";
 import { AxiosRequestConfig } from "axios";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import fetcher from "@/lib/api/fetcher";
+import DashboardLayout from "@/components/Layout/DashboardLayout";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 const DashboardEditPage = () => {
@@ -27,10 +28,11 @@ const DashboardEditPage = () => {
     data: dashboardData,
     error: dashboardError,
     isLoading: dashboardLoading,
-  } = useAPI<DashboardDetailResponse>(
-    `dashboardData-${dashboardId}`,
-    dashboardConfig,
-  );
+  }: UseQueryResult<DashboardDetailResponse, Error> = useQuery({
+    queryKey: ["dashboardData", dashboardId],
+    queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
+    enabled: !!dashboardId,
+  });
 
   if (dashboardLoading) {
     return <div>로딩 중...</div>;
@@ -49,8 +51,9 @@ const DashboardEditPage = () => {
       showProfileDropdown={true}
     >
       <div>
-        <h1>대시보드 편집</h1>
-        {/* 편집할 대시보드 데이터 표시 */}
+        <div className='h-[150px]'></div>
+        <h1 className='flex justify-center'>대시보드 Id 편집 페이지</h1>
+        {/* 대시보드 편집할 데이터 표시 */}
       </div>
     </DashboardLayout>
   );
