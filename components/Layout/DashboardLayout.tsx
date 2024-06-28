@@ -93,20 +93,29 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
 
   return (
     <div>
-      <NavMyDashboard
-        showActionButton={showActionButton}
-        showBadgeCounter={showBadgeCounter}
-        showProfileDropdown={showProfileDropdown}
-        userData={userData}
-        dashboardData={
-          dashboardData
-            ? { ...dashboardData, title: DashboardTitle, createdByMe }
-            : { title: DashboardTitle, createdByMe }
-        }
-        showCreatedByMeIcon={showCreatedByMeIcon}
-      />
-      <SideMenu />
-      {children}
+      <div className='flex h-screen flex-col'>
+        <NavMyDashboard
+          showActionButton={showActionButton}
+          showBadgeCounter={showBadgeCounter}
+          showProfileDropdown={showProfileDropdown}
+          userData={userData}
+          dashboardData={
+            dashboardData
+              ? { ...dashboardData, title: DashboardTitle, createdByMe }
+              : { title: DashboardTitle, createdByMe }
+          }
+          showCreatedByMeIcon={showCreatedByMeIcon}
+        />
+
+        <div className='flex flex-1 overflow-hidden'>
+          <div className='flex-shrink-0'>
+            <SideMenu />
+          </div>
+          <div className='ml-[300px] flex-1 p-4 max-desktop:ml-[160px] max-tablet:ml-[67px]'>
+            {children}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ const MyPage: FC = () => {
       showProfileDropdown={true}
       showCreatedByMeIcon={false}
     >
-      <div>{/* MyPage의 콘텐츠 */}</div>
+      <div>layout설정해서 contents 올바른 위치에 두자!</div>
     </DashboardLayout>
   );
 };
