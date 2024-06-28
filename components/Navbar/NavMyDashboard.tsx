@@ -1,6 +1,8 @@
 /* 
 NavMyDashboard: Dashboard 내비게이션 컴포넌트
+- Data는 DashboardLayout에서 Props로 받아옵니다
  */
+
 import { FC } from "react";
 import NavbarTitle from "./NavbarTitle";
 import ActionButton from "./ActionButton";
@@ -10,21 +12,21 @@ import { User } from "@/lib/api/types/users";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface NavMyDashboardProps {
-  showActionButton?: boolean;
-  showBadgeCounter?: boolean;
-  showProfileDropdown?: boolean;
   userData: User;
   dashboardData: DashboardDetailResponse;
   showCreatedByMeIcon?: boolean;
+  showActionButton?: boolean;
+  showBadgeCounter?: boolean;
+  showProfileDropdown?: boolean;
 }
 
 const NavMyDashboard: FC<NavMyDashboardProps> = ({
-  showActionButton = true,
-  showBadgeCounter = true,
-  showProfileDropdown = true,
   userData,
   dashboardData,
   showCreatedByMeIcon = true,
+  showActionButton = true,
+  showBadgeCounter = true,
+  showProfileDropdown = true,
 }) => {
   const profileInitial = userData.nickname.charAt(0) ?? "";
   const { title, createdByMe } = dashboardData;

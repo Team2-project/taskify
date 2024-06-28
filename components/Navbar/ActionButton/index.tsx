@@ -1,3 +1,7 @@
+/*
+Navigation에 들어가는 button
+*/
+
 import { FC } from "react";
 import Image from "next/image";
 
