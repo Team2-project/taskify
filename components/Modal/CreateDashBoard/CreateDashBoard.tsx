@@ -52,43 +52,43 @@ export default function CreateDashBoard({
             value={value}
             className='h-[42px] rounded-[6px] border-[1px] border-gray-30'
           />
-        </form>
-        <div className='flex justify-around gap-[10px] tablet:justify-around'>
-          {colors.map((color) => (
-            <div
-              key={color}
-              onClick={() => handleCircleClick(color)}
-              className='relative flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full'
-            >
-              <img
-                src={`/chip/${color}.svg`}
-                alt={color}
-                className='h-full w-full rounded-full'
-              />
-              {color === selectedCircle && (
+          <div className='flex justify-around gap-[10px] tablet:justify-around'>
+            {colors.map((color) => (
+              <div
+                key={color}
+                onClick={() => handleCircleClick(color)}
+                className='relative flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full'
+              >
                 <img
-                  src='/chip/check.svg'
-                  alt='check'
-                  className='absolute h-[24px] w-[24px]'
+                  src={`/chip/${color}.svg`}
+                  alt={color}
+                  className='h-full w-full rounded-full'
                 />
-              )}
-            </div>
-          ))}
-        </div>
-        <div className='flex items-center justify-center gap-[11px] py-[24px] tablet:py-[28px]'>
-          <Button
-            onClick={handleButtonClick}
-            className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
-          >
-            취소
-          </Button>
-          <Button
-            onClick={handleCloseClick}
-            className='h-[42px] w-[138px] rounded-[8px] text-white'
-          >
-            생성
-          </Button>
-        </div>
+                {color === selectedCircle && (
+                  <img
+                    src='/chip/check.svg'
+                    alt='check'
+                    className='absolute h-[24px] w-[24px]'
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          <div className='flex items-center justify-center gap-[11px] py-[24px] tablet:py-[28px]'>
+            <Button
+              onClick={handleButtonClick}
+              className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
+            >
+              취소
+            </Button>
+            <Button
+              onClick={handleCloseClick}
+              className='h-[42px] w-[138px] rounded-[8px] text-white'
+            >
+              생성
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
