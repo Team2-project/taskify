@@ -6,13 +6,6 @@ body {
   background-color: #fafafa;
 }
 
-@media (min-width: 768px) {
-  .form-logo-image {
-    width: 200px;
-    height: 279px;
-  }
-}
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

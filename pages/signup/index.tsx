@@ -2,21 +2,25 @@ import { useState, useEffect } from "react";
 import Form from "@/components/Form/FormField/FormField";
 import Link from "next/link";
 import Image from "next/image";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { instance } from "@/lib/api/axios";
 import {
   validateEmail,
   validateNickname,
   validatePassword,
 } from "@/lib/validation";
-import { useMutation } from "react-query";
-import Modal from "@/components/Modal/BasicModal";
+import Modal from "@/components/Modal/AlarmModal";
 import { useRouter } from "next/router";
 
 interface SignupData {
   email: string;
   nickname: string;
   password: string;
+}
+
+interface SignupResponse {
+  success: boolean;
+  message: string;
 }
 
 const SignupPage = () => {
@@ -46,19 +50,40 @@ const SignupPage = () => {
     () => {},
   );
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
 
-  async function signup({ email, nickname, password }: SignupData) {
-    const response = await instance.post("/users", {
+  const signup = async ({
+    email,
+    nickname,
+    password,
+  }: SignupData): Promise<SignupResponse> => {
+    const response = await instance.post<SignupResponse>("/users", {
       email,
       nickname,
       password,
     });
     return response.data;
-  }
+  };
 
-  const mutation = useMutation(signup, {
-    onSuccess: (data) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (!isFormValid) {
+      setShowEmailError(true);
+      setShowNicknameError(true);
+      setShowPasswordError(true);
+      setShowConfirmPasswordError(true);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await signup({ email, nickname, password });
       setIsModalOpen(true);
       setModalMessage("가입이 완료되었습니다!");
       setModalButtonText("확인");
@@ -67,14 +92,16 @@ const SignupPage = () => {
           router.push("/login");
         }, 2000);
       });
-    },
-    onError: (error) => {
+    } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response) {
-          setIsModalOpen(true);
-          setModalMessage(`${error.response.data.message}`);
-          setModalButtonText("확인");
-          setModalButtonAction(() => {});
+        if (error.response && typeof error.response.data === "object") {
+          const errorMessage = error.response.data.message;
+          if (errorMessage) {
+            setIsModalOpen(true);
+            setModalMessage(errorMessage);
+            setModalButtonText("확인");
+            setModalButtonAction(() => {});
+          }
         } else if (error.request) {
           console.error("서버로부터 응답이 없습니다:", error.request);
         } else {
@@ -83,8 +110,10 @@ const SignupPage = () => {
       } else {
         console.error("예상치 못한 에러 발생:", error);
       }
-    },
-  });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const emailValidation = validateEmail(email);
@@ -107,33 +136,12 @@ const SignupPage = () => {
     );
   }, [email, nickname, password, confirmPassword, isAgreed]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!isFormValid) {
-      setShowEmailError(true);
-      setShowNicknameError(true);
-      setShowPasswordError(true);
-      setShowConfirmPasswordError(true);
-      return;
-    }
-
-    mutation.mutate({ email, nickname, password });
-  };
-
   return (
     <div className='flex h-screen items-center justify-center'>
       <div>
         <Link href='/'>
-          <div className='flex justify-center'>
-            <Image
-              src='logo/logo_img-text.svg'
-              alt='logo'
-              width={120}
-              height={167.4}
-              priority
-              className='form-logo-image'
-            />
+          <div className='relative m-auto flex h-168 w-120 items-center justify-center tablet:h-279 tablet:w-200'>
+            <Image src='logo/logo_img-text.svg' alt='logo' fill priority />
           </div>
         </Link>
         <h1 className='mb-10 mt-2 text-center text-xl font-medium'>
@@ -202,7 +210,9 @@ const SignupPage = () => {
             />
             <label htmlFor='terms'>이용약관에 동의합니다</label>
           </div>
-          <Form.Button isFormValid={isFormValid}>회원가입</Form.Button>
+          <Form.Button isFormValid={isFormValid}>
+            {loading ? "회원가입 중..." : "회원가입"}
+          </Form.Button>
           <div className='text-center text-base font-normal'>
             <span className='mr-1'>이미 가입하셨나요?</span>
             <Link href='/login'>
