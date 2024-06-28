@@ -1,26 +1,19 @@
 import { useRouter } from "next/router";
-import DashboardLayout from "@/components/Layout/DashboardLayout";
-import { useAPI } from "@/hooks/useAPI";
 import { AxiosRequestConfig } from "axios";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import fetcher from "@/lib/api/fetcher";
+import DashboardLayout from "@/components/Layout/DashboardLayout";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 const DashboardEditPage = () => {
   const router = useRouter();
-  const { dashboardid } = router.query;
-
-  // dashboardId 콘솔에 출력하여 확인
-  console.log("Router Query:", router.query);
-  console.log("Dashboard ID:", dashboardid);
-
-  if (!dashboardid || Array.isArray(dashboardid)) {
-    return <div>유효하지 않은 대시보드 ID</div>;
-  }
+  const { dashboardId } = router.query;
 
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
 
   const dashboardConfig: AxiosRequestConfig = {
-    url: `/dashboards/${dashboardid}`,
+    url: `/dashboards/${dashboardId}`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -31,10 +24,15 @@ const DashboardEditPage = () => {
     data: dashboardData,
     error: dashboardError,
     isLoading: dashboardLoading,
-  } = useAPI<DashboardDetailResponse>(
-    `dashboardData-${dashboardid}`,
-    dashboardConfig,
-  );
+  }: UseQueryResult<DashboardDetailResponse, Error> = useQuery({
+    queryKey: ["dashboardData", dashboardId],
+    queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
+    enabled: !!dashboardId,
+  });
+
+  if (!dashboardId || Array.isArray(dashboardId)) {
+    return <div>유효하지 않은 대시보드 ID</div>;
+  }
 
   if (dashboardLoading) {
     return <div>로딩 중...</div>;
@@ -47,14 +45,15 @@ const DashboardEditPage = () => {
   return (
     <DashboardLayout
       title={`${dashboardData.title}`}
-      dashboardid={dashboardid as string}
+      dashboardId={dashboardId as string}
       showActionButton={true}
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
       <div>
-        <h1>대시보드</h1>
-        {/* 대시보드 페이지 본문 */}
+        <div className='h-[150px]'></div>
+        <h1 className='flex justify-center'>대시보드 Id 편집 페이지</h1>
+        {/* 대시보드 편집할 데이터 표시 */}
       </div>
     </DashboardLayout>
   );
