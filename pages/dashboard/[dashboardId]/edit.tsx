@@ -9,10 +9,6 @@ const DashboardEditPage = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
 
-  if (!dashboardId || Array.isArray(dashboardId)) {
-    return <div>유효하지 않은 대시보드 ID</div>;
-  }
-
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
 
@@ -33,6 +29,10 @@ const DashboardEditPage = () => {
     queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
     enabled: !!dashboardId,
   });
+
+  if (!dashboardId || Array.isArray(dashboardId)) {
+    return <div>유효하지 않은 대시보드 ID</div>;
+  }
 
   if (dashboardLoading) {
     return <div>로딩 중...</div>;

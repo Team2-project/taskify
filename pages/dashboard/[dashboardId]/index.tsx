@@ -5,14 +5,11 @@ import fetcher from "@/lib/api/fetcher";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
-const DashboardEditPage = () => {
+const DashboardIdPage = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
 
-  if (!dashboardId || Array.isArray(dashboardId)) {
-    return <div>유효하지 않은 대시보드 ID</div>;
-  }
-
+  //토큰은 추후 삭제
   const token =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
 
@@ -34,6 +31,10 @@ const DashboardEditPage = () => {
     enabled: !!dashboardId,
   });
 
+  if (!dashboardId || Array.isArray(dashboardId)) {
+    return <div>유효하지 않은 대시보드 ID</div>;
+  }
+
   if (dashboardLoading) {
     return <div>로딩 중...</div>;
   }
@@ -52,11 +53,11 @@ const DashboardEditPage = () => {
     >
       <div>
         <div className='h-[150px]'></div>
-        <h1 className='flex justify-center'>대시보드 Id 페이지</h1>
+        <h1 className='text-center'>대시보드 Id 페이지</h1>
         {/* 대시보드 데이터 표시 */}
       </div>
     </DashboardLayout>
   );
 };
 
-export default DashboardEditPage;
+export default DashboardIdPage;
