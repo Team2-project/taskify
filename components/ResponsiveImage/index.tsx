@@ -3,7 +3,7 @@ Image 컴포넌트를 반응형으로 하나하나 적용하기 귀찮아서 만
 
 사용법: 
     <ResponsiveImage
-         src="/icon/ic_add_profile.png"
+        src="/icon/ic_add_profile.png"
         alt="프로필 사진 추가"
         mobile={{ width: 20, height: 20 }}
         tablet={{ width: 30, height: 30 }}
