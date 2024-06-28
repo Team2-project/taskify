@@ -6,13 +6,9 @@ import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 const DashboardEditPage = () => {
   const router = useRouter();
-  const { dashboardid } = router.query;
+  const { dashboardId } = router.query;
 
-  // dashboardId 콘솔에 출력하여 확인
-  console.log("Router Query:", router.query);
-  console.log("Dashboard ID:", dashboardid);
-
-  if (!dashboardid || Array.isArray(dashboardid)) {
+  if (!dashboardId || Array.isArray(dashboardId)) {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
 
@@ -20,7 +16,7 @@ const DashboardEditPage = () => {
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
 
   const dashboardConfig: AxiosRequestConfig = {
-    url: `/dashboards/${dashboardid}`,
+    url: `/dashboards/${dashboardId}`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -32,7 +28,7 @@ const DashboardEditPage = () => {
     error: dashboardError,
     isLoading: dashboardLoading,
   } = useAPI<DashboardDetailResponse>(
-    `dashboardData-${dashboardid}`,
+    `dashboardData-${dashboardId}`,
     dashboardConfig,
   );
 
@@ -47,14 +43,14 @@ const DashboardEditPage = () => {
   return (
     <DashboardLayout
       title={`${dashboardData.title}`}
-      dashboardid={dashboardid as string}
+      dashboardId={dashboardId as string}
       showActionButton={true}
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
       <div>
-        <h1>대시보드</h1>
-        {/* 대시보드 페이지 본문 */}
+        <h1>대시보드 편집</h1>
+        {/* 편집할 대시보드 데이터 표시 */}
       </div>
     </DashboardLayout>
   );

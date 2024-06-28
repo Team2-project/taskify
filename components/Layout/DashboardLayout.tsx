@@ -8,7 +8,7 @@ import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 interface DashboardLayoutProps {
   children: ReactNode;
   title: string;
-  dashboardid: string;
+  dashboardId: string;
   showActionButton?: boolean;
   showBadgeCounter?: boolean;
   showProfileDropdown?: boolean;
@@ -17,7 +17,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({
   children,
   title,
-  dashboardid,
+  dashboardId,
   showActionButton = true,
   showBadgeCounter = true,
   showProfileDropdown = true,
@@ -26,7 +26,7 @@ const DashboardLayout = ({
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
 
   const dashboardConfig: AxiosRequestConfig = {
-    url: `/dashboards/${dashboardid}`,
+    url: `/dashboards/${dashboardId}`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -38,7 +38,7 @@ const DashboardLayout = ({
     error: dashboardError,
     isLoading: dashboardLoading,
   } = useAPI<DashboardDetailResponse>(
-    `dashboardData-${dashboardid}`,
+    `dashboardData-${dashboardId}`,
     dashboardConfig,
   );
 
