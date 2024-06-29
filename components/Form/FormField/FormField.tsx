@@ -24,6 +24,9 @@ interface FormFieldProps {
   placeholder?: string;
   error?: string;
   showError?: boolean;
+  width?: string;
+  tabletWidth?: string;
+  desktopWidth?: string;
 }
 
 const FormField = ({
@@ -35,6 +38,9 @@ const FormField = ({
   placeholder,
   error,
   showError = false,
+  width = "w-351",
+  tabletWidth = "tablet:w-520",
+  desktopWidth = "desktop:w-520",
 }: FormFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -52,7 +58,7 @@ const FormField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`h-50 w-351 rounded-lg border bg-white px-4 py-2 focus:outline-none tablet:w-520 ${
+          className={`h-50 ${width} ${tabletWidth} ${desktopWidth} rounded-lg border bg-white px-4 py-2 focus:outline-none ${
             showError && error
               ? "border-red"
               : "border-gray-30 focus:border-violet-20"
