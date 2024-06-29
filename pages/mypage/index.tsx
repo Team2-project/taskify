@@ -10,7 +10,7 @@ import {
   validatePassword,
 } from "@/lib/validation";
 
-const MyPage = () => {
+const MyPage: FC = () => {
   // 프로필 Form 상태 변수
   const [profileEmail, setProfileEmail] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
@@ -90,10 +90,10 @@ const MyPage = () => {
       showCreatedByMeIcon={false}
     >
       {/* 돌아가기 링크 */}
-      <div className='flex items-center justify-start'>
+      <div className='mb-[20px] flex items-center justify-start tablet:mb-[25px] desktop:mb-[25px]'>
         <div className='flex-shrink-0'>
           <ResponsiveImage
-            src='/icon/ic_arrow_forward.svg'
+            src='/icon/ic_arrow_back.svg'
             alt='뒤로가기'
             mobile={{ width: 18, height: 18 }}
             tablet={{ width: 20, height: 20 }}
@@ -107,7 +107,7 @@ const MyPage = () => {
 
       {/* 프로필 폼 */}
       <div className='w-[284px] rounded-[8px] border border-white bg-white px-[20px] py-[28px] tablet:w-[544px] tablet:px-[28px] tablet:py-[32px] desktop:w-[620px] desktop:px-[28px] desktop:py-[32px]'>
-        <div className='text-[20px] font-bold tablet:text-[24px] desktop:text-[24px]'>
+        <div className='mb-[24px] text-[20px] font-bold tablet:mb-[32px] tablet:text-[24px] desktop:mb-[32px] desktop:text-[24px]'>
           프로필
         </div>
         <Form onSubmit={handleProfileSubmit}>
@@ -131,7 +131,7 @@ const MyPage = () => {
                   setProfileEmail(e.target.value);
                   setProfileEmailTouched(true);
                 }}
-                placeholder='이메일을 입력해 주세요'
+                placeholder='이메일 입력'
                 error={profileEmailError}
                 showError={profileEmailTouched && !!profileEmailError}
                 width='w-244'
@@ -147,7 +147,7 @@ const MyPage = () => {
                   setNickname(e.target.value);
                   setNicknameTouched(true);
                 }}
-                placeholder='닉네임을 입력해 주세요'
+                placeholder='닉네임 입력'
                 error={nicknameError}
                 showError={nicknameTouched && !!nicknameError}
                 width='w-244'
@@ -156,7 +156,7 @@ const MyPage = () => {
               />
             </div>
           </div>
-          <div className='flex justify-end'>
+          <div className='mt-[16px] flex justify-end tablet:mt-[24px] desktop:mt-[24px]'>
             <DefaultButton
               size='lg'
               disabled={!isProfileFormValid}
@@ -171,7 +171,7 @@ const MyPage = () => {
 
       {/* 비밀번호 변경 폼 */}
       <div className='w-[284px] rounded-[8px] border border-white bg-white px-[20px] py-[28px] tablet:w-[544px] tablet:px-[28px] tablet:py-[32px] desktop:w-[620px] desktop:px-[28px] desktop:py-[32px]'>
-        <div className='text-[20px] font-bold tablet:text-[24px] desktop:text-[24px]'>
+        <div className='mb-[24px] text-[20px] font-bold tablet:mb-[32px] tablet:text-[24px] desktop:text-[24px]'>
           비밀번호 변경
         </div>
         <Form onSubmit={handlePasswordChangeSubmit}>
@@ -184,7 +184,7 @@ const MyPage = () => {
               setCurrentPassword(e.target.value);
               setCurrentPasswordTouched(true);
             }}
-            placeholder='현재 비밀번호를 입력해 주세요'
+            placeholder='현재 비밀번호 입력'
             error={currentPasswordError}
             showError={currentPasswordTouched && !!currentPasswordError}
             width='w-244'
@@ -200,7 +200,7 @@ const MyPage = () => {
               setNewPassword(e.target.value);
               setNewPasswordTouched(true);
             }}
-            placeholder='새 비밀번호를 입력해 주세요'
+            placeholder='새 비밀번호 입력'
             error={newPasswordError}
             showError={confirmPasswordTouched && !!confirmPasswordError}
             width='w-244'
@@ -216,14 +216,14 @@ const MyPage = () => {
               setConfirmPassword(e.target.value);
               setConfirmPasswordTouched(true);
             }}
-            placeholder='새 비밀번호를 다시 입력해 주세요'
+            placeholder='새 비밀번호 다시 입력 '
             error={confirmPasswordError}
             showError={confirmPasswordTouched && !!confirmPasswordError}
             width='w-244'
             tabletWidth='tablet:w-488'
             desktopWidth='desktop:w-564'
           />
-          <div className='flex justify-end'>
+          <div className='mt-[16px] flex justify-end tablet:mt-[24px] desktop:mt-[24px]'>
             <DefaultButton
               size='lg'
               disabled={!isPasswordFormValid}
