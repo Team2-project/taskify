@@ -27,6 +27,16 @@ const MyPage = () => {
   const [newPasswordError, setNewPasswordError] = useState<string>("");
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>("");
 
+  // 필드에 입력 여부 상태 변수
+  const [profileEmailTouched, setProfileEmailTouched] =
+    useState<boolean>(false);
+  const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
+  const [currentPasswordTouched, setCurrentPasswordTouched] =
+    useState<boolean>(false);
+  const [newPasswordTouched, setNewPasswordTouched] = useState<boolean>(false);
+  const [confirmPasswordTouched, setConfirmPasswordTouched] =
+    useState<boolean>(false);
+
   // Form 유효성 상태 변수
   const [isProfileFormValid, setIsProfileFormValid] = useState<boolean>(false);
   const [isPasswordFormValid, setIsPasswordFormValid] =
@@ -117,10 +127,13 @@ const MyPage = () => {
                 type='email'
                 name='profileEmail'
                 value={profileEmail}
-                onChange={(e) => setProfileEmail(e.target.value)}
+                onChange={(e) => {
+                  setProfileEmail(e.target.value);
+                  setProfileEmailTouched(true);
+                }}
                 placeholder='이메일을 입력해 주세요'
                 error={profileEmailError}
-                showError={!!profileEmailError}
+                showError={profileEmailTouched && !!profileEmailError}
                 width='w-244'
                 tabletWidth='tablet:w-290'
                 desktopWidth='desktop:w-366'
@@ -130,10 +143,13 @@ const MyPage = () => {
                 type='text'
                 name='nickname'
                 value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
+                onChange={(e) => {
+                  setNickname(e.target.value);
+                  setNicknameTouched(true);
+                }}
                 placeholder='닉네임을 입력해 주세요'
                 error={nicknameError}
-                showError={!!nicknameError}
+                showError={nicknameTouched && !!nicknameError}
                 width='w-244'
                 tabletWidth='tablet:w-290'
                 desktopWidth='desktop:w-366'
@@ -164,10 +180,13 @@ const MyPage = () => {
             type='password'
             name='currentPassword'
             value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
+            onChange={(e) => {
+              setCurrentPassword(e.target.value);
+              setCurrentPasswordTouched(true);
+            }}
             placeholder='현재 비밀번호를 입력해 주세요'
             error={currentPasswordError}
-            showError={!!currentPasswordError}
+            showError={currentPasswordTouched && !!currentPasswordError}
             width='w-244'
             tabletWidth='tablet:w-488'
             desktopWidth='desktop:w-564'
@@ -177,10 +196,13 @@ const MyPage = () => {
             type='password'
             name='newPassword'
             value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            onChange={(e) => {
+              setNewPassword(e.target.value);
+              setNewPasswordTouched(true);
+            }}
             placeholder='새 비밀번호를 입력해 주세요'
             error={newPasswordError}
-            showError={!!newPasswordError}
+            showError={confirmPasswordTouched && !!confirmPasswordError}
             width='w-244'
             tabletWidth='tablet:w-488'
             desktopWidth='desktop:w-564'
@@ -190,10 +212,13 @@ const MyPage = () => {
             type='password'
             name='confirmPassword'
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(e) => {
+              setConfirmPassword(e.target.value);
+              setConfirmPasswordTouched(true);
+            }}
             placeholder='새 비밀번호를 다시 입력해 주세요'
             error={confirmPasswordError}
-            showError={!!confirmPasswordError}
+            showError={confirmPasswordTouched && !!confirmPasswordError}
             width='w-244'
             tabletWidth='tablet:w-488'
             desktopWidth='desktop:w-564'
