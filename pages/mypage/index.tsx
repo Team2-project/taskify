@@ -1,15 +1,16 @@
+import { FC } from "react";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 
-const MyPage = () => {
+const MyPage: FC = () => {
   return (
     <DashboardLayout
       title='계정관리'
       showActionButton={false}
       showBadgeCounter={false}
       showProfileDropdown={true}
-      fetchDashboardData={false}
+      showCreatedByMeIcon={false}
     >
-      <div>{/* MyPage의 콘텐츠 */}</div>
+      <div>layout설정해서 contents 올바른 위치에 두자!</div>
     </DashboardLayout>
   );
 };
