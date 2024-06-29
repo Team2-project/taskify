@@ -31,7 +31,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   showCreatedByMeIcon = true,
 }) => {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NjM2ODk2LCJpc3MiOiJzcC10YXNraWZ5In0.6U-hTgLC-PGnoZle_0bOcDA6h4LEgw3QnsXcQyMJLr0";
 
   const userConfig: AxiosRequestConfig = {
     url: "/users/me",
@@ -111,7 +111,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
           <div className='flex-shrink-0'>
             <SideMenu />
           </div>
-          <div className='ml-[300px] flex-1 p-4 max-desktop:ml-[160px] max-tablet:ml-[67px]'>
+          <div className='ml-[300px] flex-1 overflow-auto p-4 max-desktop:ml-[160px] max-tablet:ml-[67px]'>
             {children}
           </div>
         </div>
