@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import { atom, useAtom } from "jotai";
 import ResponsiveImage from "@/components/ResponsiveImage";
 import Form from "@/components/Form/FormField/FormField";
@@ -7,26 +7,26 @@ import { validateNickname } from "@/lib/validation";
 import { userAtom } from "@/atoms/userAtom";
 
 // Jotai를 사용한 상태 관리
-const nicknameAtom = atom("");
 const nicknameErrorAtom = atom("");
 const isProfileFormValidAtom = atom(false);
 
-interface ProfileUpdateProps {
-  email: string;
-}
-
 const ProfileUpdate: FC = () => {
-  const [nickname, setNickname] = useAtom(nicknameAtom);
+  const [userData, setUserData] = useAtom(userAtom);
   const [nicknameError, setNicknameError] = useAtom(nicknameErrorAtom);
   const [isProfileFormValid, setIsProfileFormValid] = useAtom(
     isProfileFormValidAtom,
   );
-  const [userData] = useAtom(userAtom);
+
+  // 프로필 이미지 상태 관리
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // useState를 사용한 입력 여부 상태 관리
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
 
   // 프로필 Form 유효성 검사
+  const nickname = userData?.nickname || "";
+
   useEffect(() => {
     setNicknameError(validateNickname(nickname));
     setIsProfileFormValid(!validateNickname(nickname));
@@ -37,6 +37,29 @@ const ProfileUpdate: FC = () => {
     e.preventDefault();
     if (!isProfileFormValid) return;
     console.log("프로필 업데이트:", { email: userData?.email, nickname });
+    // 여기에서 API 호출 등을 통해 nickname을 업데이트합니다.
+  };
+
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newNickname = e.target.value;
+    setUserData((prev) => (prev ? { ...prev, nickname: newNickname } : prev));
+    setNicknameTouched(true);
+  };
+
+  //프로필 이미지 업로드 관련
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -46,15 +69,32 @@ const ProfileUpdate: FC = () => {
       </div>
       <Form onSubmit={handleProfileSubmit}>
         <div className='flex flex-col gap-4 tablet:flex-row tablet:items-center'>
-          <div className='flex h-[100px] w-[100px] items-center rounded-[6px] border border-gray bg-gray tablet:h-[182px] tablet:w-[182px] desktop:h-[182px] desktop:w-[182px]'>
-            <ResponsiveImage
-              src='/icon/ic_add_profile.png'
-              alt='프로필 사진 추가'
-              mobile={{ width: 20, height: 20 }}
-              tablet={{ width: 30, height: 30 }}
-              desktop={{ width: 30, height: 30 }}
-            />
+          <div
+            className='flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-[6px] border border-gray bg-gray tablet:h-[182px] tablet:w-[182px] desktop:h-[182px] desktop:w-[182px]'
+            onClick={handleImageClick}
+          >
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt='프로필 미리보기'
+                className='h-full w-full rounded-[6px] object-cover'
+              />
+            ) : (
+              <ResponsiveImage
+                src='/icon/ic_add_profile.png'
+                alt='프로필 사진 추가'
+                mobile={{ width: 20, height: 20 }}
+                tablet={{ width: 30, height: 30 }}
+                desktop={{ width: 30, height: 30 }}
+              />
+            )}
           </div>
+          <input
+            type='file'
+            ref={fileInputRef}
+            className='hidden'
+            onChange={handleFileChange}
+          />
           <div className='flex flex-col gap-4'>
             <Form.Field
               label='이메일'
@@ -72,10 +112,7 @@ const ProfileUpdate: FC = () => {
               type='text'
               name='nickname'
               value={nickname}
-              onChange={(e) => {
-                setNickname(e.target.value);
-                setNicknameTouched(true);
-              }}
+              onChange={handleNicknameChange}
               placeholder='닉네임 입력'
               error={nicknameError}
               showError={nicknameTouched && !!nicknameError}
