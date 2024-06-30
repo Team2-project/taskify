@@ -5,6 +5,7 @@ import Form from "@/components/Form/FormField/FormField";
 import DefaultButton from "@/components/Button";
 import { validateNickname } from "@/lib/validation";
 import { userAtom } from "@/atoms/userAtom";
+import ImageUploader from "@/components/ImageUploader";
 
 // Jotai를 사용한 상태 관리
 const nicknameErrorAtom = atom("");
@@ -18,8 +19,9 @@ const ProfileUpdate: FC = () => {
   );
 
   // 프로필 이미지 상태 관리
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [profileImage, setProfileImage] = useState<string | ArrayBuffer | null>(
+    userData?.profileImageUrl || null,
+  );
 
   // useState를 사용한 입력 여부 상태 관리
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
@@ -47,16 +49,15 @@ const ProfileUpdate: FC = () => {
   };
 
   //프로필 이미지 업로드 관련
-  const handleImageClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result as string);
+        setProfileImage(reader.result);
+        setUserData((prev) =>
+          prev ? { ...prev, profileImageUrl: reader.result as string } : prev,
+        );
       };
       reader.readAsDataURL(file);
     }
@@ -69,31 +70,15 @@ const ProfileUpdate: FC = () => {
       </div>
       <Form onSubmit={handleProfileSubmit}>
         <div className='flex flex-col gap-4 tablet:flex-row tablet:items-center'>
-          <div
-            className='flex h-[100px] w-[100px] cursor-pointer items-center justify-center rounded-[6px] border border-gray bg-gray tablet:h-[182px] tablet:w-[182px] desktop:h-[182px] desktop:w-[182px]'
-            onClick={handleImageClick}
-          >
-            {profileImage ? (
-              <img
-                src={profileImage}
-                alt='프로필 미리보기'
-                className='h-full w-full rounded-[6px] object-cover'
-              />
-            ) : (
-              <ResponsiveImage
-                src='/icon/ic_add_profile.png'
-                alt='프로필 사진 추가'
-                mobile={{ width: 20, height: 20 }}
-                tablet={{ width: 30, height: 30 }}
-                desktop={{ width: 30, height: 30 }}
-              />
-            )}
-          </div>
-          <input
-            type='file'
-            ref={fileInputRef}
-            className='hidden'
-            onChange={handleFileChange}
+          <ImageUploader
+            profileImage={profileImage}
+            onImageChange={handleImageChange}
+            mobileHeight='h-[100px]'
+            tabletHeight='h-[182px]'
+            desktopHeight='h-[182px]'
+            mobileWidth='w-[100px]'
+            tabletWidth='w-[182px]'
+            desktopWidth='w-[182px]'
           />
           <div className='flex flex-col gap-4'>
             <Form.Field
