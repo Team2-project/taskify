@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { atom, useAtom } from "jotai";
 import ResponsiveImage from "@/components/ResponsiveImage";
 import Form from "@/components/Form/FormField/FormField";
 import DefaultButton from "@/components/Button";
 import { validateNickname } from "@/lib/validation";
+import { userAtom } from "@/atoms/userAtom";
 
 // Jotai를 사용한 상태 관리
 const nicknameAtom = atom("");
@@ -14,12 +15,13 @@ interface ProfileUpdateProps {
   email: string;
 }
 
-const ProfileUpdate: React.FC<ProfileUpdateProps> = ({ email }) => {
+const ProfileUpdate: FC = () => {
   const [nickname, setNickname] = useAtom(nicknameAtom);
   const [nicknameError, setNicknameError] = useAtom(nicknameErrorAtom);
   const [isProfileFormValid, setIsProfileFormValid] = useAtom(
     isProfileFormValidAtom,
   );
+  const [userData] = useAtom(userAtom);
 
   // useState를 사용한 입력 여부 상태 관리
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
@@ -34,7 +36,7 @@ const ProfileUpdate: React.FC<ProfileUpdateProps> = ({ email }) => {
   const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isProfileFormValid) return;
-    console.log("프로필 업데이트:", { email, nickname });
+    console.log("프로필 업데이트:", { email: userData?.email, nickname });
   };
 
   return (
@@ -58,7 +60,7 @@ const ProfileUpdate: React.FC<ProfileUpdateProps> = ({ email }) => {
               label='이메일'
               type='email'
               name='profileEmail'
-              value={email}
+              value={userData?.email || ""}
               disabled
               placeholder='내 이메일'
               width='w-244'

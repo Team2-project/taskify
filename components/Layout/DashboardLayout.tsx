@@ -2,13 +2,15 @@
 DashboardLayout: MyPage, Dashboard, MyDashboard에 적용하는 Layout
 */
 
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
+import { useAtom } from "jotai";
 import NavMyDashboard from "@/components/Navbar/NavMyDashboard";
 import SideMenu from "@/components/SideMenu/SideMenu";
 import fetcher from "@/lib/api/fetcher";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { User } from "@/lib/api/types/users";
+import { userAtom } from "@/atoms/userAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface DashboardLayoutProps {
@@ -48,6 +50,8 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
       Authorization: `Bearer ${token}`,
     },
   };
+  // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
+  const [, setUserData] = useAtom(userAtom);
 
   const {
     data: userData,
@@ -57,6 +61,13 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     queryKey: ["userData"],
     queryFn: () => fetcher<User>(userConfig),
   });
+
+  // userData가 업데이트될 때마다 setUserData를 호출
+  useEffect(() => {
+    if (userData) {
+      setUserData(userData);
+    }
+  }, [userData, setUserData]);
 
   const {
     data: dashboardData,
