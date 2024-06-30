@@ -3,51 +3,38 @@ import { atom, useAtom } from "jotai";
 import ResponsiveImage from "@/components/ResponsiveImage";
 import Form from "@/components/Form/FormField/FormField";
 import DefaultButton from "@/components/Button";
-import { validateEmail, validateNickname } from "@/lib/validation";
+import { validateNickname } from "@/lib/validation";
 
 // Jotai를 사용한 상태 관리
-const profileEmailAtom = atom("");
 const nicknameAtom = atom("");
-const profileEmailErrorAtom = atom("");
 const nicknameErrorAtom = atom("");
 const isProfileFormValidAtom = atom(false);
 
-const ProfileUpdate: React.FC = () => {
-  const [profileEmail, setProfileEmail] = useAtom(profileEmailAtom);
+interface ProfileUpdateProps {
+  email: string;
+}
+
+const ProfileUpdate: React.FC<ProfileUpdateProps> = ({ email }) => {
   const [nickname, setNickname] = useAtom(nicknameAtom);
-  const [profileEmailError, setProfileEmailError] = useAtom(
-    profileEmailErrorAtom,
-  );
   const [nicknameError, setNicknameError] = useAtom(nicknameErrorAtom);
   const [isProfileFormValid, setIsProfileFormValid] = useAtom(
     isProfileFormValidAtom,
   );
 
   // useState를 사용한 입력 여부 상태 관리
-  const [profileEmailTouched, setProfileEmailTouched] =
-    useState<boolean>(false);
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
 
   // 프로필 Form 유효성 검사
   useEffect(() => {
-    setProfileEmailError(validateEmail(profileEmail));
     setNicknameError(validateNickname(nickname));
-    setIsProfileFormValid(
-      !validateEmail(profileEmail) && !validateNickname(nickname),
-    );
-  }, [
-    profileEmail,
-    nickname,
-    setProfileEmailError,
-    setNicknameError,
-    setIsProfileFormValid,
-  ]);
+    setIsProfileFormValid(!validateNickname(nickname));
+  }, [nickname, setNicknameError, setIsProfileFormValid]);
 
   // 프로필 Form 제출 처리 함수
   const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isProfileFormValid) return;
-    console.log("프로필 업데이트:", { profileEmail, nickname });
+    console.log("프로필 업데이트:", { email, nickname });
   };
 
   return (
@@ -71,14 +58,9 @@ const ProfileUpdate: React.FC = () => {
               label='이메일'
               type='email'
               name='profileEmail'
-              value={profileEmail}
-              onChange={(e) => {
-                setProfileEmail(e.target.value);
-                setProfileEmailTouched(true);
-              }}
-              placeholder='이메일 입력'
-              error={profileEmailError}
-              showError={profileEmailTouched && !!profileEmailError}
+              value={email}
+              disabled
+              placeholder='내 이메일'
               width='w-244'
               tabletWidth='tablet:w-290'
               desktopWidth='desktop:w-366'
