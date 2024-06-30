@@ -25,6 +25,7 @@ interface FormFieldProps {
   error?: string;
   showError?: boolean;
   readOnly?: boolean;
+  disabled?: boolean;
   width?: string;
   tabletWidth?: string;
   desktopWidth?: string;
@@ -40,6 +41,7 @@ const FormField = ({
   error,
   showError = false,
   readOnly = false,
+  disabled = false,
   width = "w-351",
   tabletWidth = "tablet:w-520",
   desktopWidth = "desktop:w-520",
@@ -60,6 +62,7 @@ const FormField = ({
           value={value}
           onChange={onChange}
           readOnly={readOnly}
+          disabled={disabled}
           placeholder={placeholder}
           className={`h-50 ${width} ${tabletWidth} ${desktopWidth} rounded-lg border bg-white px-4 py-2 focus:outline-none ${
             showError && error
