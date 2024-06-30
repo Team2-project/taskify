@@ -2,13 +2,15 @@
 DashboardLayout: MyPage, Dashboard, MyDashboard에 적용하는 Layout
 */
 
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
+import { useAtom } from "jotai";
 import NavMyDashboard from "@/components/Navbar/NavMyDashboard";
 import SideMenu from "@/components/SideMenu/SideMenu";
 import fetcher from "@/lib/api/fetcher";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { User } from "@/lib/api/types/users";
+import { userAtom } from "@/atoms/userAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface DashboardLayoutProps {
@@ -31,7 +33,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   showCreatedByMeIcon = true,
 }) => {
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NjM2ODk2LCJpc3MiOiJzcC10YXNraWZ5In0.6U-hTgLC-PGnoZle_0bOcDA6h4LEgw3QnsXcQyMJLr0";
 
   const userConfig: AxiosRequestConfig = {
     url: "/users/me",
@@ -48,6 +50,8 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
       Authorization: `Bearer ${token}`,
     },
   };
+  // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
+  const [, setUserData] = useAtom(userAtom);
 
   const {
     data: userData,
@@ -57,6 +61,13 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     queryKey: ["userData"],
     queryFn: () => fetcher<User>(userConfig),
   });
+
+  // userData가 업데이트될 때마다 setUserData를 호출
+  useEffect(() => {
+    if (userData) {
+      setUserData(userData);
+    }
+  }, [userData, setUserData]);
 
   const {
     data: dashboardData,
@@ -111,7 +122,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
           <div className='flex-shrink-0'>
             <SideMenu />
           </div>
-          <div className='ml-[300px] flex-1 p-4 max-desktop:ml-[160px] max-tablet:ml-[67px]'>
+          <div className='ml-[300px] flex-1 overflow-auto p-4 max-desktop:ml-[160px] max-tablet:ml-[67px]'>
             {children}
           </div>
         </div>
