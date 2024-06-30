@@ -2,6 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import CreateDashBoard from "../Modal/CreateDashBoard/CreateDashBoard";
+import ColModal from "../Modal/ColModal/ColModal";
+import InviteModal from "../Modal/InviteModal/InviteModal";
+import AlarmModal from "../Modal/AlarmModal";
+import EditResModal from "../Modal/ColModal/EditResModal";
 
 /* 해당 주석은 오류 방지를 위해 api관련 함수와 컴포넌트를 묶어둔 것입니다
 
@@ -90,6 +95,13 @@ const SideMenu = () => {
         <AddButton />
         <ButtonList />
       </div>
+      {/* <AlarmModal isOpen={true} message="fdsaf" buttonText="fdsaf" /> */}
+      {/* <CreateDashBoard title="초대하기" subTitle="이메일" placeholder="codeit@codeit.com" cancelButtonText="취소" createButtonText="생성" isOpen={true} /> */}
+      {/* <ColModal type="add" title="새 컬럼 생성" subTitle="이름" placeholder="새로운 프로젝트 이름" cancelButtonText="취소" createButtonText="생성" isOpen={true} /> */}
+      {/* <InviteModal title="초대하기" subTitle="이메일" placeholder="codeit@codeit.com" cancelButtonText="취소" createButtonText="생성" isOpen={true} /> */}
+      <EditResModal isOpen={true} title="fdsa" />
+
+      
     </div>
   );
 };

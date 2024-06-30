@@ -50,7 +50,7 @@ export default function CreateDashBoard({
             type='text'
             name='boardname'
             value={value}
-            className='h-[42px] rounded-[6px] border-[1px] border-gray-30'
+            className='p-[15px] h-[42px] rounded-[6px] border-[1px] border-gray-30'
           />
           <div className='flex justify-around gap-[10px] tablet:justify-around'>
             {colors.map((color) => (

@@ -52,7 +52,7 @@ const FormField = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`h-50 w-351 rounded-lg border bg-white px-4 py-2 focus:outline-none tablet:w-520 ${
+          className={`h-50 w-full rounded-lg border bg-white px-4 py-2 focus:outline-none tablet:w-full ${
             showError && error
               ? "border-red"
               : "border-gray-30 focus:border-violet-20"
