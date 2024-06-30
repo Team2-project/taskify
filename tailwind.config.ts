@@ -47,6 +47,8 @@ const config: Config = {
       blue: {
         DEFAULT: "#76A5EA",
         10: "#9DD7ED",
+        bg: "#DBE6F7",
+        text: "#4981D5",
       },
       gray: {
         10: "#FAFAFA",
@@ -58,12 +60,14 @@ const config: Config = {
       green: {
         DEFAULT: "#7AC555",
         10: "#A3C4A2",
+        bg: "#E7F7DB",
+        text: "#86D549",
       },
       orange: {
         DEFAULT: "#FFA500",
         10: "#FFC85A",
       },
-      pink: "#E876EA",
+      pink: { DEFAULT: "#E876EA", bg: "#F7DBF0" },
       purple: "#760DDE",
       red: {
         DEFAULT: "#D6173A",
