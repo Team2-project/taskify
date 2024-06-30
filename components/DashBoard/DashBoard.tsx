@@ -1,4 +1,3 @@
-// DashBoard.tsx
 import BoardColumn from "./Card/BoardColumn";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -58,31 +57,12 @@ const DashBoard = ({ color }: Props) => {
   return (
     <div className='mb-28 desktop:mb-1 desktop:flex'>
       {columnsData.data.map((item) => (
-        <div
+        <BoardColumn
           key={item.id}
-          className='border-y border-gray-20 desktop:w-354 desktop:border-x desktop:border-y-0'
-        >
-          <div className='flex h-22 items-center justify-between px-[15px] pb-[10px] pt-[25px]'>
-            <div className='flex items-center gap-0.5'>
-              <div
-                className='mr-2 h-8 w-8 rounded-full'
-                style={{ backgroundColor: color }}
-              />
-              <h2 className='text-base font-bold'>{item.title}</h2>
-              <span></span>
-            </div>
-            <button>
-              <Image
-                src='/icon/ic_setting.svg'
-                alt='톱니바퀴'
-                width={22}
-                height={22}
-                className='tablet:h-24 tablet:w-24'
-              />
-            </button>
-          </div>
-          <BoardColumn columnId={item.id} />
-        </div>
+          columnId={item.id}
+          title={item.title}
+          color={color}
+        />
       ))}
       <div className='p-[9px] desktop:m-[20px] desktop:mt-[60px]'>
         <Button.Add onClick={handleClick} className='desktop:w-354'>
