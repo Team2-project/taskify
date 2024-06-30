@@ -109,7 +109,6 @@ const ProfileUpdate: FC = () => {
         </div>
         <div className='mb-[20px] mt-[16px] flex justify-end tablet:mb-[28px] tablet:mt-[24px] desktop:mt-[24px]'>
           <DefaultButton
-            size='lg'
             disabled={!isProfileFormValid}
             className='h-[28px] w-[84px] rounded-[4px] text-[12px] text-white tablet:h-[32px] tablet:text-[14px] desktop:h-[32px] desktop:text-[14px]'
           >
