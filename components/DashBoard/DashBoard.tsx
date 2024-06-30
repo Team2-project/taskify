@@ -1,5 +1,4 @@
 import BoardColumn from "./Card/BoardColumn";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { AxiosRequestConfig } from "axios";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";

@@ -2,7 +2,7 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { instance } from "./axios";
 
-// 로컬 스토리지에서 토큰을 가져오는 함수
+// 로컬 스토리지에서 "accessToken"이라는 키를 사용하여 저장된 토큰을 가져오는 함수
 const getToken = (): string | null => {
   return localStorage.getItem("accessToken");
 };

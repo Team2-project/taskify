@@ -5,12 +5,12 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
 import { FetchCardsResponse } from "@/lib/api/types/cards";
 import Button from "@/components/Button";
-import Image from "next/image"; // Image 컴포넌트 추가
+import Image from "next/image";
 
 interface Props {
   columnId: number;
-  title: string; // title 추가
-  color: string; // color 추가
+  title: string;
+  color: string;
 }
 
 const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
@@ -37,7 +37,6 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
 
   useEffect(() => {
     if (cardsData && cardsData.cards) {
-      console.log(`Number of Card components: ${cardsData.cards.length}`);
       setTotalCount(cardsData.totalCount);
     }
   }, [cardsData]);
