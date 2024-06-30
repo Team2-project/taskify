@@ -22,7 +22,8 @@ const MyPage: FC = () => {
       {/* 프로필 폼 */}
       <ProfileUpdate />
 
-      <div className='h-[12px]'>{/* 공백 */}</div>
+      {/* 공백 */}
+      <div className='mt-3' />
 
       {/* 비밀번호 변경 폼 */}
       <PasswordChange />
