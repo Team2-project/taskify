@@ -74,11 +74,11 @@ const ProfileUpdate: FC = () => {
             profileImage={profileImage}
             onImageChange={handleImageChange}
             mobileHeight='h-[100px]'
-            tabletHeight='h-[182px]'
-            desktopHeight='h-[182px]'
             mobileWidth='w-[100px]'
-            tabletWidth='w-[182px]'
-            desktopWidth='w-[182px]'
+            tabletHeight='tablet:h-[182px]'
+            tabletWidth='tablet:w-[182px]'
+            desktopHeight='desktop:h-[182px]'
+            desktopWidth='desktop:w-[182px]'
           />
           <div className='flex flex-col gap-4'>
             <Form.Field

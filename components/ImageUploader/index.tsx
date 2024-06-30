@@ -35,7 +35,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
   return (
     <div
-      className={`flex cursor-pointer items-center justify-center rounded-[6px] border border-gray bg-gray ${mobileHeight} ${mobileWidth} tablet:${tabletHeight} tablet:${tabletWidth} desktop:${desktopHeight} desktop:${desktopWidth}`}
+      className={`flex cursor-pointer items-center justify-center rounded-[6px] border border-gray bg-gray ${mobileHeight} ${mobileWidth} ${tabletHeight} ${tabletWidth} ${desktopHeight} ${desktopWidth}`}
       onClick={handleImageClick}
     >
       {profileImage ? (
