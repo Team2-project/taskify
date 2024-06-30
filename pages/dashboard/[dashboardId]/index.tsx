@@ -46,7 +46,7 @@ const DashboardIdPage = () => {
       showProfileDropdown={true}
     >
       <div className='desktop:overflow-x-auto desktop:whitespace-nowrap'>
-        // 대시보드 컴포넌트를 렌더링하고 생성할때 선택한 색상을 props로 전달
+        {/* 대시보드 컴포넌트를 렌더링하고 생성할때 선택한 색상을 props로 전달*/}
         <DashBoard color={dashboardData.color} />
       </div>
     </DashboardLayout>
