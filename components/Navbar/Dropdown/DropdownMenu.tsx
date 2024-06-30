@@ -2,7 +2,8 @@
 Navbar 프로필 버튼 클릭시 나타나는 Dropdown Menu
 */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
+import useClickOutside from "@/hooks/useClickOutside";
 
 interface DropdownMenuProps {
   buttonLabel: React.ReactNode;
@@ -16,22 +17,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ buttonLabel }) => {
     setIsOpen(!isOpen);
   };
 
-  // Dropdown 이외의 영역 클릭 시 Dropdown 닫기
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  // 커스텀훅 호출: Dropdown 이외의 영역 클릭 시 Dropdown 닫기
+  useClickOutside(dropdownRef, () => setIsOpen(false));
 
   return (
     <div className='relative' ref={dropdownRef}>

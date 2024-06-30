@@ -1,3 +1,7 @@
+/*
+HomeLayout: LandingPage(/)에 적용하는 Layout
+*/
+
 import { ReactNode } from "react";
 import NavMain from "@/components/Navbar/NavMain";
 import Footer from "@/components/Footer";

@@ -51,6 +51,7 @@ const config: Config = {
         text: "#4981D5",
       },
       gray: {
+        DEFAULT: "#F5F5F5",
         10: "#FAFAFA",
         20: "#EEEEEE",
         30: "#D9D9D9",

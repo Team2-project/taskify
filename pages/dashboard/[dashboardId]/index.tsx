@@ -52,7 +52,7 @@ const DashboardIdPage = () => {
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
-      <div className='ml-[67px] tablet:ml-[160px] desktop:ml-[300px] desktop:overflow-x-auto desktop:whitespace-nowrap'>
+      <div className='desktop:overflow-x-auto desktop:whitespace-nowrap'>
         <DashBoard color={dashboardData.color} />
       </div>
     </DashboardLayout>
