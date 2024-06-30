@@ -9,7 +9,7 @@ const Footer: FC = () => {
         href=''
         className='mb-[12px] flex justify-center text-[12px] text-gray-40 tablet:text-[16px]'
       >
-        ©codeit - 2023
+        ©codeit - 2024
       </Link>
       <div className='mx-auto mb-[68px] flex w-[117px] justify-between text-[12px] text-gray-40 tablet:mx-[0px] tablet:mb-[0px] tablet:w-[161px] tablet:text-[16px]'>
         <Link href=''>Privacy Policy</Link>
