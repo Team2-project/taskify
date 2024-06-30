@@ -1,7 +1,3 @@
-/*
-DashboardLayout: MyPage, Dashboard, MyDashboard에 적용하는 Layout
-*/
-
 import { FC, ReactNode, useEffect } from "react";
 import { useAtom } from "jotai";
 import NavMyDashboard from "@/components/Navbar/NavMyDashboard";
@@ -32,24 +28,16 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   showProfileDropdown = true,
   showCreatedByMeIcon = true,
 }) => {
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NjM2ODk2LCJpc3MiOiJzcC10YXNraWZ5In0.6U-hTgLC-PGnoZle_0bOcDA6h4LEgw3QnsXcQyMJLr0";
-
   const userConfig: AxiosRequestConfig = {
     url: "/users/me",
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   };
 
   const dashboardConfig: AxiosRequestConfig = {
     url: `/dashboards/${dashboardId}`,
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   };
+
   // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
   const [, setUserData] = useAtom(userAtom);
 
@@ -75,14 +63,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     isLoading: dashboardLoading,
   } = useQuery<DashboardDetailResponse>({
     queryKey: ["dashboardData", dashboardId],
-    queryFn: () =>
-      fetcher<DashboardDetailResponse>({
-        url: `/dashboards/${dashboardId}`,
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
+    queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
     enabled: !!dashboardId,
   });
 
