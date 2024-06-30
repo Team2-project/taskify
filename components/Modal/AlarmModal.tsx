@@ -9,7 +9,7 @@ interface ModalProps {
   buttonAction?: () => void;
 }
 
-const BasicModal: React.FC<ModalProps> = ({
+const AlarmModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   message,
@@ -46,4 +46,4 @@ const BasicModal: React.FC<ModalProps> = ({
   );
 };
 
-export default BasicModal;
+export default AlarmModal;

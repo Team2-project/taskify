@@ -4,8 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { instance } from "@/lib/api/axios";
 import { validateEmail, validatePassword } from "@/lib/validation";
-import Modal from "@/components/Modal/BasicModal";
-import { useMutation } from "@tanstack/react-query";
+import Modal from "@/components/Modal/AlarmModal";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -17,8 +16,9 @@ interface LoginData {
 interface LoginResponse {
   accessToken: string;
   user: {
-    // 사용자 정보에 대한 타입 정의
+    // 필요한 경우 사용자 정보에 대한 타입 정의 추가
   };
+  message?: string; // 예상되는 경우에만 추가
 }
 
 const LoginPage = () => {
@@ -35,43 +35,29 @@ const LoginPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
-  const [modalButtonText, setModalButtonText] = useState<string>("");
+  const [modalButtonText, setModalButtonText] = useState<string>("확인");
   const [modalButtonAction, setModalButtonAction] = useState<() => void>(
     () => {},
   );
 
   const router = useRouter();
 
-  async function login({ email, password }: LoginData) {
-    const response = await instance.post("/auth/login", { email, password });
-    const accessToken = response.data.accessToken;
-
-    localStorage.setItem("accessToken", accessToken); // 토큰 저장
-    return response.data;
-  }
-
-  const mutation = useMutation(login, {
-    onSuccess: (data) => {
-      console.log("로그인 성공:", data);
-      router.push("/mydashboard");
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          setIsModalOpen(true);
-          setModalMessage(`${error.response.data.message}`);
-          setModalButtonText("확인");
-          setModalButtonAction(() => {});
-        } else if (error.request) {
-          console.error("서버로부터 응답이 없습니다:", error.request);
-        } else {
-          console.error("로그인 요청 중 에러 발생:", error.message);
-        }
-      } else {
-        console.error("예상치 못한 에러 발생:", error);
-      }
-    },
-  });
+  const login = async ({
+    email,
+    password,
+  }: LoginData): Promise<LoginResponse> => {
+    try {
+      const response = await instance.post<LoginResponse>("/auth/login", {
+        email,
+        password,
+      });
+      const accessToken = response.data.accessToken;
+      localStorage.setItem("accessToken", accessToken); // 토큰 저장
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   useEffect(() => {
     const emailValidation = validateEmail(email);
@@ -93,9 +79,24 @@ const LoginPage = () => {
     }
 
     try {
-      await mutation.mutateAsync({ email, password });
+      const data = await login({ email, password });
+      console.log("로그인 성공:", data);
+      router.push("/mydashboard");
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          setIsModalOpen(true);
+          setModalMessage(`${error.response.data.message}`);
+          setModalButtonText("확인");
+          setModalButtonAction(() => {});
+        } else if (error.request) {
+          console.error("서버로부터 응답이 없습니다:", error.request);
+        } else {
+          console.error("로그인 요청 중 에러 발생:", error.message);
+        }
+      } else {
+        console.error("예상치 못한 에러 발생:", error);
+      }
     }
   };
 
@@ -103,15 +104,8 @@ const LoginPage = () => {
     <div className='flex h-screen items-center justify-center'>
       <div>
         <Link href='/'>
-          <div className='flex justify-center'>
-            <Image
-              src='logo/logo_img-text.svg'
-              alt='logo'
-              width={120}
-              height={167.4}
-              priority
-              className='form-logo-image'
-            />
+          <div className='relative m-auto flex h-168 w-120 items-center justify-center tablet:h-279 tablet:w-200'>
+            <Image src='logo/logo_img-text.svg' alt='logo' fill priority />
           </div>
         </Link>
         <h1 className='mb-10 mt-2 text-center text-xl font-medium'>

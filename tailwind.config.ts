@@ -49,6 +49,7 @@ const config: Config = {
         10: "#9DD7ED",
       },
       gray: {
+        DEFAULT: "#F5F5F5",
         10: "#FAFAFA",
         20: "#EEEEEE",
         30: "#D9D9D9",
