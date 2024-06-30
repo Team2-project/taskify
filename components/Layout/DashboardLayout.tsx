@@ -1,3 +1,7 @@
+/*
+DashboardLayout: MyPage, Dashboard, MyDashboard에 적용하는 Layout
+*/
+
 import { FC, ReactNode, useEffect } from "react";
 import { useAtom } from "jotai";
 import NavMyDashboard from "@/components/Navbar/NavMyDashboard";
