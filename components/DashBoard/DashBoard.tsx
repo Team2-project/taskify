@@ -20,15 +20,9 @@ const DashBoard = ({ color }: Props) => {
     alert("여기에 이제 칼럼 추가하는 모달창 연결해야 함!!!");
   };
 
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A"; // 실제 토큰으로 교체
-
   const columnsConfig: AxiosRequestConfig = {
     url: `/columns?dashboardId=${dashboardId}`,
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   };
 
   const {

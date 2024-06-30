@@ -10,16 +10,9 @@ const DashboardIdPage = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
 
-  // 토큰은 추후 삭제
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
-
   const dashboardConfig: AxiosRequestConfig = {
     url: `/dashboards/${dashboardId}`,
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   };
 
   const {
