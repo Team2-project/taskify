@@ -8,6 +8,7 @@ export default function MyDashBoard() {
         showActionButton={false}
         showBadgeCounter={false}
         showProfileDropdown={true}
+        showCreatedByMeIcon={false}
       >
         <div>{/* MyDashboardPage의 콘텐츠 */}</div>
       </DashboardLayout>

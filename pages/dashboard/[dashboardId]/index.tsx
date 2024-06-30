@@ -4,21 +4,15 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
+import DashBoard from "@/components/DashBoard/DashBoard";
 
 const DashboardIdPage = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
 
-  //토큰은 추후 삭제
-  const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDAyNywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5NDE0NDM0LCJpc3MiOiJzcC10YXNraWZ5In0.JRAWWvLmLkWJQRHJPX1ii6RrW7W8Q9tyRk5ENeFUz5A";
-
   const dashboardConfig: AxiosRequestConfig = {
     url: `/dashboards/${dashboardId}`,
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   };
 
   const {
@@ -51,10 +45,9 @@ const DashboardIdPage = () => {
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
-      <div>
-        <div className='h-[150px]'></div>
-        <h1 className='text-center'>대시보드 Id 페이지</h1>
-        {/* 대시보드 데이터 표시 */}
+      <div className='desktop:overflow-x-auto desktop:whitespace-nowrap'>
+        {/* 대시보드 컴포넌트를 렌더링하고 생성할때 선택한 색상을 props로 전달*/}
+        <DashBoard color={dashboardData.color} />
       </div>
     </DashboardLayout>
   );
