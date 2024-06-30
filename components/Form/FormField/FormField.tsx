@@ -68,7 +68,7 @@ const FormField = ({
             showError && error
               ? "border-red"
               : "border-gray-30 focus:border-violet-20"
-          }${readOnly || disabled ? "cursor-not-allowed bg-gray-20 text-gray-50" : ""}`}
+          }${readOnly || disabled ? "cursor-not-allowed bg-gray-30 text-gray-50" : ""}`}
         />
         {type === "password" && (
           <button
