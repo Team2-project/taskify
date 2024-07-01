@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import ColorChip from "@/public/chip/circle.svg";
 
-const BoardTitles = () => {
+const ButtonList = () => {
 
   const config: AxiosRequestConfig = {
     url:"/dashboards",
@@ -32,7 +32,7 @@ const BoardTitles = () => {
 
   const dashboardArray = dashboardData.dashboards;
 
-  const ButtonList = () => {
+  const BoardTitles = () => {
     return dashboardArray.map((dashboard, index)=>(
       <button key={index}>
         <ColorChip fill={dashboard.color}/>
@@ -42,9 +42,9 @@ const BoardTitles = () => {
   }
   return (
     <div>
-      {ButtonList()}
+      {BoardTitles()}
     </div>
   )
 }
 
-export default BoardTitles;
+export default ButtonList;
