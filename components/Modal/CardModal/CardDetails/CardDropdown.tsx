@@ -36,7 +36,7 @@ const CardDropdown = () => {
         />
       </button>
       {isOpen && (
-        <ul className='absolute right-0 mt-2 w-[120px] rounded border-[1px] border-gray-30 bg-white shadow-lg'>
+        <ul className='absolute right-0 z-50 mt-2 w-[120px] rounded border-[1px] border-gray-30 bg-white shadow-lg'>
           <div>
             <li className='p-[8px]'>
               <button className='focus:bg-purple-bg hover:bg-purple-10 w-full rounded-[4px] px-4 py-2 text-left text-center hover:text-purple focus:outline-none'>
