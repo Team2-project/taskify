@@ -6,6 +6,7 @@ import { validatePassword } from "@/lib/validation";
 import { useMutation } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
 import { AxiosError } from "axios";
+import Modal from "../Modal";
 
 // Jotai를 사용한 상태 관리
 const currentPasswordAtom = atom("");
@@ -37,6 +38,12 @@ const PasswordChange: React.FC = () => {
   const [newPasswordTouched, setNewPasswordTouched] = useState<boolean>(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] =
     useState<boolean>(false);
+
+  // 성공 모달 상태 관리
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+  // 실패 모달 상태 관리
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   // 비밀번호 변경 Form 유효성 검사
   useEffect(() => {
@@ -77,7 +84,7 @@ const PasswordChange: React.FC = () => {
       });
     },
     onSuccess: () => {
-      alert("비밀번호 변경 성공!");
+      setIsSuccessModalOpen(true);
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -86,14 +93,12 @@ const PasswordChange: React.FC = () => {
       setConfirmPasswordTouched(false);
     },
     onError: (error) => {
-      console.error("비밀번호 변경 실패:", error);
       if (error.response) {
         const responseData = error.response.data as { message: string };
-        if (error.response.status === 400) {
-          alert("현재 비밀번호가 틀립니다");
-        } else {
-          alert(responseData.message);
-        }
+        setErrorMessage(
+          responseData.message || "비밀번호 변경에 실패했습니다.",
+        );
+        setIsErrorModalOpen(true);
       }
     },
   });
@@ -175,6 +180,24 @@ const PasswordChange: React.FC = () => {
           </Button>
         </div>
       </Form>
+      <Modal.Res
+        isOpen={isSuccessModalOpen}
+        title='비밀번호 변경 성공!'
+        DeleteButtonText='확인'
+        cancelButtonText=''
+        onClose={() => setIsSuccessModalOpen(false)}
+        buttonAction={() => setIsSuccessModalOpen(false)}
+        type='mypage'
+      />
+      <Modal.Res
+        isOpen={isErrorModalOpen}
+        title={errorMessage}
+        DeleteButtonText='확인'
+        cancelButtonText=''
+        onClose={() => setIsErrorModalOpen(false)}
+        buttonAction={() => setIsErrorModalOpen(false)}
+        type='mypage'
+      />
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
 import { AxiosError } from "axios";
 import { User } from "@/lib/api/types/users";
+import Modal from "../Modal";
 
 interface ProfileUpdateData {
   nickname: string;
@@ -32,6 +33,12 @@ const ProfileUpdate: FC = () => {
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
 
   const nickname = userData?.nickname || "";
+
+  // 성공 모달 상태 관리
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
+  // 실패 모달 상태 관리
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     const error = validateNickname(nickname);
@@ -68,14 +75,14 @@ const ProfileUpdate: FC = () => {
     },
     onSuccess: (data) => {
       setUserData((prev) => (prev ? { ...prev, ...data } : prev));
-      console.log("프로필 업데이트 성공:", data);
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
-      alert("프로필 업데이트 성공!");
+      setIsSuccessModalOpen(true);
     },
     onError: (error) => {
-      console.error("프로필 업데이트 실패:", error);
       if (error.response) {
-        console.error("서버 응답 데이터:", error.response.data);
+        const responseData = error.response.data as { message: string };
+        setErrorMessage(responseData.message);
+        setIsErrorModalOpen(true);
       }
     },
   });
@@ -91,7 +98,6 @@ const ProfileUpdate: FC = () => {
         nickname: nickname,
         profileImageUrl,
       };
-      console.log("프로필 업데이트 요청 데이터:", requestData);
       mutation.mutate(requestData);
     } catch (error) {
       console.error("이미지 업로드 실패:", error);
@@ -167,6 +173,24 @@ const ProfileUpdate: FC = () => {
           </DefaultButton>
         </div>
       </Form>
+      <Modal.Res
+        isOpen={isSuccessModalOpen}
+        title='프로필 업데이트 성공!'
+        DeleteButtonText='확인'
+        cancelButtonText=''
+        onClose={() => setIsSuccessModalOpen(false)}
+        buttonAction={() => setIsSuccessModalOpen(false)}
+        type='mypage'
+      />
+      <Modal.Res
+        isOpen={isErrorModalOpen}
+        title={errorMessage}
+        DeleteButtonText='확인'
+        cancelButtonText=''
+        onClose={() => setIsErrorModalOpen(false)}
+        buttonAction={() => setIsErrorModalOpen(false)}
+        type='mypage'
+      />
     </div>
   );
 };
