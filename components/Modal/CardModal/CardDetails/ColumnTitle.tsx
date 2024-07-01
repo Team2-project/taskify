@@ -56,7 +56,7 @@ const ColumnTitle: FC<ColumnTitleProps> = ({ columnId }) => {
 
   return (
     <span
-      className={`mr-1 rounded ${background} px-1.5 py-1 text-[10px] font-normal ${color}`}
+      className={`rounded-[11px] ${background} px-1.5 py-1 text-[10px] font-normal ${color}`}
     >
       <span>● {columnTitle}</span>
     </span>
