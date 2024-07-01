@@ -14,7 +14,7 @@ const Comment: FC<CommentProps> = ({ comment, onEdit, onDelete }) => {
       <UserBadge
         nickname={comment.author.nickname}
         profileImageUrl={comment.author.profileImageUrl}
-        className='h-[50px] w-[50px] tablet:h-[70px] tablet:w-[70px] desktop:h-[70px] desktop:w-[70px]'
+        className='h-[40px] w-[40px] tablet:h-[70px] tablet:w-[70px] desktop:h-[70px] desktop:w-[70px]'
       />
       <div className='flex-1'>
         <div className='flex items-center space-x-2'>
