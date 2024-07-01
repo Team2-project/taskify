@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import { atom, useAtom } from "jotai";
 import Form from "@/components/Form/FormField/FormField";
-import DefaultButton from "@/components/Button";
+import Button from "@/components/Button";
 import { validateNickname } from "@/lib/validation";
 import { userAtom } from "@/atoms/userAtom";
 import ImageUploader from "@/components/ImageUploader";
@@ -165,12 +165,12 @@ const ProfileUpdate: FC = () => {
           </div>
         </div>
         <div className='mb-[20px] mt-[16px] flex justify-end tablet:mb-[28px] tablet:mt-[24px] desktop:mt-[24px]'>
-          <DefaultButton
+          <Button
             disabled={!isProfileFormValid}
             className='h-[28px] w-[84px] rounded-[4px] text-[12px] text-white tablet:h-[32px] tablet:text-[14px] desktop:h-[32px] desktop:text-[14px]'
           >
             저장
-          </DefaultButton>
+          </Button>
         </div>
       </Form>
       <Modal.Res
