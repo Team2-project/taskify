@@ -61,23 +61,24 @@ const CardModal: FC<ModalProps> = ({
 
   return (
     <div className='fixed inset-0 flex min-w-[370px] items-center justify-center bg-black bg-opacity-50'>
-      <div className='mx-[24px] max-h-screen w-full overflow-y-auto rounded-[8px] bg-white px-[20px] pb-[28px] pl-[20px] pr-[20px] pt-[12px] shadow-lg tablet:h-[770px] tablet:w-[680px] tablet:pl-[28px] tablet:pr-[24px] desktop:h-[763px] desktop:w-[730px] desktop:pl-[28px] desktop:pr-[24px]'>
-        <div className='mb-4 flex flex-col justify-between'>
-          <div className='flex justify-end'>
+      <div className='mx-[24px] max-h-screen w-full overflow-y-auto rounded-[8px] bg-white p-[20px] shadow-lg tablet:max-h-[770px] tablet:w-auto tablet:max-w-[680px] desktop:max-h-[770px] desktop:w-auto desktop:max-w-[730px]'>
+        {/* Header Section */}
+        <div className='mb-4 flex items-center justify-between'>
+          <h2 className='text-xl font-semibold'>{mockCardDetails.title}</h2>
+          <div className='flex space-x-2'>
             <CardDropdown />
             <CloseButton onClose={onClose} />
           </div>
-          <div>
-            <h2 className='flex text-xl font-semibold'>
-              새로운 일정 관리 Taskify
-            </h2>
-          </div>
+        </div>
+
+        {/* Mobile Layout */}
+        <div className='block tablet:hidden'>
           <div className='my-[16px]'>
             <AssigneeDetails cardDetails={mockCardDetails} />
           </div>
-          <div className='my-[16px] flex flex-wrap space-x-[8px]'>
-            <ColumnTitle columnId={mockCardDetails.columnId} />{" "}
-            <span className='text-bold text-gray-30'>|</span>
+          <div className='my-[16px] flex flex-wrap items-center space-x-[8px]'>
+            <ColumnTitle columnId={mockCardDetails.columnId} />
+            <span className='text-gray-300 font-bold'>|</span>
             {mockCardDetails.tags.map((tag) => (
               <Tag key={tag} tag={tag} />
             ))}
@@ -93,6 +94,38 @@ const CardModal: FC<ModalProps> = ({
               onDelete={handleDelete}
             />
           </div>
+        </div>
+
+        {/* Tablet과 Desktop Layout */}
+        <div className='hidden tablet:grid tablet:grid-cols-3 tablet:gap-4'>
+          <div className='col-span-2 flex items-center'>
+            <ColumnTitle columnId={mockCardDetails.columnId} />
+            <span className='mx-2 font-bold text-gray-30'>|</span>
+            <div className='flex flex-wrap items-center space-x-[8px]'>
+              {mockCardDetails.tags.map((tag) => (
+                <Tag key={tag} tag={tag} />
+              ))}
+            </div>
+          </div>
+          <div className='col-span-1 row-span-3'>
+            <AssigneeDetails cardDetails={mockCardDetails} />
+          </div>
+          <div className='col-span-2 mb-[20px]'>
+            <CardDescription cardDetails={mockCardDetails} />
+          </div>
+          <div className='col-span-1'></div>
+          <div className='col-span-2'>
+            <WriteComment />
+          </div>
+          <div className='col-span-1'></div>
+          <div className='col-span-2 mb-[16px]'>
+            <CommentList
+              commentsResponse={commentsResponse}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          </div>
+          <div className='col-span-1'></div>
         </div>
       </div>
     </div>

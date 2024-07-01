@@ -13,10 +13,10 @@ const AssigneeDetails: React.FC<AssigneeDetailsProps> = ({ cardDetails }) => {
 
   return (
     <div className='rounded-[8px] border border-gray-30 px-[16px] py-[20px]'>
-      <div className='grid grid-cols-2 gap-4'>
+      <div className='grid grid-cols-2 gap-4 tablet:grid-cols-1'>
         <span className='text-sm font-semibold'>담당자</span>
-        <span className='text-sm font-semibold'>마감일</span>
-        <div className='relative'>
+        <span className='text-sm font-semibold tablet:hidden'>마감일</span>
+        <div className='relative tablet:col-span-2'>
           <UserBadge
             nickname={assignee.nickname}
             profileImageUrl={assignee.profileImageUrl ?? undefined}
@@ -26,7 +26,15 @@ const AssigneeDetails: React.FC<AssigneeDetailsProps> = ({ cardDetails }) => {
           />
           <span className='ml-12 text-base'>{assignee.nickname}</span>
         </div>
-        <span className='self-end text-base'>{formattedDueDate}</span>
+        <span className='self-end text-base tablet:hidden'>
+          {formattedDueDate}
+        </span>
+        <div className='hidden tablet:col-span-2 tablet:block'>
+          <span className='text-sm font-semibold'>마감일</span>
+          <div>
+            <span className='text-base'>{formattedDueDate}</span>
+          </div>
+        </div>
       </div>
     </div>
   );
