@@ -4,8 +4,8 @@ interface UserBadgeProps {
   customValue?: string;
   nickname?: string;
   profileImageUrl?: string;
-  bgColor: string;
-  textColor: string;
+  bgColor?: string;
+  textColor?: string;
   size?: string;
   borderColor?: string;
   fontSize?: string;
