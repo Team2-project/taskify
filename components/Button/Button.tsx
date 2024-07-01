@@ -1,7 +1,6 @@
 import { MouseEventHandler, ReactNode } from "react";
 
 type DefaultButtonProps = {
-  size?: "md" | "lg";
   children: ReactNode;
   disabled?: boolean;
   className?: string;
@@ -9,7 +8,6 @@ type DefaultButtonProps = {
 };
 
 export default function DefaultButton({
-  size,
   children = "",
   disabled = false,
   className = "",
@@ -18,21 +16,13 @@ export default function DefaultButton({
   const baseClasses =
     "border-box select-none rounded-[8px] bg-violet-20 text-[14px] font-medium text-white";
 
-  const sizeClasses = size
-    ? {
-        md: "w-max",
-        lg: "w-full",
-      }[size]
-    : "";
-
   return (
     <button
       disabled={disabled}
-      className={`${baseClasses} ${sizeClasses} ${className}`}
+      className={`${baseClasses} ${className}`}
       onClick={onClick}
     >
       {children}
     </button>
   );
 }
-

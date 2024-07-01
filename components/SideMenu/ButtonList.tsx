@@ -2,16 +2,16 @@ import fetcher from "@/lib/api/fetcher";
 import { DashboardsResponse, DashboardResponse } from "@/lib/api/types/dashboards";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import ColorChip from "@/public/chip/circle.svg";
+import ColorChip from "@/public/chip/circle_small.svg";
 
 const ButtonList = () => {
 
   const config: AxiosRequestConfig = {
     url:"/dashboards",
     method: "GET",
-    headers: {
-      navigationMethod: "pagination",
-    },
+    params:{
+      navigationMethod:"pagination"
+    }
   };
 
   const {
@@ -34,9 +34,9 @@ const ButtonList = () => {
 
   const BoardTitles = () => {
     return dashboardArray.map((dashboard, index)=>(
-      <button key={index}>
+      <button key={index} className="flex justify-start items-center w-[276px] h-[45px] cursor-pointer rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit">
         <ColorChip fill={dashboard.color}/>
-        <p>{dashboard.title}</p>
+        <p className="text-gray-50 max-tablet:hidden">{dashboard.title}</p>
       </button>
     ))
   }
