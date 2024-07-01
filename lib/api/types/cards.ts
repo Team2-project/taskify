@@ -29,7 +29,7 @@ export interface FetchCardsResponse {
       nickname: string;
       id: number;
     };
-    imageUrl: string;
+    imageUrl: string | null;
     teamId: string;
     columnId: number;
     createdAt: string;
@@ -60,7 +60,7 @@ export interface FetchCardDetailsResponse {
     nickname: string;
     id: number;
   };
-  imageUrl: string;
+  imageUrl: string | null;
   teamId: string;
   columnId: number;
   createdAt: string;
