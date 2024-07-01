@@ -1,13 +1,16 @@
 import React, { FC } from "react";
 import UserBadge from "@/components/UserBadge";
 import { FetchCardDetailsResponse } from "@/lib/api/types/cards";
+import { format } from "date-fns";
 
 interface AssigneeDetailsProps {
   cardDetails: FetchCardDetailsResponse;
 }
 
-const AssigneeDetails: FC<AssigneeDetailsProps> = ({ cardDetails }) => {
+const AssigneeDetails: React.FC<AssigneeDetailsProps> = ({ cardDetails }) => {
   const { assignee, dueDate } = cardDetails;
+  const formattedDueDate = format(new Date(dueDate), "yyyy.MM.dd hh:mm");
+
   return (
     <div className='rounded-[8px] border border-gray-30 px-[16px] py-[12px]'>
       <div className='grid grid-cols-2 gap-4'>
@@ -23,7 +26,7 @@ const AssigneeDetails: FC<AssigneeDetailsProps> = ({ cardDetails }) => {
           />
           <span className='text-base'>{assignee.nickname}</span>
         </div>
-        <span className='text-base'>{new Date(dueDate).toLocaleString()}</span>
+        <span className='text-base'>{formattedDueDate}</span>
       </div>
     </div>
   );
