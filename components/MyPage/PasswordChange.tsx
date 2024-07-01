@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { atom, useAtom } from "jotai";
 import Form from "@/components/Form/FormField/FormField";
-import DefaultButton from "@/components/Button";
+import Button from "@/components/Button";
 import { validatePassword } from "@/lib/validation";
+import { useMutation } from "@tanstack/react-query";
+import fetcher from "@/lib/api/fetcher";
+import { AxiosError } from "axios";
 
 // Jotai를 사용한 상태 관리
 const currentPasswordAtom = atom("");
@@ -43,7 +46,10 @@ const PasswordChange: React.FC = () => {
       newPassword !== confirmPassword ? "새 비밀번호가 일치하지 않습니다." : "",
     );
     setIsPasswordFormValid(
-      !validatePassword(currentPassword) &&
+      currentPassword !== "" &&
+        newPassword !== "" &&
+        confirmPassword !== "" &&
+        !validatePassword(currentPassword) &&
         !validatePassword(newPassword) &&
         newPassword === confirmPassword,
     );
@@ -57,11 +63,46 @@ const PasswordChange: React.FC = () => {
     setIsPasswordFormValid,
   ]);
 
+  // 비밀번호 변경 요청을 위한 mutation 훅 설정
+  const mutation = useMutation<
+    void,
+    AxiosError,
+    { password: string; newPassword: string }
+  >({
+    mutationFn: async ({ password, newPassword }) => {
+      await fetcher<void>({
+        url: "/auth/password",
+        method: "PUT",
+        data: { password, newPassword },
+      });
+    },
+    onSuccess: () => {
+      alert("비밀번호 변경 성공!");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setCurrentPasswordTouched(false);
+      setNewPasswordTouched(false);
+      setConfirmPasswordTouched(false);
+    },
+    onError: (error) => {
+      console.error("비밀번호 변경 실패:", error);
+      if (error.response) {
+        const responseData = error.response.data as { message: string };
+        if (error.response.status === 400) {
+          alert("현재 비밀번호가 틀립니다");
+        } else {
+          alert(responseData.message);
+        }
+      }
+    },
+  });
+
   // 비밀번호 변경 Form 제출 처리 함수
   const handlePasswordChangeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isPasswordFormValid) return;
-    console.log("비밀번호 변경:", { currentPassword, newPassword });
+    mutation.mutate({ password: currentPassword, newPassword });
   };
 
   return (
@@ -111,6 +152,13 @@ const PasswordChange: React.FC = () => {
             setConfirmPassword(e.target.value);
             setConfirmPasswordTouched(true);
           }}
+          onBlur={() => {
+            if (newPassword !== confirmPassword) {
+              setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+            } else {
+              setConfirmPasswordError("");
+            }
+          }}
           placeholder='새 비밀번호 다시 입력 '
           error={confirmPasswordError}
           showError={confirmPasswordTouched && !!confirmPasswordError}
@@ -119,12 +167,12 @@ const PasswordChange: React.FC = () => {
           desktopWidth='desktop:w-564'
         />
         <div className='mb-[20px] mt-[16px] flex justify-end tablet:mb-[28px] tablet:mt-[24px] desktop:mt-[24px]'>
-          <DefaultButton
+          <Button
             disabled={!isPasswordFormValid}
             className='h-[28px] w-[84px] rounded-[4px] text-[12px] text-white tablet:h-[32px] tablet:text-[14px] desktop:h-[32px] desktop:text-[14px]'
           >
             변경
-          </DefaultButton>
+          </Button>
         </div>
       </Form>
     </div>
