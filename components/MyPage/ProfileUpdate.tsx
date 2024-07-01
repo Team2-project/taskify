@@ -1,13 +1,21 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import { atom, useAtom } from "jotai";
-import ResponsiveImage from "@/components/ResponsiveImage";
 import Form from "@/components/Form/FormField/FormField";
 import DefaultButton from "@/components/Button";
 import { validateNickname } from "@/lib/validation";
 import { userAtom } from "@/atoms/userAtom";
 import ImageUploader from "@/components/ImageUploader";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import fetcher from "@/lib/api/fetcher";
+import { AxiosError } from "axios";
+import { User } from "@/lib/api/types/users";
 
-// Jotai를 사용한 상태 관리
+interface ProfileUpdateData {
+  nickname: string;
+  profileImageUrl: string | null;
+}
+
+// Jotai 상태 관리
 const nicknameErrorAtom = atom("");
 const isProfileFormValidAtom = atom(false);
 
@@ -17,52 +25,95 @@ const ProfileUpdate: FC = () => {
   const [isProfileFormValid, setIsProfileFormValid] = useAtom(
     isProfileFormValidAtom,
   );
-
-  // 프로필 이미지 상태 관리
-  const [profileImage, setProfileImage] = useState<string | ArrayBuffer | null>(
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
     userData?.profileImageUrl || null,
   );
-
-  // useState를 사용한 입력 여부 상태 관리
   const [nicknameTouched, setNicknameTouched] = useState<boolean>(false);
 
-  // 프로필 Form 유효성 검사
   const nickname = userData?.nickname || "";
 
   useEffect(() => {
-    setNicknameError(validateNickname(nickname));
-    setIsProfileFormValid(!validateNickname(nickname));
+    const error = validateNickname(nickname);
+    setNicknameError(error);
+    setIsProfileFormValid(!error);
   }, [nickname, setNicknameError, setIsProfileFormValid]);
 
-  // 프로필 Form 제출 처리 함수
-  const handleProfileSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!isProfileFormValid) return;
-    console.log("프로필 업데이트:", { email: userData?.email, nickname });
-    // 여기에서 API 호출 등을 통해 nickname을 업데이트합니다.
+  const queryClient = useQueryClient();
+
+  const uploadImage = async (image: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("image", image);
+
+    const response = await fetcher<{ profileImageUrl: string }>({
+      url: "/users/me/image",
+      method: "POST",
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.profileImageUrl;
   };
 
+  const mutation = useMutation<User, AxiosError, ProfileUpdateData>({
+    mutationFn: async (variables) => {
+      const response = await fetcher<User>({
+        url: "/users/me",
+        method: "PUT",
+        data: variables,
+      });
+      return response;
+    },
+    onSuccess: (data) => {
+      setUserData((prev) => (prev ? { ...prev, ...data } : prev));
+      console.log("프로필 업데이트 성공:", data);
+      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      alert("프로필 업데이트 성공!");
+    },
+    onError: (error) => {
+      console.error("프로필 업데이트 실패:", error);
+      if (error.response) {
+        console.error("서버 응답 데이터:", error.response.data);
+      }
+    },
+  });
+
+  const handleProfileSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!isProfileFormValid) return;
+    try {
+      const profileImageUrl = profileImage
+        ? await uploadImage(profileImage)
+        : null;
+      const requestData: ProfileUpdateData = {
+        nickname: nickname,
+        profileImageUrl,
+      };
+      console.log("프로필 업데이트 요청 데이터:", requestData);
+      mutation.mutate(requestData);
+    } catch (error) {
+      console.error("이미지 업로드 실패:", error);
+    }
+  };
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
     setUserData((prev) => (prev ? { ...prev, nickname: newNickname } : prev));
     setNicknameTouched(true);
   };
 
-  //프로필 이미지 업로드 관련
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setProfileImage(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result);
-        setUserData((prev) =>
-          prev ? { ...prev, profileImageUrl: reader.result as string } : prev,
-        );
+        setProfileImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
-
   return (
     <div className='w-[284px] rounded-[8px] border border-white bg-white px-[20px] py-[28px] tablet:w-[544px] tablet:px-[28px] tablet:py-[32px] desktop:w-[620px] desktop:px-[28px] desktop:py-[32px]'>
       <div className='mb-[24px] text-[20px] font-bold tablet:mb-[32px] tablet:text-[24px] desktop:mb-[32px] desktop:text-[24px]'>
@@ -71,7 +122,7 @@ const ProfileUpdate: FC = () => {
       <Form onSubmit={handleProfileSubmit}>
         <div className='flex flex-col gap-4 tablet:flex-row tablet:items-center'>
           <ImageUploader
-            profileImage={profileImage}
+            profileImage={profileImagePreview}
             onImageChange={handleImageChange}
             mobileHeight='h-[100px]'
             mobileWidth='w-[100px]'
