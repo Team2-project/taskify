@@ -23,6 +23,7 @@ const ProfileDropdown: FC<ProfileDropdownProps> = ({
               profileImageUrl={profileImageUrl}
               bgColor='bg-green-10'
               textColor='text-white'
+              className='h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]'
             />
           </div>
           <div className='hidden font-medium tablet:inline desktop:inline'>

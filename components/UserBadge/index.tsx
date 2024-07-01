@@ -6,9 +6,9 @@ interface UserBadgeProps {
   profileImageUrl?: string;
   bgColor?: string;
   textColor?: string;
-  size?: string;
   borderColor?: string;
   fontSize?: string;
+  className?: string;
 }
 
 const UserBadge: FC<UserBadgeProps> = ({
@@ -19,22 +19,25 @@ const UserBadge: FC<UserBadgeProps> = ({
   textColor = "text-black",
   borderColor = "border-white",
   fontSize = "text-base",
+  className = "",
 }) => {
   const displayValue =
     customValue ?? (nickname ? nickname.charAt(0).toUpperCase() : "");
 
   return (
     <div
-      className={`flex items-center justify-center rounded-full border-2 ${borderColor} ${bgColor} h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]`}
+      className={`flex items-center justify-center rounded-full border-2 ${borderColor} ${bgColor} ${className}`}
     >
       {profileImageUrl ? (
         <img
-          className='h-full w-full rounded-full'
+          className={`rounded-full object-cover`}
           src={profileImageUrl}
           alt='Profile'
         />
       ) : (
-        <span className={`${fontSize} font-bold ${textColor}`}>
+        <span
+          className={`${fontSize} rounded-full object-cover font-bold ${textColor}`}
+        >
           {displayValue}
         </span>
       )}

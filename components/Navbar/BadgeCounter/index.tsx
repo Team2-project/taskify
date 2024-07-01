@@ -29,6 +29,7 @@ const BadgeCounter: FC = () => {
           profileImageUrl={member.profileImageUrl}
           bgColor={bgColorOptions[index % bgColorOptions.length]}
           textColor='text-white'
+          className='h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]'
         />
       ))}
       {/* MaxDisplayCount이상일 경우 나머지 인원 +숫자로 표기 */}
@@ -38,6 +39,7 @@ const BadgeCounter: FC = () => {
           customValue={`+${totalCount - maxDisplayCount}`}
           bgColor='bg-red-10'
           textColor='text-red-20'
+          className='h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]'
         />
       )}
     </div>
