@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
+import ChangeCard from "@/components/DashBoardEdit/ChangeCard";
+import BackLink from "@/components/MyPage/BackLink";
 
 const DashboardEditPage = () => {
   const router = useRouter();
@@ -16,10 +18,11 @@ const DashboardEditPage = () => {
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
-      <div>
-        <div className='h-[150px]'></div>
-        <h1 className='text-center'>대시보드 Edit 페이지</h1>
-        {/* 대시보드 Edit 데이터 표시 */}
+      <div className='p-[12px] tablet:p-[20]'>
+        <BackLink href={`/dashboard/${dashboardId}`} label='돌아가기' />
+        <div className='gap-[11px] tablet:gap-3'>
+          <ChangeCard />
+        </div>
       </div>
     </DashboardLayout>
   );
