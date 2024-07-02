@@ -72,7 +72,7 @@ const CardDetailsModal: FC<ModalProps> = ({
         <div className='mb-4 flex items-center justify-between'>
           <h2 className='text-xl font-semibold'>{cardDetails.title}</h2>
           <div className='flex space-x-2'>
-            <CardDropdown />
+            <CardDropdown dashboardId={dashboardId} cardId={cardId} />
             <CloseButton onClose={onClose} />
           </div>
         </div>
@@ -102,11 +102,7 @@ const CardDetailsModal: FC<ModalProps> = ({
             dashboardId={dashboardId}
           />
           <div className='mb-[16px]'>
-            <CommentList
-              cardId={cardId}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            <CommentList cardId={cardId} />
           </div>
         </div>
 
@@ -140,11 +136,7 @@ const CardDetailsModal: FC<ModalProps> = ({
           </div>
           <div className='col-span-1'></div>
           <div className='col-span-2 mb-[16px]'>
-            <CommentList
-              cardId={cardId}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
+            <CommentList cardId={cardId} />
           </div>
           <div className='col-span-1'></div>
         </div>

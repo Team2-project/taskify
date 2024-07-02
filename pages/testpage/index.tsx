@@ -32,7 +32,7 @@ const TestPage: FC = () => {
         onSubmit={handleSubmit}
         title='Test Modal Title'
         subTitle='This is a subtitle for the test page'
-        cardId={8719} // 테스트 카드 ID
+        cardId={8725} // 테스트 카드 ID
         dashboardId={9807} // 테스트 대시보드 ID
       />
     </div>
