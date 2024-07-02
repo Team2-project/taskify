@@ -15,6 +15,7 @@ import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  userData: User;
   title?: string;
   dashboardId?: string;
   showActionButton?: boolean;

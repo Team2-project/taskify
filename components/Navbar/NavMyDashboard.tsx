@@ -14,6 +14,7 @@ import { User } from "@/lib/api/types/users";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface NavMyDashboardProps {
+  userData: User;
   dashboardData:
     | DashboardDetailResponse
     | { title: string; createdByMe: boolean };
