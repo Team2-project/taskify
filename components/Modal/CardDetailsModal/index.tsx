@@ -40,7 +40,7 @@ interface ModalProps {
   commentsResponse: CommentsResponse;
 }
 
-const CardModal: FC<ModalProps> = ({
+const CardDetailsModal: FC<ModalProps> = ({
   isOpen,
   value,
   onClose,
@@ -132,4 +132,4 @@ const CardModal: FC<ModalProps> = ({
   );
 };
 
-export default CardModal;
+export default CardDetailsModal;

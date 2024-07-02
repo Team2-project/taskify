@@ -3,7 +3,7 @@ Modal test 페이지, 기능 완성 후 삭제 예정(JIN)
 */
 
 import { FC, useState } from "react";
-import CardModal from "@/components/Modal/CardModal";
+import CardDetailsModal from "@/components/Modal/CardDetailsModal";
 import { CommentsResponse } from "@/lib/api/types/comments";
 
 const mockData: CommentsResponse = {
@@ -88,7 +88,7 @@ const TestPage: FC = () => {
       >
         Open Modal
       </button>
-      <CardModal
+      <CardDetailsModal
         isOpen={isModalOpen}
         value={inputValue}
         onClose={handleCloseModal}
