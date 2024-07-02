@@ -2,21 +2,45 @@
   댓글 작성해서 입력하는 WriterComment 컴포넌트 / 아직 전송 로직 입력 전입니다
 */
 
-import { FC } from "react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import Button from "@/components/Button";
+import fetcher from "@/lib/api/fetcher";
 
-const WriteComment: FC = () => {
+interface WriteCommentProps {
+  cardId: number;
+  columnId: number;
+  dashboardId: number;
+}
+
+const WriteComment: FC<WriteCommentProps> = ({
+  cardId,
+  columnId,
+  dashboardId,
+}) => {
   const [comment, setComment] = useState("");
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
-  const handleCommentSubmit = () => {
-    // Submit logic here
-    console.log("Comment submitted:", comment);
-    setComment("");
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await fetcher({
+        url: `comments`,
+        method: "POST",
+        data: {
+          content: comment,
+          cardId,
+          columnId,
+          dashboardId,
+        },
+      });
+      console.log("Comment submitted:", comment);
+      setComment("");
+    } catch (error) {
+      console.error("Failed to submit comment", error);
+    }
   };
 
   return (
