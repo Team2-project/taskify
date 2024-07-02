@@ -14,7 +14,7 @@ export default function DefaultButton({
   onClick,
 }: DefaultButtonProps) {
   const baseClasses =
-    "border-box select-none rounded-[8px] bg-violet-20 text-[14px] font-medium text-white";
+    "border-box select-none rounded-[8px] bg-violet-20 text-[14px] font-medium";
 
   return (
     <button
