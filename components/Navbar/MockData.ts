@@ -32,7 +32,8 @@ export const mockMembersData: MembersResponse = {
       userId: 1,
       email: "user1@example.com",
       nickname: "곽철이",
-      profileImageUrl: "https://example.com/profiles/user1.jpg",
+      profileImageUrl:
+        "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/profile_image/6-2_4027_1719820913175.jpeg",
       createdAt: "2024-06-23T16:22:05.725Z",
       updatedAt: "2024-06-23T16:22:05.725Z",
       isOwner: true,
@@ -42,7 +43,8 @@ export const mockMembersData: MembersResponse = {
       userId: 2,
       email: "user2@example.com",
       nickname: "춘식이",
-      profileImageUrl: "https://example.com/profiles/user2.jpg",
+      profileImageUrl:
+        "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/profile_image/6-2_4027_1719820913175.jpeg",
       createdAt: "2024-06-23T16:23:05.725Z",
       updatedAt: "2024-06-23T16:23:05.725Z",
       isOwner: false,
@@ -52,7 +54,7 @@ export const mockMembersData: MembersResponse = {
       userId: 3,
       email: "user3@example.com",
       nickname: "오둥이",
-      profileImageUrl: "https://example.com/profiles/user3.jpg",
+      profileImageUrl: "",
       createdAt: "2024-06-23T16:24:05.725Z",
       updatedAt: "2024-06-23T16:24:05.725Z",
       isOwner: false,
@@ -62,7 +64,8 @@ export const mockMembersData: MembersResponse = {
       userId: 4,
       email: "user4@example.com",
       nickname: "고심이",
-      profileImageUrl: "https://example.com/profiles/user4.jpg",
+      profileImageUrl:
+        "https://sprint-fe-project.s3.ap-northeast-2.amazonaws.com/taskify/profile_image/6-2_4027_1719820913175.jpeg",
       createdAt: "2024-06-23T16:25:05.725Z",
       updatedAt: "2024-06-23T16:25:05.725Z",
       isOwner: false,

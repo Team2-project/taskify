@@ -30,7 +30,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
   showBadgeCounter = true,
   showProfileDropdown = true,
 }) => {
-  const profileInitial = userData.nickname.charAt(0) ?? "";
+  const profileInitial = userData.nickname.charAt(0).toUpperCase() ?? "";
   const { title, createdByMe } = dashboardData;
 
   return (
@@ -63,6 +63,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
               <ProfileDropdown
                 nickname={userData.nickname}
                 profileInitial={profileInitial}
+                profileImageUrl={userData.profileImageUrl ?? undefined}
               />
             </div>
           )}

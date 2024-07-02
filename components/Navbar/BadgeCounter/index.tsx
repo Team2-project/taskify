@@ -3,7 +3,7 @@ my dashboard에서 member들 보여주는 카운터
 우선 MockData와 연결 - 추후 API 연결
 */
 import { FC } from "react";
-import UserBadge from "@/components/Navbar/UserBadge/UserBadge";
+import UserBadge from "@/components/UserBadge";
 import { mockMembersData } from "../MockData";
 import useMaxDisplayCount from "./useMaxDisplayCount";
 
@@ -26,8 +26,10 @@ const BadgeCounter: FC = () => {
         <UserBadge
           key={member.id}
           nickname={member.nickname}
+          profileImageUrl={member.profileImageUrl}
           bgColor={bgColorOptions[index % bgColorOptions.length]}
           textColor='text-white'
+          className='h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]'
         />
       ))}
       {/* MaxDisplayCount이상일 경우 나머지 인원 +숫자로 표기 */}
@@ -37,6 +39,7 @@ const BadgeCounter: FC = () => {
           customValue={`+${totalCount - maxDisplayCount}`}
           bgColor='bg-red-10'
           textColor='text-red-20'
+          className='h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]'
         />
       )}
     </div>
