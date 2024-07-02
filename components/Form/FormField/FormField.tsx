@@ -21,6 +21,7 @@ interface FormFieldProps {
   name: string;
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: () => void;
   placeholder?: string;
   error?: string;
   showError?: boolean;
@@ -37,6 +38,7 @@ const FormField = ({
   name,
   value,
   onChange,
+  onBlur,
   placeholder,
   error,
   showError = false,
@@ -61,6 +63,7 @@ const FormField = ({
           name={name}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           readOnly={readOnly}
           disabled={disabled}
           placeholder={placeholder}
