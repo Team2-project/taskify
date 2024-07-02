@@ -1,27 +1,12 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { ColumnResponse } from "@/lib/api/types/columns";
-import Image from "next/image";
+import fetcher from "@/lib/api/fetcher";
+import { useQuery } from "@tanstack/react-query";
 
 interface ColumnTitleProps {
   columnId: number;
+  dashboardId: number;
 }
-
-const mockColumns: ColumnResponse[] = [
-  {
-    id: 33066,
-    title: "To Do",
-    teamId: "6-2",
-    createdAt: "2024-07-01T20:00:37.413Z",
-    updatedAt: "2024-07-01T20:00:37.413Z",
-  },
-  {
-    id: 33067,
-    title: "In Progress",
-    teamId: "6-2",
-    createdAt: "2024-07-01T20:00:37.413Z",
-    updatedAt: "2024-07-01T20:00:37.413Z",
-  },
-];
 
 const tagColors: { background: string; color: string }[] = [
   { background: "bg-pink-bg", color: "text-pink" },
@@ -31,20 +16,31 @@ const tagColors: { background: string; color: string }[] = [
   { background: "bg-orange", color: "text-orange-10" },
 ];
 
-const ColumnTitle: FC<ColumnTitleProps> = ({ columnId }) => {
-  const [columnTitle, setColumnTitle] = useState<string>("");
+const ColumnTitle: FC<ColumnTitleProps> = ({ columnId, dashboardId }) => {
+  const { data, error, isLoading } = useQuery<{
+    result: string;
+    data: ColumnResponse[];
+  }>({
+    queryKey: ["columns", dashboardId],
+    queryFn: () =>
+      fetcher<{ result: string; data: ColumnResponse[] }>({
+        url: `columns`,
+        method: "GET",
+        params: { dashboardId },
+      }),
+  });
 
-  useEffect(() => {
-    const fetchColumnTitle = async () => {
-      // Mock data를 사용하여 columnTitle을 가져오는 중. 추후 API 연결.
-      const column = mockColumns.find((col) => col.id === columnId);
-      if (column) {
-        setColumnTitle(column.title);
-      }
-    };
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
 
-    fetchColumnTitle();
-  }, [columnId]);
+  if (error) {
+    console.error("Failed to fetch column title", error);
+    return <span>Error</span>;
+  }
+
+  const column = data?.data.find((col) => col.id === columnId);
+  const columnTitle = column ? column.title : "Unknown Column";
 
   const { background, color } =
     tagColors[
