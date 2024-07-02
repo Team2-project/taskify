@@ -9,7 +9,6 @@ import CardDropdown from "./CardDetails/CardDropdown";
 import ColumnTitle from "./CardDetails/ColumnTitle";
 import fetcher from "@/lib/api/fetcher";
 import { FetchCardDetailsResponse } from "@/lib/api/types/cards";
-import { CommentsResponse } from "@/lib/api/types/comments";
 
 interface ModalProps {
   isOpen: boolean;
@@ -34,8 +33,6 @@ const CardDetailsModal: FC<ModalProps> = ({
 }) => {
   const [cardDetails, setCardDetails] =
     useState<FetchCardDetailsResponse | null>(null);
-  const [commentsResponse, setCommentsResponse] =
-    useState<CommentsResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,24 +47,15 @@ const CardDetailsModal: FC<ModalProps> = ({
         method: "GET",
       })
         .then((data) => setCardDetails(data))
-        .catch((error) => console.error("Failed to fetch card details", error));
-
-      // Fetch comments
-      fetcher<CommentsResponse>({
-        url: `comments`,
-        method: "GET",
-        params: { cardId, size: 10 },
-      })
-        .then((data) => setCommentsResponse(data))
         .catch((error) => {
-          console.error("Failed to fetch comments", error);
-          setError("Failed to fetch comments");
+          console.error("Failed to fetch card details", error);
+          setError("Failed to fetch card details");
         })
         .finally(() => setIsLoading(false));
     }
   }, [isOpen, cardId]);
 
-  if (!isOpen || !cardDetails || !commentsResponse) return null;
+  if (!isOpen || !cardDetails) return null;
 
   const handleEdit = (id: number) => {
     console.log(`Edit clicked for comment ID: ${id}`);
@@ -115,7 +103,7 @@ const CardDetailsModal: FC<ModalProps> = ({
           />
           <div className='mb-[16px]'>
             <CommentList
-              commentsResponse={commentsResponse}
+              cardId={cardId}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
@@ -153,7 +141,7 @@ const CardDetailsModal: FC<ModalProps> = ({
           <div className='col-span-1'></div>
           <div className='col-span-2 mb-[16px]'>
             <CommentList
-              commentsResponse={commentsResponse}
+              cardId={cardId}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />

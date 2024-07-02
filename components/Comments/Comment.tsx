@@ -1,3 +1,7 @@
+/*
+  작은 단위의 Comment(댓글) 창
+*/
+
 import { FC } from "react";
 import UserBadge from "@/components/UserBadge";
 import { CommentResponse } from "@/lib/api/types/comments";

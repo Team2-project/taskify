@@ -1,10 +1,15 @@
 /*
-  댓글 작성해서 입력하는 WriterComment 컴포넌트 / 아직 전송 로직 입력 전입니다
+  댓글 작성해서 입력하는 WriterComment 컴포넌트
 */
 
 import { FC, useState } from "react";
 import Button from "@/components/Button";
 import fetcher from "@/lib/api/fetcher";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  CreateCommentRequest,
+  CommentResponse,
+} from "@/lib/api/types/comments";
 
 interface WriteCommentProps {
   cardId: number;
@@ -19,28 +24,33 @@ const WriteComment: FC<WriteCommentProps> = ({
 }) => {
   const [comment, setComment] = useState("");
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<CommentResponse, Error, CreateCommentRequest>({
+    mutationFn: async (newComment) => {
+      const response = await fetcher<CommentResponse>({
+        url: `comments`,
+        method: "POST",
+        data: newComment,
+      });
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", cardId] });
+      setComment(""); // 댓글 작성 후 입력란 비우기
+    },
+    onError: (error) => {
+      console.error("Failed to submit comment", error);
+    },
+  });
+
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
 
-  const handleCommentSubmit = async (e: React.FormEvent) => {
+  const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await fetcher({
-        url: `comments`,
-        method: "POST",
-        data: {
-          content: comment,
-          cardId,
-          columnId,
-          dashboardId,
-        },
-      });
-      console.log("Comment submitted:", comment);
-      setComment("");
-    } catch (error) {
-      console.error("Failed to submit comment", error);
-    }
+    mutation.mutate({ content: comment, cardId, columnId, dashboardId });
   };
 
   return (
