@@ -1,5 +1,5 @@
 /*
-  댓글 작성해서 입력하는 WriterComment 컴포넌트
+  댓글 작성해서 입력하는 WriteComment 컴포넌트
 */
 
 import { FC, useState } from "react";
@@ -72,7 +72,10 @@ const WriteComment: FC<WriteCommentProps> = ({
           ></textarea>
           <Button
             onClick={handleCommentSubmit}
-            className='h-[28px] w-[84px] justify-end rounded-[4px] border border-gray-30 bg-white text-[12px] text-purple tablet:h-[32px] tablet:text-[14px] desktop:h-[32px] desktop:text-[14px]'
+            disabled={!comment.trim()}
+            className={`h-[28px] w-[84px] justify-end rounded-[4px] border border-gray-30 bg-white text-[12px] ${
+              comment.trim() ? "text-purple" : "text-gray-30"
+            } tablet:h-[32px] tablet:text-[14px] desktop:h-[32px] desktop:text-[14px]`}
           >
             입력
           </Button>
