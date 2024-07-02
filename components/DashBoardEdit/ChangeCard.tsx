@@ -1,5 +1,5 @@
 import { useState } from "react";
-import DashBoardForm from "./DashBoardForm";
+import DashBoardForm from "./components/DashBoardForm";
 import { useRouter } from "next/router";
 import { AxiosRequestConfig, AxiosError } from "axios";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
