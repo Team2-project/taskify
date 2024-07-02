@@ -25,10 +25,19 @@ const AlarmModal: React.FC<ModalProps> = ({
     onClose();
   };
 
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+    <div
+      className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'
+      onClick={handleBackgroundClick}
+    >
       <div className='h-200 w-327 rounded-lg bg-white p-6 tablet:h-250 tablet:w-540'>
         <h1 className='mt-10 justify-center text-center text-base font-medium text-black-20 tablet:mt-16 tablet:text-lg'>
           {message}
