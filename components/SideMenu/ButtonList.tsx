@@ -38,10 +38,11 @@ const getDashboard = ():DashboardResponse[] | null | JSX.Element => {
 
 
 const ButtonList = () => {
+  const dashboardId =
 
   const dashboardArray = getDashboard()
-
   if(Array.isArray(dashboardArray)){
+
     return dashboardArray.map((dashboard:DashboardResponse, index:number)=>(
       <Link href="/dashboard/[dashboardId]">
         <button key={index} className="flex justify-start items-center w-[276px] h-[45px] cursor-pointer rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit">
