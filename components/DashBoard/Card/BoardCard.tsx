@@ -14,13 +14,6 @@ interface Props {
   imageUrl: string | null;
 }
 
-const tagColors: { background: string; color: string }[] = [
-  { background: "bg-pink-bg", color: "text-pink" },
-  { background: "bg-violet-10", color: "text-violet-20" },
-  { background: "bg-green-bg", color: "bg-green-text" },
-  { background: "bg-blue-bg", color: "bg-blue-text" },
-];
-
 const BoardCard: React.FC<Props> = ({
   title,
   tags,
@@ -49,17 +42,9 @@ const BoardCard: React.FC<Props> = ({
         </div>
         <div className='tablet:flex tablet:w-full tablet:gap-2 desktop:flex-col'>
           <div>
-            {tags.map((tag, index) => {
-              const { background, color } = tagColors[index % tagColors.length]; // 순서대로 색상을 할당
-              return (
-                <Tag
-                  key={tag}
-                  tag={tag}
-                  background={background}
-                  color={color}
-                />
-              );
-            })}
+            {tags.map((tag) => (
+              <Tag key={tag} tag={tag} />
+            ))}
           </div>
 
           <div className='flex justify-between tablet:h-24 tablet:min-w-[120px] tablet:flex-auto desktop:m-0'>
