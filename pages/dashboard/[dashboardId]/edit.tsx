@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import ChangeCard from "@/components/DashBoardEdit/ChangeCard";
+import MemberList from "@/components/DashBoardEdit/MemberList";
 import BackLink from "@/components/MyPage/BackLink";
 
 const DashboardEditPage = () => {
@@ -20,8 +21,9 @@ const DashboardEditPage = () => {
     >
       <div className='p-[12px] tablet:p-[20]'>
         <BackLink href={`/dashboard/${dashboardId}`} label='돌아가기' />
-        <div className='gap-[11px] tablet:gap-3'>
+        <div className='flex flex-col gap-[11px] tablet:gap-3'>
           <ChangeCard />
+          <MemberList />
         </div>
       </div>
     </DashboardLayout>

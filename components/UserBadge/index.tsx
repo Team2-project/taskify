@@ -16,7 +16,7 @@ const UserBadge: FC<UserBadgeProps> = ({
   nickname,
   profileImageUrl,
   bgColor = "bg-green-10",
-  textColor = "text-black",
+  textColor = "text-white",
   borderColor = "border-white",
   fontSize = "text-base",
   className = "",
