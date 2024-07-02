@@ -1,5 +1,5 @@
 /*
-  CommentList: 댓글 리스트 보여주기
+  CommentList: 댓글 리스트로 보여주기
 */
 
 import { FC } from "react";
@@ -10,11 +10,9 @@ import { useQuery } from "@tanstack/react-query";
 
 interface CommentListProps {
   cardId: number;
-  onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
 }
 
-const CommentList: FC<CommentListProps> = ({ cardId, onEdit, onDelete }) => {
+const CommentList: FC<CommentListProps> = ({ cardId }) => {
   const { data, error, isLoading } = useQuery<CommentsResponse>({
     queryKey: ["comments", cardId],
     queryFn: () =>
@@ -36,12 +34,7 @@ const CommentList: FC<CommentListProps> = ({ cardId, onEdit, onDelete }) => {
   return (
     <div className='mt-[20px] space-y-[20px]'>
       {data?.comments.map((comment) => (
-        <Comment
-          key={comment.id}
-          comment={comment}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
+        <Comment key={comment.id} comment={comment} />
       ))}
     </div>
   );
