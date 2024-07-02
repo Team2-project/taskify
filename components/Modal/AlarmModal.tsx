@@ -6,7 +6,7 @@ interface ModalProps {
   onClose: () => void;
   message: string;
   buttonText: string;
-  buttonAction?: () => void;
+  buttonAction?: (memberId?: number) => void;
 }
 
 const AlarmModal: React.FC<ModalProps> = ({
