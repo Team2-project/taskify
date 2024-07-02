@@ -15,6 +15,7 @@ import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  userData?: User;
   title?: string;
   dashboardId?: string;
   showActionButton?: boolean;
@@ -43,10 +44,10 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   };
 
   // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
-  const [, setUserData] = useAtom(userAtom);
+  const [userData, setUserData] = useAtom(userAtom);
 
   const {
-    data: userData,
+    data: fetchedUserData,
     error: userError,
     isLoading: userLoading,
   } = useQuery<User>({
@@ -56,10 +57,10 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
 
   // userData가 업데이트될 때마다 setUserData를 호출
   useEffect(() => {
-    if (userData) {
-      setUserData(userData);
+    if (fetchedUserData) {
+      setUserData(fetchedUserData);
     }
-  }, [userData, setUserData]);
+  }, [fetchedUserData, setUserData]);
 
   const {
     data: dashboardData,
