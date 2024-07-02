@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CustomComponent from "./components/MemberCard";
+import CustomComponent from "./components/UserCard";
 import Button from "@/components/Button";
 import fetcher from "@/lib/api/fetcher";
 import { useRouter } from "next/router";

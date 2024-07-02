@@ -49,15 +49,21 @@ const FormField = ({
 
 interface FormButtonProps {
   children: ReactNode;
+  icon?: string;
 }
 
-const FormButton = ({ children }: FormButtonProps) => {
+const FormButton = ({ children, icon }: FormButtonProps) => {
   return (
     <div className='flex justify-end'>
       <button
         type='submit'
-        className='h-28 w-84 rounded bg-violet-20 text-xs font-medium text-white tablet:h-32 tablet:text-sm'
+        className={
+          icon
+            ? "flex h-28 w-86 items-center justify-center gap-1.5 rounded bg-violet-20 text-xs font-medium text-white tablet:h-32 tablet:w-105 tablet:gap-2 tablet:text-sm"
+            : "h-28 w-84 rounded bg-violet-20 text-xs font-medium text-white tablet:h-32 tablet:text-sm"
+        }
       >
+        {icon && <img src={icon} alt='버튼 아이콘' className='h-14 w-14' />}
         {children}
       </button>
     </div>

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import ChangeCard from "@/components/DashBoardEdit/ChangeCard";
 import MemberList from "@/components/DashBoardEdit/MemberList";
+import InvitationList from "@/components/DashBoardEdit/InvitationList";
 import BackLink from "@/components/MyPage/BackLink";
 
 const DashboardEditPage = () => {
@@ -24,6 +25,7 @@ const DashboardEditPage = () => {
         <div className='flex flex-col gap-[11px] tablet:gap-3'>
           <ChangeCard />
           <MemberList />
+          <InvitationList />
         </div>
       </div>
     </DashboardLayout>
