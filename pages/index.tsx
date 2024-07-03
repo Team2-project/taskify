@@ -29,7 +29,7 @@ export default function Home() {
               <LinkButton
                 to='/login'
                 children='로그인하기'
-                className='h-[42px] w-[235.2px] text-[14px] font-medium tablet:h-[50px] tablet:w-[280px] tablet:text-[16px]'
+                className='h-[42px] w-[235.2px] text-[14px] font-medium text-white tablet:h-[50px] tablet:w-[280px] tablet:text-[16px] desktop:text-[18px]'
               />
             </div>
           </div>
