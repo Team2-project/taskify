@@ -137,7 +137,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
           title='Card Details'
           subTitle='Card information'
           cardId={selectedCard.id}
-          dashboardId={numDashboardId} // 예시로 컬럼 ID를 대시보드 ID로 전달
+          dashboardId={numDashboardId}
         />
       )}
     </div>

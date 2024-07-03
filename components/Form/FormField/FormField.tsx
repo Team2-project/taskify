@@ -4,6 +4,7 @@ import { ReactSVG } from "react-svg";
 interface FormProps {
   children: ReactNode;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  isFormValid?: boolean;
   className?: string;
 }
 

@@ -7,8 +7,10 @@ import { DashboardInvitationsResponse } from "@/lib/api/types/dashboards";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import DashBoardForm from "./components/DashBoardForm";
+import InvitationModal from "./InvitationModal";
 
 const InvitationList: React.FC = () => {
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const size = 5;
 
@@ -68,8 +70,13 @@ const InvitationList: React.FC = () => {
       console.error("구성원 삭제 중 오류가 발생했습니다:", error);
     }
   };
-  const handleSubmit = () => {
-    console.log();
+
+  const handleInvitation = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
   };
 
   return (
@@ -97,8 +104,12 @@ const InvitationList: React.FC = () => {
         <p className='text-sm font-normal text-gray-40 tablet:text-base'>
           이메일
         </p>
-        <DashBoardForm onSubmit={handleSubmit}>
-          <DashBoardForm.Button icon='/icon/ic_plus_edit.svg'>
+        <DashBoardForm onSubmit={handleInvitation}>
+          <DashBoardForm.Button
+            type='button'
+            icon='/icon/ic_plus_edit.svg'
+            onClick={handleInvitation}
+          >
             초대하기
           </DashBoardForm.Button>
         </DashBoardForm>
@@ -114,6 +125,11 @@ const InvitationList: React.FC = () => {
           />
         ))}
       </div>
+
+      <InvitationModal
+        isModalOpen={isModalOpen}
+        handleCloseModal={handleCloseModal}
+      />
     </div>
   );
 };
