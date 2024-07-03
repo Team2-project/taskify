@@ -1,5 +1,6 @@
 interface InputProps {
   subTitle: string;
+  name: string;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -20,4 +21,3 @@ export default function Input({ subTitle, placeholder, onChange }: InputProps) {
     </div>
   );
 }
-
