@@ -46,14 +46,18 @@ const ButtonList = () => {
   const dashboardArray = getDashboard()
 
   if(Array.isArray(dashboardArray)){
-    return dashboardArray.map((dashboard:DashboardResponse, index:number)=>(
-      <Link href={`/dashboard/${dashboard.id}`}>
-        <button key={index} className="flex justify-start items-center w-[276px] h-[45px] cursor-pointer active:bg-[#F1EFFD] rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit">
-          <ColorChip fill={dashboard.color}/>
-          <p className="align-middle text-gray-50 max-tablet:hidden">{dashboard.title}</p>
-       </button>
-      </Link>
-    ))
+    return(
+      <div className="flex flex-col-reverse justify-start items-start">
+      {dashboardArray.map((dashboard:DashboardResponse, index:number)=>(
+        <Link href={`/dashboard/${dashboard.id}`}>
+          <button key={index} className="flex justify-start items-center w-[276px] h-[45px] cursor-pointer active:bg-[#F1EFFD] rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit">
+            <ColorChip fill={dashboard.color}/>
+            <p className="align-middle text-gray-50 max-tablet:hidden">{dashboard.title}</p>
+         </button>
+        </Link>))
+        }
+        </div> 
+    )
   }
 }
 
