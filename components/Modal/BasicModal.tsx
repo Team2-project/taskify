@@ -43,8 +43,10 @@ export default function BasicModal({
 
   return (
     <div className='fixed inset-0 box-border h-full w-full bg-black bg-opacity-50'>
-      <div className='fixed inset-0 m-auto h-[276px] w-[540px] rounded-[8px] bg-white px-[28px] pb-[28px] pt-[32px]'>
-        <div className='mb-[32px] text-[20px] font-bold'>{title}</div>
+      <div className='fixed inset-0 m-auto h-241 w-327 rounded-[8px] bg-white px-[20px] py-[28px] tablet:h-276 tablet:w-540 tablet:py-[32px]'>
+        <div className='mb-[16px] text-[20px] font-bold tablet:mb-[22px]'>
+          {title}
+        </div>
         <Form onSubmit={onSubmit}>
           <Form.Field
             label={subTitle}
@@ -53,24 +55,26 @@ export default function BasicModal({
             value={value}
             onChange={onChange}
             placeholder={placeholder}
+            width='w-287'
+            tabletWidth='tablet:w-498'
+            desktopWidth='desktop:w-498'
           />
         </Form>
-        <div className='flex items-center justify-center gap-[11px] py-[28px]'>
-          <Button
-            onClick={handleButtonClick}
-            className='h-[42px] w-[138px] rounded-[8px] text-white'
-          >
-            {createButtonText}
-          </Button>
+        <div className='mt-[20px] flex items-center gap-[11px] tablet:justify-end'>
           <Button
             onClick={handleCloseClick}
-            className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
+            className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50 tablet:h-48 tablet:w-120'
           >
             {cancelButtonText}
+          </Button>
+          <Button
+            onClick={handleButtonClick}
+            className='h-[42px] w-[138px] rounded-[8px] text-white tablet:h-48 tablet:w-120'
+          >
+            {createButtonText}
           </Button>
         </div>
       </div>
     </div>
   );
 }
-
