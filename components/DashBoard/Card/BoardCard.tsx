@@ -7,11 +7,9 @@ interface Props {
   title: string;
   tags: string[];
   dueDate: string;
-  assignee: {
-    nickname: string;
-    profileImageUrl: string | null;
-  };
+  assignee: string;
   imageUrl: string | null;
+  onClick: () => void;
 }
 
 const BoardCard: React.FC<Props> = ({
@@ -20,12 +18,15 @@ const BoardCard: React.FC<Props> = ({
   dueDate,
   assignee,
   imageUrl,
+  onClick,
 }) => {
-  const { nickname, profileImageUrl } = assignee;
   const formattedDueDate = format(new Date(dueDate), "yyyy.MM.dd");
 
   return (
-    <div className='flex min-h-[71px] w-auto flex-col gap-3 rounded-md border border-gray-30 bg-white p-3 tablet:flex-row desktop:w-314 desktop:flex-col'>
+    <div
+      onClick={onClick}
+      className='flex min-h-[71px] w-auto cursor-pointer flex-col gap-3 rounded-md border border-gray-30 bg-white p-3 tablet:flex-row desktop:w-314 desktop:flex-col'
+    >
       {imageUrl && (
         <div className='h-151 w-auto tablet:h-53 desktop:h-161'>
           <img
@@ -50,7 +51,7 @@ const BoardCard: React.FC<Props> = ({
           <div className='flex justify-between tablet:h-24 tablet:min-w-[120px] tablet:flex-auto desktop:m-0'>
             <div className='relative mr-1 flex items-center gap-1'>
               <Image
-                src='../../icon/ic_calendar.svg'
+                src='/icon/ic_calendar.svg'
                 alt='달력아이콘'
                 priority
                 width={14}
@@ -62,15 +63,13 @@ const BoardCard: React.FC<Props> = ({
               </p>
             </div>
 
-            {profileImageUrl ? (
-              <img
-                className='h-22 w-22 rounded-full'
-                src={profileImageUrl}
-                alt='Profile'
-              />
+            {assignee ? (
+              <div className='flex h-22 w-22 items-center justify-center rounded-full bg-green-10 text-[10px] font-semibold text-white tablet:h-24 tablet:w-24'>
+                {assignee.charAt(0).toUpperCase()}
+              </div>
             ) : (
               <div className='flex h-22 w-22 items-center justify-center rounded-full bg-green-10 text-[10px] font-semibold text-white tablet:h-24 tablet:w-24'>
-                {nickname.charAt(0).toUpperCase()}
+                No Assignee
               </div>
             )}
           </div>

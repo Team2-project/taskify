@@ -83,7 +83,7 @@ const CardDropdown: FC<CardDropdownProps> = ({ cardId, dashboardId }) => {
         className='flex items-center justify-center'
       >
         <Image
-          src={"icon/ic_kebab_menu.svg"}
+          src={"/icon/ic_kebab_menu.svg"}
           alt='수정/삭제하기'
           width={32}
           height={32}

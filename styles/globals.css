@@ -14,3 +14,12 @@ input:-webkit-autofill:active {
   -webkit-transition: background-color 9999s ease-out;
   -webkit-box-shadow: 0 0 0px 1000px white inset !important;
 }
+
+.Toastify__toast-container {
+  width: auto !important;
+}
+
+.Toastify__toast {
+  white-space: pre-wrap;
+  word-break: break-word;
+}

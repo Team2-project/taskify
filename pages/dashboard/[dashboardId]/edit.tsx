@@ -1,26 +1,75 @@
 import { useRouter } from "next/router";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
+import ChangeCard from "@/components/DashBoardEdit/ChangeCard";
+import MemberList from "@/components/DashBoardEdit/MemberList";
+import InvitationList from "@/components/DashBoardEdit/InvitationList";
+import BackLink from "@/components/MyPage/BackLink";
+import Button from "@/components/Button";
+import DeleteModal from "@/components/Modal/AlarmModal";
+import React, { useState} from "react";
+import fetcher from "@/lib/api/fetcher";
 
 const DashboardEditPage = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   if (!dashboardId || Array.isArray(dashboardId)) {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
 
+  const handleDelete = async () => {
+    try {
+      await fetcher({
+        url: `/dashboards/${dashboardId}`,
+        method: "DELETE",
+      });
+
+      console.log(`${dashboardId} 삭제되었습니다.`);
+      router.push("/mydashboard");
+    } catch (error) {
+      console.error("오류가 발생했습니다:", error);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <DashboardLayout
-      dashboardId={dashboardId as string}
+      dashboardId={dashboardId}
       showActionButton={true}
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
-      <div>
-        <div className='h-[150px]'></div>
-        <h1 className='text-center'>대시보드 Edit 페이지</h1>
-        {/* 대시보드 Edit 데이터 표시 */}
+      <div className='p-[12px] tablet:p-[20]'>
+        <BackLink href={`/dashboard/${dashboardId}`} label='돌아가기' />
+        <div className='flex flex-col gap-[11px] tablet:gap-3'>
+          {/* 대시보드 정보 변경 컴포넌트 */}
+          <ChangeCard />
+          {/* 멤버 목록 표시 컴포넌트 */}
+          <MemberList />
+          {/* 초대 목록 표시 컴포넌트 */}
+          <InvitationList />        
+        </div>
+        <Button.Delete
+          onClick={handleOpenModal}
+          className='custom-class-name mt-[43px]'
+        />
       </div>
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        message='정말 대시보드를 삭제하시겠습니까?'
+        buttonText='확인'
+        buttonAction={handleDelete}
+      />
     </DashboardLayout>
   );
 };
