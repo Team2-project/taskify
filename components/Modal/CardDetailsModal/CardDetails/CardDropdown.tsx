@@ -8,9 +8,14 @@ import ResModal from "@/components/Modal/ResModal";
 interface CardDropdownProps {
   cardId: number;
   dashboardId: number;
+  onEdit: () => void;
 }
 
-const CardDropdown: FC<CardDropdownProps> = ({ cardId, dashboardId }) => {
+const CardDropdown: FC<CardDropdownProps> = ({
+  cardId,
+  dashboardId,
+  onEdit,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -93,7 +98,10 @@ const CardDropdown: FC<CardDropdownProps> = ({ cardId, dashboardId }) => {
         <ul className='absolute right-0 z-10 mt-2 w-[120px] rounded border-[1px] border-gray-30 bg-white shadow-lg'>
           <div>
             <li className='p-[8px]'>
-              <button className='focus:bg-purple-bg w-full rounded-[4px] px-4 py-2 text-left text-center hover:bg-purple-10 hover:text-purple focus:outline-none'>
+              <button
+                onClick={onEdit}
+                className='focus:bg-purple-bg w-full rounded-[4px] px-4 py-2 text-left text-center hover:bg-purple-10 hover:text-purple focus:outline-none'
+              >
                 수정하기
               </button>
             </li>
