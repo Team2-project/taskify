@@ -8,9 +8,10 @@ interface TextareaProps {
 
 export default function Textarea({
   subTitle,
+  name,
   placeholder,
-  onChange,
   value,
+  onChange,
 }: TextareaProps) {
   return (
     <div className='mt-[18px] flex flex-col gap-[10px] tablet:mt-[26px]'>
@@ -19,6 +20,7 @@ export default function Textarea({
       </div>
       <div className='relative flex h-[84px] w-full items-center rounded-[6px] border-[1px] border-gray-30 p-4 active:border-[1px] active:border-violet-20 tablet:h-[96px]'>
         <textarea
+          name={name}
           placeholder={placeholder}
           className='h-full w-full text-[14px] font-normal tablet:text-[16]'
           value={value}

@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import DropDown from "@/components/Input/DropDown";
-import Input from "@/components/Input/Input";
-import Textarea from "@/components/Input/Textarea";
-import Calendar from "@/components/Input/Calendar";
-import TagInput from "@/components/Input/TagInput";
-import ImgInput from "@/components/Input/ImgInput";
+import DropDown from "@/components/Modal/CardModal/InputCardEdit/DropDown";
+import Input from "@/components/Modal/CardModal/InputCardEdit/Input";
+import Textarea from "@/components/Modal/CardModal/InputCardEdit/Textarea";
+import Calendar from "@/components/Modal/CardModal/InputCardEdit/Calendar";
+import TagInput from "@/components/Modal/CardModal/InputCardEdit/TagInput";
+import ImgInput from "@/components/Modal/CardModal/InputCardEdit/ImgInput";
 import Button from "@/components/Button";
 import useModal from "@/hooks/useModal";
 import {
@@ -23,7 +23,7 @@ interface ModalProps {
   cardId: number;
 }
 
-export default function CardEditModal({
+const CardEditModal: FC<ModalProps> = ({
   isOpen,
   onSubmit,
   onClose,
@@ -31,7 +31,7 @@ export default function CardEditModal({
   createButtonText,
   cancelButtonText,
   cardId,
-}: ModalProps) {
+}) => {
   const {
     isOpen: modalIsOpen,
     cardDetails,
@@ -55,11 +55,11 @@ export default function CardEditModal({
     } else {
       closeModal();
     }
-  }, [isOpen, openModal, closeModal]);
+  }, [isOpen, cardId, openModal, closeModal]);
 
   useEffect(() => {
     if (cardDetails) {
-      console.log("Card details set in formData:", cardDetails);
+      const dueDate = cardDetails.dueDate.replace(" ", "T");
       setFormData({
         columnId: cardDetails.columnId,
         assigneeUserId: cardDetails.assignee.id,
@@ -101,6 +101,11 @@ export default function CardEditModal({
       setFormData((prev) => ({ ...prev, imageUrl: reader.result as string }));
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData((prev) => ({ ...prev, dueDate: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -147,7 +152,7 @@ export default function CardEditModal({
         <Calendar
           subTitle='마감일'
           value={formData.dueDate}
-          onChange={handleChange}
+          onChange={handleDateChange}
         />
         <TagInput
           subTitle='태그'
@@ -173,4 +178,6 @@ export default function CardEditModal({
       </div>
     </div>
   );
-}
+};
+
+export default CardEditModal;

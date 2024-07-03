@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { dropButton } from "../Modal/CardModal/list";
+import { dropButton } from "../list";
 
 interface DropDownProps {
   subTitle: string;
@@ -10,7 +10,7 @@ export default function DropDown({ subTitle, placeholder }: DropDownProps) {
   const [dropOpen, setDropOpen] = useState<boolean>(false);
 
   return (
-    <div className='w-full mt-[18px] flex flex-col gap-[10px] tablet:mt-[26px]'>
+    <div className='mt-[18px] flex w-full flex-col gap-[10px] tablet:mt-[26px]'>
       <div className='text-[16px] font-medium tablet:text-[18px]'>
         {subTitle}
       </div>
@@ -28,4 +28,3 @@ export default function DropDown({ subTitle, placeholder }: DropDownProps) {
     </div>
   );
 }
-
