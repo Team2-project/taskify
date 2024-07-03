@@ -1,7 +1,7 @@
 interface CalendarProps {
   subTitle: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value?: any;
+  value?: string;
 }
 
 export default function Calendar({ subTitle, onChange, value }: CalendarProps) {
@@ -12,7 +12,7 @@ export default function Calendar({ subTitle, onChange, value }: CalendarProps) {
       </div>
       <div className='relative flex h-[42px] items-center rounded-[6px] border-[1px] border-gray-30 p-4 active:border-[1px] active:border-violet-20 tablet:h-[48px]'>
         <input
-          type='date'
+          type='datetime-local'
           value={value}
           onChange={onChange}
           className='w-full'
@@ -21,4 +21,3 @@ export default function Calendar({ subTitle, onChange, value }: CalendarProps) {
     </div>
   );
 }
-
