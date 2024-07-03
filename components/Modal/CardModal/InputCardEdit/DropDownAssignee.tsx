@@ -17,12 +17,16 @@ export default function DropDownAssignee({
   onMemberSelect,
 }: DropDownProps) {
   const [dropOpen, setDropOpen] = useState<boolean>(false);
+  const [selectedMember, setSelectedMember] = useState<string>(
+    placeholder || "",
+  );
 
   useEffect(() => {
-    console.log("membersData:", membersData); // 전달된 membersData를 콘솔에 출력하여 확인
-  }, [membersData]);
+    setSelectedMember(placeholder || "");
+  }, [placeholder]);
 
   const handleMemberSelect = (memberId: number, memberNickname: string) => {
+    setSelectedMember(memberNickname);
     if (onMemberSelect) {
       onMemberSelect(memberId, memberNickname);
     }
@@ -40,13 +44,9 @@ export default function DropDownAssignee({
           className='flex w-full items-center justify-between'
         >
           <div className='text-[14px] font-normal tablet:text-[16px]'>
-            {placeholder}
+            {selectedMember}
           </div>
-          {dashboardId != null
-            ? dropOpen
-              ? dropButton.open
-              : dropButton.close
-            : null}
+          {dropOpen ? dropButton.open : dropButton.close}
         </button>
         {dropOpen && (
           <div className='absolute left-0 right-0 top-full z-[10] rounded-b-[6px] border border-gray-20 bg-white shadow-lg'>

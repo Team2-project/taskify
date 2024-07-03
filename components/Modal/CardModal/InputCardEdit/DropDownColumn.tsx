@@ -5,24 +5,28 @@ interface DropDownProps {
   subTitle: string;
   placeholder?: string;
   columnsData?: { id: number; title: string }[];
-  onColumnSelect?: (columnId: number) => void;
+  onColumnSelect?: (columnId: number, columnTitle: string) => void;
 }
 
-export default function DropDownColumns({
+export default function DropDownColumn({
   subTitle,
   placeholder,
   columnsData = [],
   onColumnSelect,
 }: DropDownProps) {
   const [dropOpen, setDropOpen] = useState<boolean>(false);
+  const [selectedColumn, setSelectedColumn] = useState<string>(
+    placeholder || "",
+  );
 
   useEffect(() => {
-    console.log("columnsData:", columnsData); // 전달된 columnsData를 콘솔에 출력하여 확인
-  }, [columnsData]);
+    setSelectedColumn(placeholder || "");
+  }, [placeholder]);
 
   const handleColumnSelect = (columnId: number, columnTitle: string) => {
+    setSelectedColumn(columnTitle);
     if (onColumnSelect) {
-      onColumnSelect(columnId);
+      onColumnSelect(columnId, columnTitle);
     }
     setDropOpen(false);
   };
@@ -38,13 +42,9 @@ export default function DropDownColumns({
           className='flex w-full items-center justify-between'
         >
           <div className='text-[14px] font-normal tablet:text-[16px]'>
-            {placeholder}
+            {selectedColumn}
           </div>
-          {columnsData != null
-            ? dropOpen
-              ? dropButton.open
-              : dropButton.close
-            : null}
+          {dropOpen ? dropButton.open : dropButton.close}
         </button>
         {dropOpen && (
           <div className='absolute left-0 right-0 top-full z-[10] rounded-b-[6px] border border-gray-20 bg-white shadow-lg'>
