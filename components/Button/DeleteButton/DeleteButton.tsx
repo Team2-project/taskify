@@ -2,11 +2,13 @@ import { MouseEventHandler, ReactNode } from "react";
 
 type DeleteButtonProps = {
   className?: string;
-  onDelete: MouseEventHandler<HTMLButtonElement>;
+  onDelete?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function DeleteButton({
   onDelete,
+  onClick,
   className = "",
 }: DeleteButtonProps) {
   const baseClasses =
@@ -14,13 +16,21 @@ export default function DeleteButton({
 
   const responseClasses = "tablet:h-[62px] tablet:w-[320px] tablet:text-[18px]";
 
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    if (onClick) {
+      onClick(event);
+    }
+    if (onDelete) {
+      onDelete(event);
+    }
+  };
+
   return (
     <button
-      onClick={onDelete}
+      onClick={handleClick}
       className={`${baseClasses} ${responseClasses} ${className}`}
     >
       대시보드 삭제하기
     </button>
   );
 }
-
