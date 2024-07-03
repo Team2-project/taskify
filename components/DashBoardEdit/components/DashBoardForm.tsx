@@ -50,13 +50,21 @@ const FormField = ({
 interface FormButtonProps {
   children: ReactNode;
   icon?: string;
+  type?: "submit" | "button";
+  onClick?: () => void; // 추가된 onClick prop
 }
 
-const FormButton = ({ children, icon }: FormButtonProps) => {
+const FormButton = ({
+  children,
+  icon,
+  type = "submit",
+  onClick,
+}: FormButtonProps) => {
   return (
     <div className='flex justify-end'>
       <button
-        type='submit'
+        type={type}
+        onClick={onClick} // onClick prop을 버튼의 onClick 핸들러로 설정
         className={
           icon
             ? "flex h-28 w-86 items-center justify-center gap-1.5 rounded bg-violet-20 text-xs font-medium text-white tablet:h-32 tablet:w-105 tablet:gap-2 tablet:text-sm"
