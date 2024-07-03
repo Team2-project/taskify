@@ -4,6 +4,8 @@ NavMyDashboard: Dashboard 내비게이션 컴포넌트
  */
 
 import { FC } from "react";
+import { useAtom } from "jotai";
+import { userAtom } from "@/atoms/userAtom";
 import NavbarTitle from "./NavbarTitle";
 import ActionButton from "./ActionButton";
 import BadgeCounter from "./BadgeCounter";
@@ -21,16 +23,20 @@ interface NavMyDashboardProps {
   showBadgeCounter?: boolean;
   showProfileDropdown?: boolean;
 }
-
 const NavMyDashboard: FC<NavMyDashboardProps> = ({
-  userData,
   dashboardData,
   showCreatedByMeIcon = true,
   showActionButton = true,
   showBadgeCounter = true,
   showProfileDropdown = true,
 }) => {
-  const profileInitial = userData.nickname.charAt(0) ?? "";
+  const [userData] = useAtom(userAtom);
+
+  if (!userData) {
+    return null;
+  }
+
+  const profileInitial = userData.nickname.charAt(0).toUpperCase() ?? "";
   const { title, createdByMe } = dashboardData;
 
   return (
@@ -63,6 +69,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
               <ProfileDropdown
                 nickname={userData.nickname}
                 profileInitial={profileInitial}
+                profileImageUrl={userData.profileImageUrl ?? undefined}
               />
             </div>
           )}
