@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import BoardColumn from "./Card/BoardColumn";
 import { useRouter } from "next/router";
 import { AxiosRequestConfig } from "axios";
@@ -5,6 +6,7 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
 import { ColumnResponse } from "@/lib/api/types/columns";
 import Button from "@/components/Button";
+import AddColumn from "@/components/DashBoard/Modal/AddColumn";
 
 interface Props {
   color: string;
@@ -13,9 +15,14 @@ interface Props {
 const DashBoard = ({ color }: Props) => {
   const router = useRouter();
   const { dashboardId } = router.query;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClick = () => {
-    alert("여기에 이제 칼럼 추가하는 모달창 연결해야 함!!!");
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   const columnsConfig: AxiosRequestConfig = {
@@ -53,6 +60,9 @@ const DashBoard = ({ color }: Props) => {
     return <div>데이터가 없습니다</div>;
   }
 
+  // 기존 제목 목록을 전달하기 위해
+  const existingTitles = columnsData.data.map((column) => column.title);
+
   return (
     <div className='mb-28 desktop:mb-1 desktop:flex'>
       {columnsData.data.map((item) => (
@@ -68,6 +78,11 @@ const DashBoard = ({ color }: Props) => {
           새로운 칼럼 추가하기
         </Button.Add>
       </div>
+      <AddColumn
+        isModalOpen={isModalOpen}
+        handleCloseModal={handleCloseModal}
+        existingTitles={existingTitles}
+      />
     </div>
   );
 };
