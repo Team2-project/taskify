@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useQuery,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import DropDown from "@/components/Modal/CardModal/InputCardEdit/DropDown";
 import Input from "@/components/Modal/CardModal/InputCardEdit/Input";
 import Textarea from "@/components/Modal/CardModal/InputCardEdit/Textarea";
@@ -12,6 +17,8 @@ import {
   FetchCardDetailsResponse,
   UpdateCardData,
 } from "@/lib/api/types/cards";
+import { AxiosRequestConfig } from "axios";
+import { MembersRequest, MembersResponse } from "@/lib/api/types/members";
 import fetcher from "@/lib/api/fetcher";
 
 interface ModalProps {
@@ -23,6 +30,7 @@ interface ModalProps {
   cancelButtonText: string;
   cardId: number;
   columnId: number;
+  dashboardId: number;
 }
 
 const CardEditModal: FC<ModalProps> = ({
@@ -34,6 +42,7 @@ const CardEditModal: FC<ModalProps> = ({
   cancelButtonText,
   cardId,
   columnId,
+  dashboardId,
 }) => {
   const queryClient = useQueryClient();
   const {
@@ -59,7 +68,7 @@ const CardEditModal: FC<ModalProps> = ({
     } else {
       closeModal();
     }
-  }, [isOpen, cardId, openModal, closeModal]);
+  }, [isOpen, openModal, closeModal]);
 
   useEffect(() => {
     if (cardDetails) {
@@ -69,7 +78,7 @@ const CardEditModal: FC<ModalProps> = ({
         assigneeUserId: cardDetails.assignee.id,
         title: cardDetails.title,
         description: cardDetails.description,
-        dueDate: cardDetails.dueDate,
+        dueDate: dueDate,
         tags: cardDetails.tags,
         imageUrl: cardDetails.imageUrl || "",
       });
@@ -119,8 +128,16 @@ const CardEditModal: FC<ModalProps> = ({
     setFormData((prev) => ({ ...prev, columnId }));
   };
 
-  const handleImageChange = async (file: File) => {
+  const handleImageChange = async (file: File | null) => {
     try {
+      if (!file) {
+        setFormData((prev) => ({ ...prev, imageUrl: "" }));
+        return;
+      }
+      if (!columnId) {
+        throw new Error("Column ID is undefined or null");
+      }
+
       const formData = new FormData();
       formData.append("image", file);
 
@@ -132,10 +149,15 @@ const CardEditModal: FC<ModalProps> = ({
           "Content-Type": "multipart/form-data",
         },
       });
-
-      setFormData((prev) => ({ ...prev, imageUrl: response.imageUrl }));
+      if (response && response.imageUrl) {
+        setFormData((prev) => ({ ...prev, imageUrl: response.imageUrl }));
+      } else {
+        throw new Error(
+          "Failed to upload image: No image URL returned from server",
+        );
+      }
     } catch (error) {
-      throw new Error("Failed to upload image");
+      console.error("이미지 업로드 실패:", error);
     }
   };
 
@@ -148,6 +170,41 @@ const CardEditModal: FC<ModalProps> = ({
     e.preventDefault();
     mutation.mutate(formData);
   };
+
+  // useQuery 훅을 사용하여 대시보드 멤버 데이터 로드
+  const membersConfig: AxiosRequestConfig = {
+    url: `/members?dashboardId=${dashboardId}`,
+    method: "GET",
+  };
+
+  const {
+    data: membersData,
+    error: membersError,
+    isLoading: membersLoading,
+  }: UseQueryResult<MembersResponse, Error> = useQuery({
+    queryKey: ["members", dashboardId],
+    queryFn: async () => {
+      try {
+        const response = await fetcher<MembersResponse>({
+          ...membersConfig,
+          url: `/members?dashboardId=${dashboardId}`,
+        });
+        return response;
+      } catch (error) {
+        console.error("API 요청 중 오류 발생:", error);
+        throw error;
+      }
+    },
+    enabled: !!dashboardId,
+  });
+
+  if (membersError) {
+    return <div>멤버 데이터를 불러오는 중 오류가 발생했습니다.</div>;
+  }
+
+  if (membersLoading) {
+    return <div>멤버 데이터를 불러오는 중...</div>;
+  }
 
   if (!modalIsOpen) return null;
 
@@ -162,10 +219,15 @@ const CardEditModal: FC<ModalProps> = ({
             <DropDown
               subTitle='상태'
               placeholder={formData.columnId.toString()}
+              membersData={[]} // 상태 드롭다운 데이터가 없다고 가정합니다.
+              onMemberSelect={handleColumnChange}
             />
             <DropDown
               subTitle='담당자'
               placeholder={formData.assigneeUserId.toString()}
+              dashboardId={dashboardId}
+              membersData={membersData?.members}
+              onMemberSelect={handleAssigneeChange}
             />
           </div>
           <Input
@@ -191,7 +253,6 @@ const CardEditModal: FC<ModalProps> = ({
             onChange={handleTagChange}
           />
           <ImgInput subTitle='이미지' onChange={handleImageChange} />
-
           <div className='mt-[18px] flex w-full items-center justify-center gap-[11px] tablet:mt-[26px] tablet:justify-end'>
             <Button
               type='submit'

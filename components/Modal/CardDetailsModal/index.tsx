@@ -154,6 +154,7 @@ const CardDetailsModal: FC<ModalProps> = ({
         cancelButtonText='취소'
         cardId={cardId}
         columnId={columnId}
+        dashboardId={dashboardId}
       />
     </>
   );
