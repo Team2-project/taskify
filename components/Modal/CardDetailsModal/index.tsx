@@ -7,8 +7,7 @@ import Tag from "@/components/Tag/Tag";
 import CloseButton from "./CardDetails/CloseButton";
 import CardDropdown from "./CardDetails/CardDropdown";
 import ColumnTitle from "./CardDetails/ColumnTitle";
-import fetcher from "@/lib/api/fetcher";
-import { FetchCardDetailsResponse } from "@/lib/api/types/cards";
+import useModal from "@/hooks/useModal";
 
 interface ModalProps {
   isOpen: boolean;
@@ -31,31 +30,24 @@ const CardDetailsModal: FC<ModalProps> = ({
   cardId,
   dashboardId,
 }) => {
-  const [cardDetails, setCardDetails] =
-    useState<FetchCardDetailsResponse | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    isOpen: modalIsOpen,
+    isLoading,
+    error,
+    cardDetails,
+    openModal,
+    closeModal,
+  } = useModal(isOpen, cardId);
 
   useEffect(() => {
     if (isOpen) {
-      setIsLoading(true);
-      setError(null);
-
-      // Fetch card details
-      fetcher<FetchCardDetailsResponse>({
-        url: `cards/${cardId}`,
-        method: "GET",
-      })
-        .then((data) => setCardDetails(data))
-        .catch((error) => {
-          console.error("Failed to fetch card details", error);
-          setError("Failed to fetch card details");
-        })
-        .finally(() => setIsLoading(false));
+      openModal();
+    } else {
+      closeModal();
     }
-  }, [isOpen, cardId]);
+  }, [isOpen, openModal, closeModal]);
 
-  if (!isOpen || !cardDetails) return null;
+  if (!modalIsOpen || !cardDetails) return null;
 
   const handleEdit = (id: number) => {
     console.log(`Edit clicked for comment ID: ${id}`);
