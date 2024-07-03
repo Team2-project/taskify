@@ -13,6 +13,7 @@ const InvitationList: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const size = 5;
+  const [deletedInvitations, setDeletedInvitations] = useState<number[]>([]);
 
   const handleNextPage = () => {
     setPage((prevPage) => prevPage + 1);
@@ -34,11 +35,33 @@ const InvitationList: React.FC = () => {
     data: invitationsData,
     error: invitationsError,
     isLoading: invitationsLoading,
+    refetch: refetchInvitations,
   }: UseQueryResult<DashboardInvitationsResponse, Error> = useQuery({
     queryKey: ["invitationsData", dashboardId, page],
     queryFn: () => fetcher<DashboardInvitationsResponse>(invitationsConfig),
     enabled: !!dashboardId,
   });
+
+  const handleButtonClick = async (invitationId: number) => {
+    try {
+      await fetcher({
+        url: `dashboards/${dashboardId}/invitations/${invitationId}`,
+        method: "DELETE",
+      });
+
+      setDeletedInvitations((prevDeleted) => [...prevDeleted, invitationId]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleInvitation = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   if (!dashboardId || Array.isArray(dashboardId)) {
     return <div>유효하지 않은 대시보드 ID</div>;
@@ -58,26 +81,10 @@ const InvitationList: React.FC = () => {
 
   const totalCount = invitationsData.totalCount;
 
-  const handleButtonClick = async (invitationId: number) => {
-    try {
-      await fetcher({
-        url: `dashboards/${dashboardId}/invitations/${invitationId}`,
-        method: "DELETE",
-      });
-
-      console.log(`ID가 ${invitationId}인 구성원이 삭제되었습니다.`);
-    } catch (error) {
-      console.error("구성원 삭제 중 오류가 발생했습니다:", error);
-    }
-  };
-
-  const handleInvitation = () => {
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  // 삭제된 초대를 제외한 초대 목록 필터링
+  const filteredInvitations = invitationsData.invitations.filter(
+    (invitation) => !deletedInvitations.includes(invitation.id),
+  );
 
   return (
     <div className='h-395 max-w-[620px] bg-white tablet:h-477'>
@@ -116,7 +123,7 @@ const InvitationList: React.FC = () => {
       </div>
 
       <div className='flex flex-col gap-[24px]'>
-        {invitationsData.invitations.map((invitation) => (
+        {filteredInvitations.map((invitation) => (
           <CustomComponent
             key={invitation.id}
             title={invitation.invitee.email}

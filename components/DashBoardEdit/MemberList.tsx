@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import CustomComponent from "./components/UserCard";
+import UserCard from "./components/UserCard";
 import Button from "@/components/Button";
 import fetcher from "@/lib/api/fetcher";
 import { useRouter } from "next/router";
-import { MembersResponse } from "@/lib/api/types/members";
+import { MembersResponse, Member } from "@/lib/api/types/members";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import UserBadge from "@/components/UserBadge";
@@ -11,6 +11,7 @@ import UserBadge from "@/components/UserBadge";
 const MemberList: React.FC = () => {
   const [page, setPage] = useState(1);
   const size = 4;
+  const [deletedMembers, setDeletedMembers] = useState<number[]>([]); // 상태 추가: 삭제된 멤버의 ID를 저장
 
   const handleNextPage = () => {
     setPage((prevPage) => prevPage + 1);
@@ -32,11 +33,27 @@ const MemberList: React.FC = () => {
     data: membersData,
     error: membersError,
     isLoading: membersLoading,
+    refetch: refetchMembers, // 멤버 목록 다시 불러오기 위한 refetch 함수
   }: UseQueryResult<MembersResponse, Error> = useQuery({
     queryKey: ["membersData", dashboardId, page],
     queryFn: () => fetcher<MembersResponse>(membersConfig),
     enabled: !!dashboardId,
   });
+
+  const handleButtonClick = async (memberId: number) => {
+    try {
+      await fetcher({
+        url: `/members/${memberId}`,
+        method: "DELETE",
+      });
+
+      console.log(`ID가 ${memberId}인 구성원이 삭제되었습니다.`);
+      // 삭제 성공 후 deletedMembers 상태 업데이트
+      setDeletedMembers((prevDeleted) => [...prevDeleted, memberId]);
+    } catch (error) {
+      console.error("구성원 삭제 중 오류가 발생했습니다:", error);
+    }
+  };
 
   if (!dashboardId || Array.isArray(dashboardId)) {
     return <div>유효하지 않은 대시보드 ID</div>;
@@ -56,18 +73,10 @@ const MemberList: React.FC = () => {
 
   const totalCount = membersData.totalCount;
 
-  const handleButtonClick = async (memberId: number) => {
-    try {
-      await fetcher({
-        url: `/members/${memberId}`,
-        method: "DELETE",
-      });
-
-      console.log(`ID가 ${memberId}인 구성원이 삭제되었습니다.`);
-    } catch (error) {
-      console.error("구성원 삭제 중 오류가 발생했습니다:", error);
-    }
-  };
+  // 삭제된 멤버를 제외한 멤버 리스트 필터링
+  const filteredMembers = membersData.members.filter(
+    (member) => !deletedMembers.includes(member.id),
+  );
 
   return (
     <div className='h-337 max-w-[620px] bg-white tablet:h-404'>
@@ -94,8 +103,8 @@ const MemberList: React.FC = () => {
         이름
       </p>
       <div className='flex flex-col gap-[24px]'>
-        {membersData.members.map((member) => (
-          <CustomComponent
+        {filteredMembers.map((member) => (
+          <UserCard
             key={member.id}
             title={member.nickname}
             buttonLabel='삭제'
@@ -106,7 +115,7 @@ const MemberList: React.FC = () => {
               profileImageUrl={member.profileImageUrl}
               className='h-34 w-34'
             />
-          </CustomComponent>
+          </UserCard>
         ))}
       </div>
     </div>

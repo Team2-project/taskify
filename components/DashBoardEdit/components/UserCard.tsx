@@ -7,7 +7,7 @@ interface MemberCardProps {
   onButtonClick?: () => void;
 }
 
-const MemberCard: React.FC<MemberCardProps> = ({
+const UserCard: React.FC<MemberCardProps> = ({
   title,
   buttonLabel,
   children,
@@ -36,4 +36,4 @@ const MemberCard: React.FC<MemberCardProps> = ({
   );
 };
 
-export default MemberCard;
+export default UserCard;

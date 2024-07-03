@@ -73,7 +73,7 @@ export default function BasicModal({
             showError={showError}
           />
         </Form>
-        <div className='mt-[20px] flex items-center gap-[11px] tablet:justify-end'>
+        <div className='mt-[10px] flex items-center gap-[11px] tablet:justify-end'>
           <Button
             onClick={handleCloseClick}
             className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50 tablet:h-48 tablet:w-120'

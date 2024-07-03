@@ -13,6 +13,7 @@ const DashBoardForm = ({ children, onSubmit }: FormProps) => {
   );
 };
 
+// FormField 컴포넌트
 interface FormFieldProps {
   label: string;
   type: string;
@@ -47,11 +48,12 @@ const FormField = ({
   );
 };
 
+// FormButton 컴포넌트
 interface FormButtonProps {
   children: ReactNode;
   icon?: string;
   type?: "submit" | "button";
-  onClick?: () => void; // 추가된 onClick prop
+  onClick?: () => void;
 }
 
 const FormButton = ({
@@ -64,7 +66,7 @@ const FormButton = ({
     <div className='flex justify-end'>
       <button
         type={type}
-        onClick={onClick} // onClick prop을 버튼의 onClick 핸들러로 설정
+        onClick={onClick}
         className={
           icon
             ? "flex h-28 w-86 items-center justify-center gap-1.5 rounded bg-violet-20 text-xs font-medium text-white tablet:h-32 tablet:w-105 tablet:gap-2 tablet:text-sm"

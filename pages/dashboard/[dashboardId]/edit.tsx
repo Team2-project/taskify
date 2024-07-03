@@ -6,7 +6,7 @@ import InvitationList from "@/components/DashBoardEdit/InvitationList";
 import BackLink from "@/components/MyPage/BackLink";
 import Button from "@/components/Button";
 import DeleteModal from "@/components/Modal/AlarmModal";
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import fetcher from "@/lib/api/fetcher";
 
 const DashboardEditPage = () => {
@@ -14,28 +14,19 @@ const DashboardEditPage = () => {
   const { dashboardId } = router.query;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [validDashboardId, setValidDashboardId] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (dashboardId && !Array.isArray(dashboardId)) {
-      setValidDashboardId(dashboardId);
-    }
-  }, [dashboardId]);
-
-  if (!validDashboardId) {
+  if (!dashboardId || Array.isArray(dashboardId)) {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
 
   const handleDelete = async () => {
-    if (!validDashboardId) return;
-
     try {
       await fetcher({
-        url: `/dashboards/${validDashboardId}`,
+        url: `/dashboards/${dashboardId}`,
         method: "DELETE",
       });
 
-      console.log(`${validDashboardId} 삭제되었습니다.`);
+      console.log(`${dashboardId} 삭제되었습니다.`);
       router.push("/mydashboard");
     } catch (error) {
       console.error("오류가 발생했습니다:", error);
@@ -52,17 +43,20 @@ const DashboardEditPage = () => {
 
   return (
     <DashboardLayout
-      dashboardId={validDashboardId}
+      dashboardId={dashboardId}
       showActionButton={true}
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
       <div className='p-[12px] tablet:p-[20]'>
-        <BackLink href={`/dashboard/${validDashboardId}`} label='돌아가기' />
+        <BackLink href={`/dashboard/${dashboardId}`} label='돌아가기' />
         <div className='flex flex-col gap-[11px] tablet:gap-3'>
+          {/* 대시보드 정보 변경 컴포넌트 */}
           <ChangeCard />
+          {/* 멤버 목록 표시 컴포넌트 */}
           <MemberList />
-          <InvitationList />
+          {/* 초대 목록 표시 컴포넌트 */}
+          <InvitationList />        
         </div>
         <Button.Delete
           onClick={handleOpenModal}
