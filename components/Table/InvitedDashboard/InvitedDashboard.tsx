@@ -99,35 +99,35 @@ export default function InvitedDashboard() {
 
   const Invitations = () => {
     return filteredInvitations.map((invitation) => (
-      // <tbody className='tablet:w-full tablet:table-fixed'>
-      <tr
-        key={invitation.id}
-        className='w-full border-b-[1px] border-gray-30 tablet:h-[70px]'
-      >
-        <td className='mb-[10px] mt-[16px] flex text-[14px] text-black-20 tablet:text-[16px]'>
-          <p className='mr-[28px] text-[14px] text-gray-40 tablet:hidden'>
-            이름
-          </p>
-          {invitation.dashboard.title}
-        </td>
-        <td className='mb-[16px] flex text-[14px] text-black-20 tablet:text-[16px]'>
-          <p className='mr-[16px] text-[14px] text-gray-40 tablet:hidden'>
-            초대자
-          </p>
-          {invitation.inviter.nickname}
-        </td>
-        <td className='mb-[16px] flex justify-between'>
-          <div className='flex w-full justify-between gap-[10px]'>
-            <button className='h-[28px] w-full rounded-[4px] bg-violet-20 py-[7px] text-[12px] font-medium text-white tablet:h-[30px] tablet:w-[72px] tablet:px-[20px] tablet:py-[6px] desktop:h-[32px] desktop:w-[84px] desktop:px-[23px] desktop:py-[7px]'>
-              수락
-            </button>
-            <button className='h-[28px] w-full rounded-[4px] border-[1px] border-gray-30 py-[7px] text-[12px] font-medium text-violet-20 tablet:h-[30px] tablet:w-[72px] tablet:px-[20px] tablet:py-[6px] desktop:h-[32px] desktop:w-[84px] desktop:px-[23px] desktop:py-[7px]'>
-              거절
-            </button>
-          </div>
-        </td>
-      </tr>
-      // </tbody>
+      <tbody className='tablet:w-full tablet:table-fixed'>
+        <tr
+          key={invitation.id}
+          className='w-full border-b-[1px] border-gray-30 tablet:table-row tablet:h-[70px]'
+        >
+          <td className='mb-[10px] mt-[16px] flex text-[14px] text-black-20 tablet:table-cell tablet:text-[16px]'>
+            <p className='mr-[28px] text-[14px] text-gray-40 tablet:hidden'>
+              이름
+            </p>
+            {invitation.dashboard.title}
+          </td>
+          <td className='mb-[16px] flex text-[14px] text-black-20 tablet:table-cell tablet:text-[16px]'>
+            <p className='mr-[16px] text-[14px] text-gray-40 tablet:hidden'>
+              초대자
+            </p>
+            {invitation.inviter.nickname}
+          </td>
+          <td className='mb-[16px] flex tablet:table-cell'>
+            <div className='flex w-full gap-[10px]'>
+              <button className='h-[28px] w-full rounded-[4px] bg-violet-20 text-[12px] font-medium text-white tablet:h-[30px] tablet:w-[72px] tablet:px-[20px] tablet:py-[6px] desktop:h-[32px] desktop:w-[84px] desktop:px-[23px] desktop:py-[7px]'>
+                수락
+              </button>
+              <button className='h-[28px] w-full rounded-[4px] border-[1px] border-gray-30 text-[12px] font-medium text-violet-20 tablet:h-[30px] tablet:w-[72px] tablet:px-[20px] tablet:py-[6px] desktop:h-[32px] desktop:w-[84px] desktop:px-[23px] desktop:py-[7px]'>
+                거절
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     ));
   };
 
@@ -146,34 +146,34 @@ export default function InvitedDashboard() {
               <col />
               <col />
             </colgroup>
-            {/* <thead className='mb-[30px]'> */}
-            <tr>
-              <th colSpan={3}>
-                <form className='relative mb-[24px] flex items-center'>
-                  <button className='absolute mx-[5px]'>
-                    <ReactSVG
-                      src='/icon/ic_search.svg'
-                      width={15}
-                      height={15}
+            <thead>
+              <tr>
+                <th colSpan={3}>
+                  <form className='relative mb-[24px] flex items-center'>
+                    <button className='absolute mx-[5px]'>
+                      <ReactSVG
+                        src='/icon/ic_search.svg'
+                        width={15}
+                        height={15}
+                      />
+                    </button>
+                    <input
+                      className='h-[36px] w-full rounded-md border border-gray-30 pl-[27px] text-[14px] font-normal tablet:h-[40px]'
+                      id='title'
+                      placeholder='검색'
+                      type='text'
+                      value={searchTitle}
+                      onChange={handleInputChange}
                     />
-                  </button>
-                  <input
-                    className='h-[36px] w-full rounded-md border border-gray-30 pl-[27px] text-[14px] font-normal tablet:h-[40px]'
-                    id='title'
-                    placeholder='검색'
-                    type='text'
-                    value={searchTitle}
-                    onChange={handleInputChange}
-                  />
-                </form>
-              </th>
-            </tr>
-            <tr className='hidden w-full tablet:contents tablet:text-[16px] tablet:font-normal tablet:text-gray-40'>
-              <td className='border-b-[30px] border-white'>이름</td>
-              <td className='border-b-[30px] border-white'>초대자</td>
-              <td className='border-b-[30px] border-white'>수락 여부</td>
-            </tr>
-            {/* </thead> */}
+                  </form>
+                </th>
+              </tr>
+              <tr className='hidden w-full tablet:contents tablet:text-[16px] tablet:font-normal tablet:text-gray-40'>
+                <td>이름</td>
+                <td>초대자</td>
+                <td>수락 여부</td>
+              </tr>
+            </thead>
             <Invitations />
           </table>
         </section>
