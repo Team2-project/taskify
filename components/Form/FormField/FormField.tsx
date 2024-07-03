@@ -4,12 +4,12 @@ import { ReactSVG } from "react-svg";
 interface FormProps {
   children: ReactNode;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  isFormValid?: boolean;
+  className?: string;
 }
 
-const Form = ({ children, onSubmit, isFormValid = true }: FormProps) => {
+const Form = ({ children, onSubmit, className }: FormProps) => {
   return (
-    <form onSubmit={onSubmit} className='space-y-3'>
+    <form onSubmit={onSubmit} className={`space-y-3 ${className}`}>
       {children}
     </form>
   );
@@ -30,6 +30,7 @@ interface FormFieldProps {
   width?: string;
   tabletWidth?: string;
   desktopWidth?: string;
+  className?: string;
 }
 
 const FormField = ({
@@ -47,6 +48,7 @@ const FormField = ({
   width = "w-351",
   tabletWidth = "tablet:w-520",
   desktopWidth = "desktop:w-520",
+  className = "",
 }: FormFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,7 +57,7 @@ const FormField = ({
   };
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className={`flex flex-col gap-2 ${className}`}>
       <label className='text-base font-medium'>{label}</label>
       <div className='relative'>
         <input
@@ -71,7 +73,7 @@ const FormField = ({
             showError && error
               ? "border-red"
               : "border-gray-30 focus:border-violet-20"
-          }${readOnly || disabled ? "cursor-not-allowed bg-gray-30 text-gray-50" : ""}`}
+          }${readOnly || disabled ? "cursor-not-allowed bg-gray-30 text-gray-50" : ""} ${className}`}
         />
         {type === "password" && (
           <button
@@ -100,19 +102,21 @@ interface FormButtonProps {
   children: ReactNode;
   isFormValid?: boolean;
   onClick?: () => void;
+  className?: string;
 }
 
 const FormButton = ({
   children,
   isFormValid = true,
   onClick,
+  className = "",
 }: FormButtonProps) => {
   return (
     <button
       type='submit'
       className={`h-50 w-351 rounded-lg ${
         isFormValid ? "bg-violet-20" : "bg-gray-40"
-      } text-white tablet:w-520`}
+      } text-white tablet:w-520 ${className}`}
       disabled={!isFormValid}
       onClick={onClick}
     >
