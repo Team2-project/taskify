@@ -45,6 +45,7 @@ export default function MyDashBoard() {
   const BoardButtons = () => {
     return dashboardArray.map((dashboard, index) => (
       <ListButton
+        className='mb-[8px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
         children={dashboard.title}
         onClick={() => {
           router.push(`/dashboard/${dashboard.id}`);
@@ -62,9 +63,10 @@ export default function MyDashBoard() {
         showCreatedByMeIcon={false}
       >
         <div>
-          <div className='mb-[24px] tablet:mb-[40px]'>
+          <div className='mx-[24px] mb-[24px] w-full pr-[48px] tablet:mx-[20px] tablet:my-[40px] tablet:grid tablet:w-full tablet:grid-cols-2 tablet:gap-x-5 tablet:pl-[20px] tablet:pr-[40px] desktop:mx-[40px] desktop:w-[1022px] desktop:grid-cols-3 desktop:gap-x-0 desktop:px-0'>
             {/* 대시보드 생성 버튼 */}
             <AddButton
+              className='mb-[8px] mt-[24px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
               onClick={() => {
                 setIsModalOpen(true);
               }}
