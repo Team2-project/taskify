@@ -9,7 +9,7 @@ interface DropDownProps {
   onMemberSelect?: (memberId: number, memberNickname: string) => void;
 }
 
-export default function DropDown({
+export default function DropDownAssignee({
   subTitle,
   placeholder,
   dashboardId,
@@ -39,7 +39,7 @@ export default function DropDown({
           onClick={() => setDropOpen((prev) => !prev)}
           className='flex w-full items-center justify-between'
         >
-          <div className='text-[14px] font-normal text-gray-40 tablet:text-[16px]'>
+          <div className='text-[14px] font-normal tablet:text-[16px]'>
             {placeholder}
           </div>
           {dashboardId != null
