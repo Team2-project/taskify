@@ -74,7 +74,7 @@ const ProfileUpdate: FC = () => {
       return response;
     },
     onSuccess: (data) => {
-      setUserData((prev) => (prev ? { ...prev, ...data } : prev));
+      setUserData((prev) => ({ ...prev!, ...data }));
       queryClient.invalidateQueries({ queryKey: ["userProfile"] });
       setIsSuccessModalOpen(true);
     },
@@ -89,11 +89,11 @@ const ProfileUpdate: FC = () => {
 
   const handleProfileSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isProfileFormValid) return;
+    if (!isProfileFormValid || !userData) return;
     try {
       const profileImageUrl = profileImage
         ? await uploadImage(profileImage)
-        : null;
+        : userData.profileImageUrl;
       const requestData: ProfileUpdateData = {
         nickname: nickname,
         profileImageUrl,
@@ -103,6 +103,7 @@ const ProfileUpdate: FC = () => {
       console.error("이미지 업로드 실패:", error);
     }
   };
+
   const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newNickname = e.target.value;
     setUserData((prev) => (prev ? { ...prev, nickname: newNickname } : prev));

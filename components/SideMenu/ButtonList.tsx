@@ -4,6 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import ColorChip from "@/public/chip/circle_small.svg";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDA5NywidGVhbUlkIjoiNi0yIiwiaWF0IjoxNzE5OTYwNjYwLCJpc3MiOiJzcC10YXNraWZ5In0.9YZREbJn1sstQkOI4v7rm0xo_pkbM1PD6-Fd7GmoCfA
 
 const getDashboard = ():DashboardResponse[] | null | JSX.Element => {
 
@@ -34,21 +37,21 @@ const getDashboard = ():DashboardResponse[] | null | JSX.Element => {
   const dashboardArray = dashboardData.dashboards;
 
   return dashboardArray
-}
+};
 
 
 const ButtonList = () => {
-  const dashboardId =
-
+  const router = useRouter();
+  const { dashboardId } = router.query;
   const dashboardArray = getDashboard()
-  if(Array.isArray(dashboardArray)){
 
+  if(Array.isArray(dashboardArray)){
     return dashboardArray.map((dashboard:DashboardResponse, index:number)=>(
-      <Link href="/dashboard/[dashboardId]">
-        <button key={index} className="flex justify-start items-center w-[276px] h-[45px] cursor-pointer rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit">
+      <Link href={`/dashboard/${dashboard.id}`}>
+        <button key={index} className="flex justify-start items-center w-[276px] h-[45px] cursor-pointer active:bg-[#F1EFFD] rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit">
           <ColorChip fill={dashboard.color}/>
-          <p className="text-gray-50 max-tablet:hidden">{dashboard.title}</p>
-        </button>
+          <p className="align-middle text-gray-50 max-tablet:hidden">{dashboard.title}</p>
+       </button>
       </Link>
     ))
   }

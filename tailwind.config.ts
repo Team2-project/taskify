@@ -69,7 +69,7 @@ const config: Config = {
         10: "#FFC85A",
       },
       pink: { DEFAULT: "#E876EA", bg: "#F7DBF0" },
-      purple: "#760DDE",
+      purple: { DEFAULT: "#760DDE", 10: "#F1EFFD" },
       red: {
         DEFAULT: "#D6173A",
         10: "#F4D7DA",

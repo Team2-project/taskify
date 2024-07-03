@@ -1,6 +1,9 @@
 //SideMenu compo
 import Link from "next/link";
 import ButtonList from "@/components/SideMenu/ButtonList";
+import useClickOutside from "@/hooks/useClickOutside";
+import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard";
+import { useState } from "react";
 
 const SideMenu = () => {
   //로고 컴포넌트
@@ -20,15 +23,6 @@ const SideMenu = () => {
   };
   //버튼 리스트의 추가 버튼 컴포넌트
   const AddButton = () => {
-    return (
-      <button className='flex h-[20px] w-[276px] items-center justify-between max-desktop:w-[112px] max-tablet:w-[67px] max-tablet:justify-center'>
-        <p className='text-[12px] max-tablet:hidden'>Dash Boards</p>
-        <img src='/icon/ic_add_dashboard.svg' className='h-[14px] w-[14px]' />
-      </button>
-    );
-  };
-
-
   return (
     <div className='fixed left-0 top-0 flex h-full w-[300px] flex-col items-center justify-start gap-[40px] border-r-[1px] border-gray-30 bg-white max-desktop:w-[160px] max-tablet:w-[67px]'>
       <Link href='/'>
@@ -41,6 +35,6 @@ const SideMenu = () => {
     </div>
   );
 };
-
+}
 export default SideMenu;
 
