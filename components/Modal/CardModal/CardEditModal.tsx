@@ -18,7 +18,7 @@ import {
   UpdateCardData,
 } from "@/lib/api/types/cards";
 import { AxiosRequestConfig } from "axios";
-import { MembersRequest, MembersResponse } from "@/lib/api/types/members";
+import { MembersResponse } from "@/lib/api/types/members";
 import fetcher from "@/lib/api/fetcher";
 
 interface ModalProps {
@@ -52,9 +52,12 @@ const CardEditModal: FC<ModalProps> = ({
     closeModal,
   } = useModal(isOpen, cardId);
 
-  const [formData, setFormData] = useState<UpdateCardData>({
+  const [formData, setFormData] = useState<
+    UpdateCardData & { assigneeNickname: string }
+  >({
     columnId: 0,
     assigneeUserId: 0,
+    assigneeNickname: "",
     title: "",
     description: "",
     dueDate: "",
@@ -76,6 +79,7 @@ const CardEditModal: FC<ModalProps> = ({
       setFormData({
         columnId: cardDetails.columnId,
         assigneeUserId: cardDetails.assignee.id,
+        assigneeNickname: cardDetails.assignee.nickname,
         title: cardDetails.title,
         description: cardDetails.description,
         dueDate: dueDate,
@@ -120,8 +124,11 @@ const CardEditModal: FC<ModalProps> = ({
     }));
   };
 
-  const handleAssigneeChange = (assigneeUserId: number) => {
-    setFormData((prev) => ({ ...prev, assigneeUserId }));
+  const handleAssigneeChange = (
+    assigneeUserId: number,
+    assigneeNickname: string,
+  ) => {
+    setFormData((prev) => ({ ...prev, assigneeUserId, assigneeNickname }));
   };
 
   const handleColumnChange = (columnId: number) => {
@@ -224,10 +231,14 @@ const CardEditModal: FC<ModalProps> = ({
             />
             <DropDown
               subTitle='담당자'
-              placeholder={formData.assigneeUserId.toString()}
+              placeholder={
+                formData.assigneeNickname || formData.assigneeUserId.toString()
+              }
               dashboardId={dashboardId}
               membersData={membersData?.members}
-              onMemberSelect={handleAssigneeChange}
+              onMemberSelect={(assigneeUserId, assigneeNickname) =>
+                handleAssigneeChange(assigneeUserId, assigneeNickname)
+              }
             />
           </div>
           <Input

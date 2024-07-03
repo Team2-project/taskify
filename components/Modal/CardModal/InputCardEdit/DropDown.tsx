@@ -6,7 +6,7 @@ interface DropDownProps {
   placeholder?: string;
   dashboardId?: number;
   membersData?: { id: number; nickname: string; profileImageUrl: string }[];
-  onMemberSelect?: (memberId: number) => void;
+  onMemberSelect?: (memberId: number, memberNickname: string) => void;
 }
 
 export default function DropDown({
@@ -22,9 +22,9 @@ export default function DropDown({
     console.log("membersData:", membersData); // 전달된 membersData를 콘솔에 출력하여 확인
   }, [membersData]);
 
-  const handleMemberSelect = (memberId: number) => {
+  const handleMemberSelect = (memberId: number, memberNickname: string) => {
     if (onMemberSelect) {
-      onMemberSelect(memberId);
+      onMemberSelect(memberId, memberNickname);
     }
     setDropOpen(false);
   };
@@ -39,7 +39,7 @@ export default function DropDown({
           onClick={() => setDropOpen((prev) => !prev)}
           className='flex w-full items-center justify-between'
         >
-          <div className='text-[14px] font-normal text-gray-40 tablet:text-[16]'>
+          <div className='text-[14px] font-normal text-gray-40 tablet:text-[16px]'>
             {placeholder}
           </div>
           {dashboardId != null
@@ -55,7 +55,7 @@ export default function DropDown({
                 <li
                   key={member.id}
                   className='hover:bg-gray-100 cursor-pointer px-4 py-2'
-                  onClick={() => handleMemberSelect(member.id)}
+                  onClick={() => handleMemberSelect(member.id, member.nickname)}
                 >
                   {member.nickname}
                 </li>
