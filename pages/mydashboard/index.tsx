@@ -4,7 +4,7 @@ import ListButton from "@/components/Button/ListButton/ListButton";
 import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard";
 import InvitedDashboard from "@/components/Table/InvitedDashboard/InvitedDashboard";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DashboardsResponse } from "@/lib/api/types/dashboards";
 import fetcher from "@/lib/api/fetcher";
@@ -13,6 +13,7 @@ import Pagination from "@/components/Pagination/Pagination";
 
 export default function MyDashBoard() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [newDashBoardTitle, setNewDashboardTitle] = useState("");
 
   const config: AxiosRequestConfig = {
     url: "/dashboards",
@@ -47,12 +48,18 @@ export default function MyDashBoard() {
       <ListButton
         className='mb-[8px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
         children={dashboard.title}
+        createdByMe={dashboard.createdByMe}
         onClick={() => {
           router.push(`/dashboard/${dashboard.id}`);
         }}
       />
     ));
   };
+
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewDashboardTitle(e.target.value);
+  };
+
   return (
     <>
       <DashboardLayout
@@ -63,7 +70,7 @@ export default function MyDashBoard() {
         showCreatedByMeIcon={false}
       >
         <div>
-          <div className='mx-[24px] mb-[24px] w-full pr-[48px] tablet:mx-[20px] tablet:my-[40px] tablet:grid tablet:w-full tablet:grid-cols-2 tablet:gap-x-5 tablet:pl-[20px] tablet:pr-[40px] desktop:mx-[40px] desktop:w-[1022px] desktop:grid-cols-3 desktop:gap-x-0 desktop:px-0'>
+          <div className='mx-[24px] mb-[24px] w-full pr-[48px] tablet:mx-[20px] tablet:mb-[14px] tablet:mt-[40px] tablet:grid tablet:w-full tablet:grid-cols-2 tablet:gap-x-5 tablet:pl-[20px] tablet:pr-[40px] desktop:mx-[40px] desktop:w-[1022px] desktop:grid-cols-3 desktop:gap-x-0 desktop:px-0'>
             {/* 대시보드 생성 버튼 */}
             <AddButton
               className='mb-[8px] mt-[24px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
@@ -74,14 +81,13 @@ export default function MyDashBoard() {
             />
             {/* 대시보드 버튼 목록 */}
             <BoardButtons />
-            {/* 페이지네이션 구현 필요 */}
           </div>
 
           {/* 대시보드 생성 모달창 */}
           <CreateDashBoard
             isOpen={isModalOpen}
             title='새로운 대시보드'
-            value=''
+            value={newDashBoardTitle}
             subTitle='대시보드 이름'
             placeholder='대시보드 이름'
             createButtonText='생성'
@@ -90,10 +96,7 @@ export default function MyDashBoard() {
               setIsModalOpen(false);
             }}
             onSubmit={() => {}}
-            buttonAction={() => {
-              router.push(`/dashboard`);
-            }}
-            onChange={() => {}}
+            onChange={handleChangeInput}
           />
 
           {/* 초대받은 대시보드 - 있는 경우와 없는 경우에 따른 구현 */}
