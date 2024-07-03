@@ -53,6 +53,7 @@ const CardDetailsModal: FC<ModalProps> = ({
 
   const handleEdit = (id: number) => {
     console.log(`Edit clicked for comment ID: ${id}`);
+    setIsEditModalOpen(true);
   };
 
   const handleDelete = (id: number) => {
@@ -149,6 +150,7 @@ const CardDetailsModal: FC<ModalProps> = ({
         buttonAction={() => {}}
         createButtonText='수정'
         cancelButtonText='취소'
+        cardId={cardId}
       />
     </>
   );
