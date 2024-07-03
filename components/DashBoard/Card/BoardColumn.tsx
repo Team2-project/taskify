@@ -83,7 +83,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   };
 
   return (
-    <div className='min-w-[283px] border-y border-gray-20 desktop:w-354 desktop:border-x desktop:border-y-0'>
+    <div className='min-w-[283px] border-y border-gray-20 desktop:w-354 desktop:min-w-[354px] desktop:border-x desktop:border-y-0'>
       <div className='flex h-22 items-center justify-between px-[15px] pb-[10px] pt-[25px]'>
         <div className='flex items-center gap-0.5'>
           <div
