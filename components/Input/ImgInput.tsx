@@ -3,6 +3,7 @@ import { ChangeEvent, useState } from "react";
 
 interface ImgInputProps {
   subTitle: string;
+  value?: string;
   onChange?: (file: File) => void;
 }
 
@@ -62,4 +63,3 @@ export default function ImgInput({ subTitle, onChange }: ImgInputProps) {
     </div>
   );
 }
-
