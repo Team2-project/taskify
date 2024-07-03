@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import Button from "@/components/Button";
 import Form from "../Form/FormField/FormField";
 
@@ -13,6 +14,8 @@ interface ModalProps {
   title: string;
   subTitle: string;
   placeholder: string;
+  error?: string;
+  showError?: boolean;
 }
 
 export default function BasicModal({
@@ -27,7 +30,15 @@ export default function BasicModal({
   placeholder,
   cancelButtonText,
   createButtonText,
+  error = "",
+  showError = false,
 }: ModalProps) {
+  const [isButtonDisabled, setButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    setButtonDisabled(value.trim() === "");
+  }, [value]);
+
   const handleButtonClick = () => {
     if (buttonAction) {
       buttonAction();
@@ -58,6 +69,8 @@ export default function BasicModal({
             width='w-287'
             tabletWidth='tablet:w-498'
             desktopWidth='desktop:w-498'
+            error={error}
+            showError={showError}
           />
         </Form>
         <div className='mt-[20px] flex items-center gap-[11px] tablet:justify-end'>
@@ -69,7 +82,10 @@ export default function BasicModal({
           </Button>
           <Button
             onClick={handleButtonClick}
-            className='h-[42px] w-[138px] rounded-[8px] text-white tablet:h-48 tablet:w-120'
+            className={`h-[42px] w-[138px] rounded-[8px] text-white tablet:h-48 tablet:w-120 ${
+              isButtonDisabled ? "bg-gray-40" : "bg-violet-20"
+            }`}
+            disabled={isButtonDisabled}
           >
             {createButtonText}
           </Button>
