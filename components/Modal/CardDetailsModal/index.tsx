@@ -19,6 +19,7 @@ interface ModalProps {
   subTitle: string;
   cardId: number;
   dashboardId: number;
+  columnId: number;
 }
 
 const CardDetailsModal: FC<ModalProps> = ({
@@ -30,6 +31,7 @@ const CardDetailsModal: FC<ModalProps> = ({
   subTitle,
   cardId,
   dashboardId,
+  columnId,
 }) => {
   const {
     isOpen: modalIsOpen,
@@ -151,6 +153,7 @@ const CardDetailsModal: FC<ModalProps> = ({
         createButtonText='수정'
         cancelButtonText='취소'
         cardId={cardId}
+        columnId={columnId}
       />
     </>
   );

@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import DropDown from "@/components/Modal/CardModal/InputCardEdit/DropDown";
 import Input from "@/components/Modal/CardModal/InputCardEdit/Input";
 import Textarea from "@/components/Modal/CardModal/InputCardEdit/Textarea";
@@ -21,6 +22,7 @@ interface ModalProps {
   createButtonText: string;
   cancelButtonText: string;
   cardId: number;
+  columnId: number;
 }
 
 const CardEditModal: FC<ModalProps> = ({
@@ -31,7 +33,9 @@ const CardEditModal: FC<ModalProps> = ({
   createButtonText,
   cancelButtonText,
   cardId,
+  columnId,
 }) => {
+  const queryClient = useQueryClient();
   const {
     isOpen: modalIsOpen,
     cardDetails,
@@ -72,6 +76,26 @@ const CardEditModal: FC<ModalProps> = ({
     }
   }, [cardDetails]);
 
+  const mutation = useMutation<unknown, Error, UpdateCardData>({
+    mutationFn: async (updatedCard: UpdateCardData) => {
+      console.log("Sending update request:", updatedCard);
+      return await fetcher({
+        url: `cards/${cardId}`,
+        method: "PUT",
+        data: updatedCard,
+      });
+    },
+    onSuccess: () => {
+      console.log("Update successful");
+      queryClient.invalidateQueries({ queryKey: ["card", cardId] });
+      buttonAction();
+      onClose();
+    },
+    onError: (error) => {
+      console.error("Failed to update card", error);
+    },
+  });
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -95,12 +119,24 @@ const CardEditModal: FC<ModalProps> = ({
     setFormData((prev) => ({ ...prev, columnId }));
   };
 
-  const handleImageChange = (file: File) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFormData((prev) => ({ ...prev, imageUrl: reader.result as string }));
-    };
-    reader.readAsDataURL(file);
+  const handleImageChange = async (file: File) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      const response = await fetcher<{ imageUrl: string }>({
+        url: `columns/${columnId}/card-image`,
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      setFormData((prev) => ({ ...prev, imageUrl: response.imageUrl }));
+    } catch (error) {
+      throw new Error("Failed to upload image");
+    }
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,15 +144,9 @@ const CardEditModal: FC<ModalProps> = ({
     setFormData((prev) => ({ ...prev, dueDate: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetcher({
-      url: `cards/${cardId}`,
-      method: "PUT",
-      data: formData,
-    });
-    buttonAction();
-    onClose();
+    mutation.mutate(formData);
   };
 
   if (!modalIsOpen) return null;
@@ -127,54 +157,56 @@ const CardEditModal: FC<ModalProps> = ({
         <div className='text-[20px] font-bold tablet:text-[24px]'>
           할 일 수정
         </div>
-        <div className='tablet:flex tablet:items-center tablet:justify-center tablet:gap-[16px]'>
-          <DropDown
-            subTitle='상태'
-            placeholder={formData.columnId.toString()}
+        <form onSubmit={handleSubmit}>
+          <div className='tablet:flex tablet:items-center tablet:justify-center tablet:gap-[16px]'>
+            <DropDown
+              subTitle='상태'
+              placeholder={formData.columnId.toString()}
+            />
+            <DropDown
+              subTitle='담당자'
+              placeholder={formData.assigneeUserId.toString()}
+            />
+          </div>
+          <Input
+            subTitle='제목'
+            name='title'
+            value={formData.title}
+            onChange={handleChange}
           />
-          <DropDown
-            subTitle='담당자'
-            placeholder={formData.assigneeUserId.toString()}
+          <Textarea
+            subTitle='설명'
+            name='description'
+            value={formData.description}
+            onChange={handleChange}
           />
-        </div>
-        <Input
-          subTitle='제목'
-          name='title'
-          value={formData.title}
-          onChange={handleChange}
-        />
-        <Textarea
-          subTitle='설명'
-          name='description'
-          value={formData.description}
-          onChange={handleChange}
-        />
-        <Calendar
-          subTitle='마감일'
-          value={formData.dueDate}
-          onChange={handleDateChange}
-        />
-        <TagInput
-          subTitle='태그'
-          value={formData.tags.join(",")}
-          onChange={handleTagChange}
-        />
-        <ImgInput subTitle='이미지' onChange={handleImageChange} />
+          <Calendar
+            subTitle='마감일'
+            value={formData.dueDate}
+            onChange={handleDateChange}
+          />
+          <TagInput
+            subTitle='태그'
+            value={formData.tags.join(",")}
+            onChange={handleTagChange}
+          />
+          <ImgInput subTitle='이미지' onChange={handleImageChange} />
 
-        <div className='mt-[18px] flex w-full items-center justify-center gap-[11px] tablet:mt-[26px] tablet:justify-end'>
-          <Button
-            type='submit'
-            className='h-[50px] w-full rounded-[8px] text-white'
-          >
-            {createButtonText}
-          </Button>
-          <Button
-            onClick={onClose}
-            className='h-[50px] w-full rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
-          >
-            {cancelButtonText}
-          </Button>
-        </div>
+          <div className='mt-[18px] flex w-full items-center justify-center gap-[11px] tablet:mt-[26px] tablet:justify-end'>
+            <Button
+              type='submit'
+              className='h-[50px] w-full rounded-[8px] text-white'
+            >
+              {createButtonText}
+            </Button>
+            <Button
+              onClick={onClose}
+              className='h-[50px] w-full rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
+            >
+              {cancelButtonText}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );
