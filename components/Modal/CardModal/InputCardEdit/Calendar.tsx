@@ -5,6 +5,17 @@ interface CalendarProps {
 }
 
 export default function Calendar({ subTitle, onChange, value }: CalendarProps) {
+  // value가 존재하고 ISO 8601 형식이 아닌 경우, ISO 8601 형식으로 변환
+  const formattedValue = value
+    ? new Date(value).toISOString().slice(0, 16)
+    : "";
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (onChange) {
+      onChange(e);
+    }
+  };
+
   return (
     <div className='mt-[18px] flex flex-col gap-[10px] tablet:mt-[26px]'>
       <div className='text-[16px] font-medium tablet:text-[18px]'>

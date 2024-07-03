@@ -3,7 +3,6 @@ import { ChangeEvent, useState } from "react";
 
 interface ImgInputProps {
   subTitle: string;
-  value?: string;
   onChange?: (file: File) => void;
 }
 
