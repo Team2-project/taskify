@@ -21,8 +21,8 @@ const createRequestConfig = (
   return config;
 };
 
-// Axios의 request 함수를 감싸는 함수
-export const request = async <T>(
+// Axios의 request 함수를 감싸는 함수 (인증 기반 요청)
+export const authRequest = async <T>(
   config: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> => {
   try {
@@ -33,10 +33,27 @@ export const request = async <T>(
   }
 };
 
-// 데이터를 가져오는 fetcher 함수
-const fetcher = async <T>(config: AxiosRequestConfig): Promise<T> => {
+// Axios의 request 함수를 감싸는 함수 (인증 기반 요청 X)
+export const request = async <T>(
+  config: AxiosRequestConfig,
+): Promise<AxiosResponse<T>> => {
   try {
-    const response = await request<T>(config);
+    const response = await instance.request<T>(config);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// 데이터를 가져오는 fetcher 함수
+const fetcher = async <T>(
+  config: AxiosRequestConfig,
+  isAuth: boolean = true,
+): Promise<T> => {
+  try {
+    const response = isAuth
+      ? await authRequest<T>(config)
+      : await request<T>(config);
     return response.data;
   } catch (error) {
     throw error;
