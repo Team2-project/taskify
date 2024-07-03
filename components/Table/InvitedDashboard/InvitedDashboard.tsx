@@ -38,29 +38,6 @@ export default function InvitedDashboard() {
     setSearchTitle(event.target.value);
   };
 
-  // const router = useRouter();
-  // const { invitationId } = router.query;
-
-  // const queryClient = useQueryClient();
-  // const mutation = useMutation<
-  //   InvitationResponse,
-  //   AxiosError,
-  //   { inviteAccepted: boolean }
-  // >({
-  //   mutationFn: async ({ inviteAccepted }) => {
-  //     const response = await fetcher<InvitationResponse>({
-  //       url: `/invitations/${invitationId}`,
-  //       method: "PUT",
-  //       data: { inviteAccepted },
-  //     });
-  //     return response;
-  //   },
-  //   onSuccess: (data) => {
-  //     queryClient.invalidateQueries({ queryKey: ["getInvitations"] });
-  //     queryClient.invalidateQueries({ queryKey: ["dashBoards"] });
-  //   },
-  // });
-
   const invitationConfig: AxiosRequestConfig = {
     url: `/invitations`,
     method: "GET",
@@ -83,6 +60,19 @@ export default function InvitedDashboard() {
   }
 
   const invitationArray = invitationData.invitations;
+
+  const handleClickButton = async () => {
+    const invitationId = 0;
+    try {
+      await fetcher({
+        url: `invitations/${invitationId}`,
+        method: "PUT",
+        data: {
+          inviteAccepted: true,
+        },
+      });
+    } catch (error) {}
+  };
 
   const getFilteredInvitations = () => {
     if (searchTitle === "") {
@@ -118,7 +108,10 @@ export default function InvitedDashboard() {
           </td>
           <td className='mb-[16px] flex tablet:table-cell'>
             <div className='flex w-full gap-[10px]'>
-              <button className='h-[28px] w-full rounded-[4px] bg-violet-20 text-[12px] font-medium text-white tablet:h-[30px] tablet:w-[72px] tablet:px-[20px] tablet:py-[6px] desktop:h-[32px] desktop:w-[84px] desktop:px-[23px] desktop:py-[7px]'>
+              <button
+                onClick={handleClickButton}
+                className='h-[28px] w-full rounded-[4px] bg-violet-20 text-[12px] font-medium text-white tablet:h-[30px] tablet:w-[72px] tablet:px-[20px] tablet:py-[6px] desktop:h-[32px] desktop:w-[84px] desktop:px-[23px] desktop:py-[7px]'
+              >
                 수락
               </button>
               <button className='h-[28px] w-full rounded-[4px] border-[1px] border-gray-30 text-[12px] font-medium text-violet-20 tablet:h-[30px] tablet:w-[72px] tablet:px-[20px] tablet:py-[6px] desktop:h-[32px] desktop:w-[84px] desktop:px-[23px] desktop:py-[7px]'>
