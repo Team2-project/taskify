@@ -5,7 +5,8 @@ import {
   useQuery,
   UseQueryResult,
 } from "@tanstack/react-query";
-import DropDown from "@/components/Modal/CardModal/InputCardEdit/DropDown";
+import DropDownAssignee from "@/components/Modal/CardModal/InputCardEdit/DropDownAssignee";
+import DropDownColumn from "@/components/Modal/CardModal/InputCardEdit/DropDownColumn";
 import Input from "@/components/Modal/CardModal/InputCardEdit/Input";
 import Textarea from "@/components/Modal/CardModal/InputCardEdit/Textarea";
 import Calendar from "@/components/Modal/CardModal/InputCardEdit/Calendar";
@@ -175,12 +176,18 @@ const CardEditModal: FC<ModalProps> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("Form Data:", formData); // 로그로 출력
     mutation.mutate(formData);
   };
 
   // useQuery 훅을 사용하여 대시보드 멤버 데이터 로드
   const membersConfig: AxiosRequestConfig = {
     url: `/members?dashboardId=${dashboardId}`,
+    method: "GET",
+  };
+
+  const columnsConfig: AxiosRequestConfig = {
+    url: `/columns?dashboardId=${dashboardId}`,
     method: "GET",
   };
 
@@ -205,12 +212,38 @@ const CardEditModal: FC<ModalProps> = ({
     enabled: !!dashboardId,
   });
 
-  if (membersError) {
-    return <div>멤버 데이터를 불러오는 중 오류가 발생했습니다.</div>;
+  const {
+    data: columnsData,
+    error: columnsError,
+    isLoading: columnsLoading,
+  }: UseQueryResult<
+    { data: { id: number; title: string }[] },
+    Error
+  > = useQuery({
+    queryKey: ["columns", dashboardId],
+    queryFn: async () => {
+      try {
+        const response = await fetcher<{
+          data: { id: number; title: string }[];
+        }>({
+          ...columnsConfig,
+          url: `/columns?dashboardId=${dashboardId}`,
+        });
+        return response;
+      } catch (error) {
+        console.error("API 요청 중 오류 발생:", error);
+        throw error;
+      }
+    },
+    enabled: !!dashboardId,
+  });
+
+  if (membersError || columnsError) {
+    return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
   }
 
-  if (membersLoading) {
-    return <div>멤버 데이터를 불러오는 중...</div>;
+  if (membersLoading || columnsLoading) {
+    return <div>데이터를 불러오는 중...</div>;
   }
 
   if (!modalIsOpen) return null;
@@ -223,13 +256,16 @@ const CardEditModal: FC<ModalProps> = ({
         </div>
         <form onSubmit={handleSubmit}>
           <div className='tablet:flex tablet:items-center tablet:justify-center tablet:gap-[16px]'>
-            <DropDown
+            <DropDownColumn
               subTitle='상태'
-              placeholder={formData.columnId.toString()}
-              membersData={[]} // 상태 드롭다운 데이터가 없다고 가정합니다.
-              onMemberSelect={handleColumnChange}
+              placeholder={
+                columnsData?.data.find((col) => col.id === formData.columnId)
+                  ?.title || "Select"
+              }
+              columnsData={columnsData?.data}
+              onColumnSelect={handleColumnChange}
             />
-            <DropDown
+            <DropDownAssignee
               subTitle='담당자'
               placeholder={
                 formData.assigneeNickname || formData.assigneeUserId.toString()
