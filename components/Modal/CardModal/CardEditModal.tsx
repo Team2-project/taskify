@@ -327,7 +327,11 @@ const CardEditModal: FC<ModalProps> = ({
             value={formData.tags.join(",")}
             onChange={handleTagChange}
           />
-          <ImgInput subTitle='이미지' onChange={handleImageChange} />
+          <ImgInput
+            subTitle='카드 이미지'
+            onChange={handleImageChange}
+            initialImgUrl={formData.imageUrl} // 초기 이미지 URL 전달
+          />
           <div className='mt-[18px] flex w-full items-center justify-center gap-[11px] tablet:mt-[26px] tablet:justify-end'>
             <Button
               type='submit'
