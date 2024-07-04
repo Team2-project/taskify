@@ -80,7 +80,6 @@ const LoginPage = () => {
 
     try {
       const data = await login({ email, password });
-      console.log("로그인 성공:", data);
       router.push("/mydashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
