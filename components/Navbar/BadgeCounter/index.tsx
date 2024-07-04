@@ -1,4 +1,6 @@
-// components/BadgeCounter.tsx
+/*
+my dashboard에서 member들 보여주는 카운터
+*/
 import { FC, useEffect } from "react";
 import UserBadge from "@/components/UserBadge";
 import { useAtom } from "jotai";
