@@ -10,6 +10,8 @@ const DashboardIdPage = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
 
+  const dashboardIdNumber = Number(dashboardId); //router로 dashboardId가 넘어오기 때문에 string으로 변환됨
+
   const dashboardConfig: AxiosRequestConfig = {
     url: `/dashboards/${dashboardId}`,
     method: "GET",
@@ -40,7 +42,7 @@ const DashboardIdPage = () => {
   return (
     <DashboardLayout
       title={`${dashboardData.title}`}
-      dashboardId={dashboardId as string}
+      dashboardId={dashboardIdNumber}
       showActionButton={true}
       showBadgeCounter={true}
       showProfileDropdown={true}
