@@ -132,7 +132,7 @@ const CardEditModal: FC<ModalProps> = ({
     setFormData((prev) => ({ ...prev, assigneeUserId, assigneeNickname }));
   };
 
-  const handleColumnChange = (columnId: number) => {
+  const handleColumnChange = (columnId: number, columnTitle: string) => {
     setFormData((prev) => ({ ...prev, columnId }));
   };
 
@@ -180,7 +180,6 @@ const CardEditModal: FC<ModalProps> = ({
     mutation.mutate(formData);
   };
 
-  // useQuery 훅을 사용하여 대시보드 멤버 데이터 로드
   const membersConfig: AxiosRequestConfig = {
     url: `/members?dashboardId=${dashboardId}`,
     method: "GET",

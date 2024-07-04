@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { dropButton } from "../list";
 
 interface DropDownProps {
@@ -14,21 +14,19 @@ export default function DropDownColumn({
   columnsData = [],
   onColumnSelect,
 }: DropDownProps) {
-  const [dropOpen, setDropOpen] = useState<boolean>(false);
-  const [selectedColumn, setSelectedColumn] = useState<string>(
+  const [selectedColumnId, setSelectedColumnId] = useState<number | null>(null);
+  const [selectedColumnTitle, setSelectedColumnTitle] = useState<string>(
     placeholder || "",
   );
-
-  useEffect(() => {
-    setSelectedColumn(placeholder || "");
-  }, [placeholder]);
+  const [dropOpen, setDropOpen] = useState<boolean>(false);
 
   const handleColumnSelect = (columnId: number, columnTitle: string) => {
-    setSelectedColumn(columnTitle);
+    setSelectedColumnId(columnId);
+    setSelectedColumnTitle(columnTitle);
+    setDropOpen(false); // 컬럼 선택 후 드롭다운 닫기
     if (onColumnSelect) {
       onColumnSelect(columnId, columnTitle);
     }
-    setDropOpen(false);
   };
 
   return (
@@ -38,11 +36,16 @@ export default function DropDownColumn({
       </div>
       <div className='relative flex h-[42px] w-full items-center rounded-[6px] border-[1px] border-gray-30 p-4 active:border-[1px] active:border-violet-20 tablet:h-[48px]'>
         <button
-          onClick={() => setDropOpen((prev) => !prev)}
+          type='button'
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setDropOpen((prev) => !prev);
+          }}
           className='flex w-full items-center justify-between'
         >
           <div className='text-[14px] font-normal tablet:text-[16px]'>
-            {selectedColumn}
+            {selectedColumnTitle}
           </div>
           {dropOpen ? dropButton.open : dropButton.close}
         </button>
@@ -52,7 +55,7 @@ export default function DropDownColumn({
               {columnsData.map((column) => (
                 <li
                   key={column.id}
-                  className='hover:bg-gray-100 cursor-pointer px-4 py-2'
+                  className={`hover:bg-gray-100 cursor-pointer px-4 py-2 ${column.id === selectedColumnId ? "bg-gray-100" : ""}`}
                   onClick={() => handleColumnSelect(column.id, column.title)}
                 >
                   {column.title}
