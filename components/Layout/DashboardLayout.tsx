@@ -13,7 +13,6 @@ import { User } from "@/lib/api/types/users";
 import { userAtom } from "@/atoms/userAtom";
 import { membersAtom } from "@/atoms/membersAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
-import { MembersResponse } from "@/lib/api/types/members";
 import useFetchMembers from "@/hooks/useFetchMembers";
 
 interface DashboardLayoutProps {
