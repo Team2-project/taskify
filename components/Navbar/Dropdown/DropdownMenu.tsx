@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Cookies from "js-cookie"; // js-cookie 라이브러리 추가
 import useClickOutside from "@/hooks/useClickOutside";
 
 interface DropdownMenuProps {
@@ -11,8 +12,8 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ buttonLabel }) => {
 
   // accessToken 삭제 함수
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    setIsOpen(false); // Dropdown 닫기
+    Cookies.remove("accessToken");
+    setIsOpen(false);
   };
 
   const toggleDropdown = () => {
