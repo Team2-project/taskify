@@ -9,33 +9,12 @@ import useMaxDisplayCount from "./useMaxDisplayCount";
 import fetcher from "@/lib/api/fetcher";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
-import { MembersResponse } from "@/lib/api/types/members";
+import useFetchMembers from "@/hooks/useFetchMembers";
 
 const BadgeCounter: FC<{ dashboardId: number }> = ({ dashboardId }) => {
   const [members, setMembers] = useAtom(membersAtom);
 
-  const membersConfig: AxiosRequestConfig = {
-    url: `/members`,
-    method: "GET",
-    params: {
-      dashboardId,
-    },
-  };
-
-  const {
-    data: fetchedMembersData,
-    error: membersError,
-    isLoading: membersLoading,
-  } = useQuery<MembersResponse>({
-    queryKey: ["membersData", dashboardId],
-    queryFn: () => fetcher<MembersResponse>(membersConfig),
-  });
-
-  useEffect(() => {
-    if (fetchedMembersData) {
-      setMembers(fetchedMembersData.members);
-    }
-  }, [fetchedMembersData, setMembers]);
+  useFetchMembers(dashboardId);
 
   const maxDisplayCount = useMaxDisplayCount();
   const bgColorOptions = [
@@ -45,14 +24,6 @@ const BadgeCounter: FC<{ dashboardId: number }> = ({ dashboardId }) => {
     "bg-sand",
     "bg-red-10",
   ];
-
-  if (membersLoading) {
-    return <div>로딩 중...</div>;
-  }
-
-  if (membersError) {
-    return <div>데이터를 불러오는 중 오류가 발생했습니다</div>;
-  }
 
   return (
     <div className='flex space-x-[-10px]'>
