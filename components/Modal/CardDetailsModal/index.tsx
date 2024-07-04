@@ -76,6 +76,7 @@ const CardDetailsModal: FC<ModalProps> = ({
             <h2 className='word-wrap w-full whitespace-normal text-xl font-semibold tablet:w-[420px] desktop:w-[420px]'>
               {cardDetails.title}
             </h2>
+
             <div className='flex space-x-2'>
               <CardDropdown
                 dashboardId={dashboardId}
@@ -96,12 +97,13 @@ const CardDetailsModal: FC<ModalProps> = ({
                 columnId={cardDetails?.columnId}
                 dashboardId={dashboardId}
               />
+
               <span className='font-bold text-gray-30'>|</span>
               <span className='font-bold text-gray-30'>|</span>
               {cardDetails.tags.map((tag) => (
                 <Tag key={tag} tag={tag} />
               ))}
-            </div>
+            </div>{" "}
             <div className='mb-[20px]'>
               <CardDescription cardDetails={cardDetails} />
             </div>
@@ -126,17 +128,6 @@ const CardDetailsModal: FC<ModalProps> = ({
                 {cardDetails.tags.map((tag) => (
                   <Tag key={tag} tag={tag} />
                 ))}
-                <CardEditModal
-                  isOpen={isEditModalOpen}
-                  onSubmit={onSubmit}
-                  onClose={() => setIsEditModalOpen(false)}
-                  buttonAction={onSuccess} // 수정 후 성공 시 onSuccess 호출
-                  createButtonText='수정'
-                  cancelButtonText='취소'
-                  cardId={cardId}
-                  columnId={columnId}
-                  dashboardId={dashboardId}
-                />
               </div>
             </div>
             <div className='col-span-1 row-span-3'>
@@ -157,6 +148,17 @@ const CardDetailsModal: FC<ModalProps> = ({
             <div className='col-span-2 mb-[16px]'>
               <CommentList cardId={cardId} />
             </div>
+            <CardEditModal
+              isOpen={isEditModalOpen}
+              onSubmit={onSubmit}
+              onClose={() => setIsEditModalOpen(false)}
+              buttonAction={onSuccess} // 수정 후 성공 시 onSuccess 호출
+              createButtonText='수정'
+              cancelButtonText='취소'
+              cardId={cardId}
+              columnId={columnId}
+              dashboardId={dashboardId}
+            />
             <div className='col-span-1'></div>
           </div>
         </div>
