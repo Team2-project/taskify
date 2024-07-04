@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import ResModal from "@/components/Modal/ResModal";
 import fetcher from "@/lib/api/fetcher";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/router";
 
 interface DeleteColumnProps {
   isModalOpen: boolean;
@@ -13,22 +15,33 @@ const DeleteColumn: React.FC<DeleteColumnProps> = ({
   handleCloseModal,
   columnId,
 }) => {
-  const handleDelete = async () => {
-    if (columnId === null) {
-      console.error("Invalid column ID");
-      return;
-    }
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const { dashboardId } = router.query as { dashboardId: string };
 
-    try {
+  const deleteMutation = useMutation<void, Error>({
+    mutationFn: async () => {
+      if (columnId === null) {
+        throw new Error("Invalid column ID");
+      }
+
       await fetcher({
         url: `/columns/${columnId}`,
         method: "DELETE",
       });
-      console.log("삭제 버튼 클릭됨, columnId:", columnId);
-    } catch (error) {
-      console.error(error);
-    }
-    handleCloseModal();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["columns", dashboardId] });
+      handleCloseModal();
+      router.replace(`/dashboard/${dashboardId}`);
+    },
+    onError: (error) => {
+      console.error("Failed to delete column", error);
+    },
+  });
+
+  const handleDelete = () => {
+    deleteMutation.mutate();
   };
 
   return (

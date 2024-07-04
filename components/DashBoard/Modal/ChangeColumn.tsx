@@ -6,6 +6,7 @@ import fetcher from "@/lib/api/fetcher";
 import { CreateColumnRequest } from "@/lib/api/types/columns";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ParentComponentProps {
   isModalOpen: boolean;
@@ -24,46 +25,46 @@ const ChangeColumn: React.FC<ParentComponentProps> = ({
   const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false); // 삭제 모달 상태 추가
   const router = useRouter();
   const { dashboardId } = router.query as { dashboardId: string };
+  const queryClient = useQueryClient();
+
+  const editMutation = useMutation<void, AxiosError, { title: string }>({
+    mutationFn: async ({ title }) => {
+      if (!columnId) {
+        throw new Error("유효하지 않은 칼럼 ID입니다.");
+      }
+      await fetcher({
+        url: `/columns/${columnId}`,
+        method: "PUT",
+        data: { title },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["columns", dashboardId] });
+      toast.success("칼럼이 성공적으로 업데이트되었습니다!");
+      handleCloseModal();
+    },
+    onError: (error) => {
+      if (error.response?.data) {
+        const errorMessage = (error.response.data as { message: string })
+          .message;
+        toast.error(errorMessage);
+      } else {
+        console.error("칼럼 업데이트 중 오류가 발생했습니다.", error);
+      }
+    },
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const handleButtonAction = async () => {
-    try {
-      const formData = {
-        title: inputValue,
-      };
-
-      if (!columnId) {
-        console.error("유효하지 않은 칼럼 ID입니다.");
-        return;
-      }
-
-      const response = await fetcher<CreateColumnRequest>({
-        url: `/columns/${columnId}`,
-        method: "PUT",
-        data: formData,
-      });
-
-      console.log(response);
-      toast.success("칼럼이 성공적으로 업데이트되었습니다!");
-
-      setError("");
-      setShowError(false);
-      handleCloseModal();
-    } catch (error: unknown) {
-      if (error instanceof AxiosError && error.response) {
-        toast.error(error.response.data.message);
-      } else {
-        console.error("칼럼 업데이트 중 오류가 발생했습니다.");
-      }
-    }
+  const handleButtonAction = () => {
+    editMutation.mutate({ title: inputValue });
   };
 
   // 삭제 모달 열기 핸들러 수정: 현재 모달을 닫고 삭제 모달을 엽니다

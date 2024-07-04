@@ -38,7 +38,7 @@ const DashBoard = ({ color }: Props) => {
     { result: string; data: ColumnResponse[] },
     Error
   > = useQuery({
-    queryKey: ["columnsData", dashboardId],
+    queryKey: ["columns", dashboardId],
     queryFn: () =>
       fetcher<{ result: string; data: ColumnResponse[] }>(columnsConfig),
     enabled: !!dashboardId,

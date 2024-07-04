@@ -5,6 +5,7 @@ import fetcher from "@/lib/api/fetcher";
 import { CreateColumnRequest } from "@/lib/api/types/columns";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ParentComponentProps {
   isModalOpen: boolean;
@@ -22,6 +23,35 @@ const AddColumn: React.FC<ParentComponentProps> = ({
   const [showError, setShowError] = useState<boolean>(false);
   const router = useRouter();
   const { dashboardId } = router.query as { dashboardId: string };
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<unknown, AxiosError, CreateColumnRequest>({
+    mutationFn: async (newColumn) => {
+      const response = await fetcher<unknown>({
+        url: `/columns`,
+        method: "POST",
+        data: newColumn,
+      });
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["columns", dashboardId] });
+      toast.success("칼럼 생성이 완료되었습니다!");
+      setInputValue(""); // 입력 필드 초기화
+      setError("");
+      setShowError(false);
+      handleCloseModal();
+    },
+    onError: (error: AxiosError) => {
+      if (error.response?.data) {
+        const errorMessage = (error.response.data as { message: string })
+          .message;
+        toast.error(errorMessage);
+      } else {
+        console.error("칼럼 생성 중 오류가 발생했습니다.", error);
+      }
+    },
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -36,41 +66,21 @@ const AddColumn: React.FC<ParentComponentProps> = ({
     }
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  const handleButtonAction = async () => {
+  const handleButtonAction = () => {
     if (existingTitles.includes(inputValue)) {
       setError("중복된 컬럼 이름입니다.");
       setShowError(true);
       return;
     }
-    try {
-      const formData: CreateColumnRequest = {
-        title: inputValue,
-        dashboardId: Number(dashboardId),
-      };
-
-      const response = await fetcher<CreateColumnRequest>({
-        url: `/columns`,
-        method: "POST",
-        data: formData,
-      });
-
-      console.log(response);
-      toast.success("칼럼 생성이 완료되었습니다!");
-
-      setError("");
-      setShowError(false);
-      handleCloseModal();
-    } catch (error: unknown) {
-      if (error instanceof AxiosError && error.response) {
-        toast.error(error.response.data.message);
-      } else {
-        console.log("칼럼 생성 중 오류가 발생했습니다.");
-      }
-    }
+    const formData: CreateColumnRequest = {
+      title: inputValue,
+      dashboardId: Number(dashboardId),
+    };
+    mutation.mutate(formData);
   };
 
   return (
