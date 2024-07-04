@@ -90,12 +90,15 @@ const CardEditModal: FC<ModalProps> = ({
     }
   }, [cardDetails]);
 
-  const uploadCardImg = async (columnId: number, data: File) => {
+  const uploadCardImg = async (
+    columnId: number,
+    data: File,
+  ): Promise<{ imageUrl: string }> => {
     try {
       const formData = new FormData();
       formData.append("image", data);
 
-      const response = await fetcher({
+      const response = await fetcher<{ imageUrl: string }>({
         url: `columns/${columnId}/card-image`,
         method: "POST",
         data: formData,
