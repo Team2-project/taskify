@@ -6,9 +6,6 @@ import UserBadge from "@/components/UserBadge";
 import { useAtom } from "jotai";
 import { membersAtom } from "@/atoms/membersAtom";
 import useMaxDisplayCount from "./useMaxDisplayCount";
-import fetcher from "@/lib/api/fetcher";
-import { useQuery } from "@tanstack/react-query";
-import { AxiosRequestConfig } from "axios";
 import useFetchMembers from "@/hooks/useFetchMembers";
 
 const BadgeCounter: FC<{ dashboardId: number }> = ({ dashboardId }) => {
