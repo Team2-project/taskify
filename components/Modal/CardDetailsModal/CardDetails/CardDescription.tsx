@@ -10,7 +10,7 @@ const CardDescription: FC<CardDescriptionProps> = ({ cardDetails }) => {
 
   return (
     <div>
-      <p className='mb-[16px] text-base'>{description}</p>
+      <p className='mb-[16px] whitespace-normal text-base'>{description}</p>
       {imageUrl && (
         <img src={imageUrl} alt='Card Image' className='w-full rounded-lg' />
       )}
