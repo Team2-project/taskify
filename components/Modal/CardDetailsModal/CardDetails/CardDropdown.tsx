@@ -9,7 +9,7 @@ interface CardDropdownProps {
   cardId: number;
   dashboardId: number;
   onEdit: () => void;
-  onDelete: () => void; // 추가
+  onDelete: () => void; // 삭제 후 처리할 콜백 추가
 }
 
 const CardDropdown: FC<CardDropdownProps> = ({
@@ -50,11 +50,13 @@ const CardDropdown: FC<CardDropdownProps> = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["cards"],
+        queryKey: ["cards"], // 카드 데이터를 다시 불러오도록 쿼리를 무효화
       });
-      setIsModalOpen(false); // 모달 닫기
+      queryClient.invalidateQueries({
+        queryKey: ["dashboard", dashboardId], // 대시보드 데이터를 다시 불러오도록 쿼리를 무효화
+      });
       onDelete(); // CardDetailsModal을 닫는 콜백 호출
-      router.push(`/dashboard/${dashboardId}`); // 대시보드 페이지로 리디렉션
+      router.replace(`/dashboard/${dashboardId}`); // 페이지를 다시 로드하여 최신 데이터를 가져옴
     },
     onError: (error) => {
       console.error("Failed to delete card", error);

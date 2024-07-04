@@ -62,13 +62,13 @@ const CardDetailsModal: FC<ModalProps> = ({
 
   const handleDelete = () => {
     onClose(); // CardDetailsModal 닫기
+    window.location.reload(); // 페이지 리로드하여 최신 데이터 반영
   };
 
   return (
     <>
       <div className='fixed inset-0 flex min-w-[370px] items-center justify-center bg-black bg-opacity-50'>
         <div className='mx-[24px] max-h-screen w-full overflow-y-auto rounded-[8px] bg-white p-[20px] shadow-lg tablet:max-h-[770px] tablet:w-auto tablet:max-w-[680px] desktop:max-h-[770px] desktop:w-auto desktop:max-w-[730px]'>
-          {/* Header Section */}
           <div className='mb-4 flex items-center justify-between'>
             <h2 className='text-xl font-semibold'>{cardDetails.title}</h2>
             <div className='flex space-x-2'>
@@ -76,13 +76,12 @@ const CardDetailsModal: FC<ModalProps> = ({
                 dashboardId={dashboardId}
                 cardId={cardId}
                 onEdit={() => setIsEditModalOpen(true)}
-                onDelete={handleDelete} // 추가
+                onDelete={handleDelete}
               />
               <CloseButton onClose={onClose} />
             </div>
           </div>
 
-          {/* Mobile Layout */}
           <div className='block tablet:hidden'>
             <div className='my-[16px]'>
               <AssigneeDetails cardDetails={cardDetails} />
@@ -111,7 +110,6 @@ const CardDetailsModal: FC<ModalProps> = ({
             </div>
           </div>
 
-          {/* Tablet과 Desktop Layout */}
           <div className='hidden tablet:grid tablet:grid-cols-3 tablet:gap-4'>
             <div className='col-span-2 flex items-center'>
               <ColumnTitle
