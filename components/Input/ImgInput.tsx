@@ -3,23 +3,18 @@ import { ChangeEvent, useState } from "react";
 
 interface ImgInputProps {
   subTitle: string;
-  onChange?: (file: File) => void;
+  handleImgChange: (file: File) => void;
 }
 
-export default function ImgInput({ subTitle, onChange }: ImgInputProps) {
+export default function ImgInput({ subTitle, handleImgChange }: ImgInputProps) {
   const [imgSrc, setImgSrc] = useState<string>("");
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImgSrc(reader.result as string);
-        if (onChange) {
-          onChange(file);
-        }
-      };
-      reader.readAsDataURL(file);
+      const imgUrl = URL.createObjectURL(file);
+      setImgSrc(imgUrl);
+      handleImgChange(file);
     }
   };
 
