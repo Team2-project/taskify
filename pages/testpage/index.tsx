@@ -17,6 +17,10 @@ const TestPage: FC = () => {
     handleCloseModal();
   };
 
+  const handleSuccess = () => {
+    console.log("Operation successful");
+  };
+
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-10'>
       <button
@@ -32,8 +36,10 @@ const TestPage: FC = () => {
         onSubmit={handleSubmit}
         title='Test Modal Title'
         subTitle='This is a subtitle for the test page'
+        columnId={33066}
         cardId={8725} // 테스트 카드 ID
         dashboardId={9807} // 테스트 대시보드 ID
+        onSuccess={handleSuccess} // 추가
       />
     </div>
   );
