@@ -21,7 +21,8 @@
     "react": "^18",
     "react-datepicker": "^7.2.0",
     "react-dom": "^18",
-    "react-svg": "^16.1.34"
+    "react-svg": "^16.1.34",
+    "react-toastify": "^10.0.5"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

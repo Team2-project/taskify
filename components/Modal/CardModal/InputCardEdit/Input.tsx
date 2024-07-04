@@ -1,15 +1,17 @@
 interface InputProps {
   subTitle: string;
+  name: string;
+  value?: string;
   placeholder?: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  inputData: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
   subTitle,
+  name,
+  value,
   placeholder,
-  handleInputChange,
-  inputData,
+  onChange,
 }: InputProps) {
   return (
     <div className='mt-[18px] flex flex-col gap-[10px] tablet:mt-[26px]'>
@@ -18,14 +20,13 @@ export default function Input({
       </div>
       <div className='relative flex h-[42px] w-full items-center rounded-[6px] border-[1px] border-gray-30 p-4 active:border-[1px] active:border-violet-20 tablet:h-[48px]'>
         <input
+          name={name}
           placeholder={placeholder}
-          className='w-full text-[14px] font-normal tablet:text-[16px]'
-          onChange={handleInputChange}
-          type='text'
-          value={inputData}
-        />
+          className='w-full text-[14px] font-normal tablet:text-[16]'
+          value={value}
+          onChange={onChange}
+        ></input>
       </div>
     </div>
   );
 }
-
