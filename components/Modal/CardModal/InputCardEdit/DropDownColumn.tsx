@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dropButton } from "../list";
 
 interface DropDownProps {
@@ -6,6 +6,8 @@ interface DropDownProps {
   placeholder?: string;
   columnsData?: { id: number; title: string }[];
   onColumnSelect?: (columnId: number, columnTitle: string) => void;
+  initialColumnId?: number;
+  initialColumnTitle?: string;
 }
 
 export default function DropDownColumn({
@@ -13,12 +15,23 @@ export default function DropDownColumn({
   placeholder,
   columnsData = [],
   onColumnSelect,
+  initialColumnId,
+  initialColumnTitle,
 }: DropDownProps) {
-  const [selectedColumnId, setSelectedColumnId] = useState<number | null>(null);
+  const [selectedColumnId, setSelectedColumnId] = useState<number | null>(
+    initialColumnId || null,
+  );
   const [selectedColumnTitle, setSelectedColumnTitle] = useState<string>(
-    placeholder || "",
+    initialColumnTitle || placeholder || "",
   );
   const [dropOpen, setDropOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialColumnId && initialColumnTitle) {
+      setSelectedColumnId(initialColumnId);
+      setSelectedColumnTitle(initialColumnTitle);
+    }
+  }, [initialColumnId, initialColumnTitle]);
 
   const handleColumnSelect = (columnId: number, columnTitle: string) => {
     setSelectedColumnId(columnId);

@@ -53,18 +53,17 @@ const CardEditModal: FC<ModalProps> = ({
     closeModal,
   } = useModal(isOpen, cardId);
 
-  const [formData, setFormData] = useState<
-    UpdateCardData & { assigneeNickname: string }
-  >({
+  const [formData, setFormData] = useState<UpdateCardData>({
     columnId: 0,
     assigneeUserId: 0,
-    assigneeNickname: "",
     title: "",
     description: "",
     dueDate: "",
     tags: [],
     imageUrl: "",
   });
+
+  const [assigneeNickname, setAssigneeNickname] = useState<string>("");
 
   useEffect(() => {
     if (isOpen) {
@@ -80,13 +79,13 @@ const CardEditModal: FC<ModalProps> = ({
       setFormData({
         columnId: cardDetails.columnId,
         assigneeUserId: cardDetails.assignee.id,
-        assigneeNickname: cardDetails.assignee.nickname,
         title: cardDetails.title,
         description: cardDetails.description,
         dueDate: dueDate,
         tags: cardDetails.tags,
         imageUrl: cardDetails.imageUrl || "",
       });
+      setAssigneeNickname(cardDetails.assignee.nickname);
     }
   }, [cardDetails]);
 
@@ -129,7 +128,8 @@ const CardEditModal: FC<ModalProps> = ({
     assigneeUserId: number,
     assigneeNickname: string,
   ) => {
-    setFormData((prev) => ({ ...prev, assigneeUserId, assigneeNickname }));
+    setFormData((prev) => ({ ...prev, assigneeUserId }));
+    setAssigneeNickname(assigneeNickname);
   };
 
   const handleColumnChange = (columnId: number, columnTitle: string) => {
@@ -263,17 +263,24 @@ const CardEditModal: FC<ModalProps> = ({
               }
               columnsData={columnsData?.data}
               onColumnSelect={handleColumnChange}
+              initialColumnId={formData.columnId}
+              initialColumnTitle={
+                columnsData?.data.find((col) => col.id === formData.columnId)
+                  ?.title || "Select"
+              }
             />
             <DropDownAssignee
               subTitle='담당자'
               placeholder={
-                formData.assigneeNickname || formData.assigneeUserId.toString()
+                assigneeNickname || formData.assigneeUserId.toString()
               }
               dashboardId={dashboardId}
               membersData={membersData?.members}
               onMemberSelect={(assigneeUserId, assigneeNickname) =>
                 handleAssigneeChange(assigneeUserId, assigneeNickname)
               }
+              initialAssigneeId={formData.assigneeUserId}
+              initialAssigneeNickname={assigneeNickname}
             />
           </div>
           <Input

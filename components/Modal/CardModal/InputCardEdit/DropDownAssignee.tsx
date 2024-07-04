@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dropButton } from "../list";
 
 interface DropDownProps {
@@ -7,6 +7,8 @@ interface DropDownProps {
   dashboardId?: number;
   membersData?: { id: number; nickname: string; profileImageUrl: string }[];
   onMemberSelect?: (memberId: number, memberNickname: string) => void;
+  initialAssigneeId?: number;
+  initialAssigneeNickname?: string;
 }
 
 export default function DropDownAssignee({
@@ -15,29 +17,31 @@ export default function DropDownAssignee({
   dashboardId,
   membersData = [],
   onMemberSelect,
+  initialAssigneeId,
+  initialAssigneeNickname,
 }: DropDownProps) {
-  const [selectedMemberId, setSelectedMemberId] = useState<number | null>(null);
+  const [selectedMemberId, setSelectedMemberId] = useState<number | null>(
+    initialAssigneeId || null,
+  );
   const [selectedMemberNickname, setSelectedMemberNickname] = useState<string>(
-    placeholder || "",
+    initialAssigneeNickname || placeholder || "",
   );
   const [dropOpen, setDropOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialAssigneeId && initialAssigneeNickname) {
+      setSelectedMemberId(initialAssigneeId);
+      setSelectedMemberNickname(initialAssigneeNickname);
+    }
+  }, [initialAssigneeId, initialAssigneeNickname]);
 
   const handleMemberSelect = (memberId: number, memberNickname: string) => {
     setSelectedMemberId(memberId);
     setSelectedMemberNickname(memberNickname);
-    setDropOpen(false);
+    setDropOpen(false); // 멤버 선택 후 드롭다운 닫기
     if (onMemberSelect) {
       onMemberSelect(memberId, memberNickname);
     }
-  };
-
-  const handleConfirm = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (selectedMemberId !== null && onMemberSelect) {
-      onMemberSelect(selectedMemberId, selectedMemberNickname);
-    }
-    setDropOpen(false);
   };
 
   return (
@@ -72,12 +76,6 @@ export default function DropDownAssignee({
                   {member.nickname}
                 </li>
               ))}
-              <li
-                className='hover:bg-gray-100 cursor-pointer px-4 py-2'
-                onClick={handleConfirm}
-              >
-                Confirm
-              </li>
             </ul>
           </div>
         )}
