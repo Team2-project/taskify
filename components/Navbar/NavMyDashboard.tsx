@@ -60,7 +60,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
 
         <div className='ml-auto mr-2 flex items-center justify-end space-x-4 text-sm tablet:mr-10 tablet:space-x-8 tablet:text-base desktop:mr-20 desktop:space-x-10 desktop:text-base'>
           <div className='flex space-x-2 whitespace-nowrap font-medium text-gray-50 tablet:space-x-3 desktop:space-x-8'>
-            {showActionButton && (
+            {showActionButton && createdByMe && (
               <>
                 <ActionButton
                   label='관리'
