@@ -54,7 +54,7 @@ const CardEditModal: FC<ModalProps> = ({
   } = useModal(isOpen, cardId);
 
   const [formData, setFormData] = useState<UpdateCardData>({
-    columnId: 0,
+    columnId,
     assigneeUserId: 0,
     title: "",
     description: "",
@@ -64,6 +64,7 @@ const CardEditModal: FC<ModalProps> = ({
   });
 
   const [assigneeNickname, setAssigneeNickname] = useState<string>("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -88,6 +89,26 @@ const CardEditModal: FC<ModalProps> = ({
       setAssigneeNickname(cardDetails.assignee.nickname);
     }
   }, [cardDetails]);
+
+  const uploadCardImg = async (columnId: number, data: File) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", data);
+
+      const response = await fetcher({
+        url: `columns/${columnId}/card-image`,
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response;
+    } catch (error: any) {
+      console.error("Image upload error:", error);
+      throw error;
+    }
+  };
 
   const mutation = useMutation<unknown, Error, UpdateCardData>({
     mutationFn: async (updatedCard: UpdateCardData) => {
@@ -136,37 +157,8 @@ const CardEditModal: FC<ModalProps> = ({
     setFormData((prev) => ({ ...prev, columnId }));
   };
 
-  const handleImageChange = async (file: File | null) => {
-    try {
-      if (!file) {
-        setFormData((prev) => ({ ...prev, imageUrl: "" }));
-        return;
-      }
-      if (!columnId) {
-        throw new Error("Column ID is undefined or null");
-      }
-
-      const formData = new FormData();
-      formData.append("image", file);
-
-      const response = await fetcher<{ imageUrl: string }>({
-        url: `columns/${columnId}/card-image`,
-        method: "POST",
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response && response.imageUrl) {
-        setFormData((prev) => ({ ...prev, imageUrl: response.imageUrl }));
-      } else {
-        throw new Error(
-          "Failed to upload image: No image URL returned from server",
-        );
-      }
-    } catch (error) {
-      console.error("이미지 업로드 실패:", error);
-    }
+  const handleImageChange = (file: File | null) => {
+    setImageFile(file);
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -174,7 +166,6 @@ const CardEditModal: FC<ModalProps> = ({
     setFormData((prev) => ({ ...prev, dueDate: value }));
   };
 
-  //Date 형식 변환
   const formatDate = (date: string): string => {
     const d = new Date(date);
     const year = d.getFullYear();
@@ -185,17 +176,27 @@ const CardEditModal: FC<ModalProps> = ({
     return `${year}-${month}-${day} ${hours}:${minutes}`;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 서버가 예상하는 형식으로 데이터 변환
-    const submitData: UpdateCardData = {
-      ...formData,
-      dueDate: formatDate(formData.dueDate), // 서버가 기대하는 형식으로 변환
-    };
+    try {
+      let imageUrl = formData.imageUrl;
+      if (imageFile) {
+        const response = await uploadCardImg(formData.columnId, imageFile);
+        imageUrl = response.imageUrl;
+      }
 
-    console.log("Form Data before submit:", submitData); // 로그로 출력
-    mutation.mutate(submitData);
+      const submitData: UpdateCardData = {
+        ...formData,
+        imageUrl,
+        dueDate: formatDate(formData.dueDate), // 서버가 기대하는 형식으로 변환
+      };
+
+      console.log("Form Data before submit:", submitData); // 로그로 출력
+      mutation.mutate(submitData);
+    } catch (error) {
+      console.error("Error uploading image or submitting form:", error);
+    }
   };
 
   const membersConfig: AxiosRequestConfig = {
