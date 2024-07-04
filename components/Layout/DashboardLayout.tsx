@@ -14,12 +14,13 @@ import { userAtom } from "@/atoms/userAtom";
 import { membersAtom } from "@/atoms/membersAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 import { MembersResponse } from "@/lib/api/types/members";
+import useFetchMembers from "@/hooks/useFetchMembers";
 
 interface DashboardLayoutProps {
   children: ReactNode;
   userData?: User;
   title?: string;
-  dashboardId?: string;
+  dashboardId?: number;
   showActionButton?: boolean;
   showBadgeCounter?: boolean;
   showProfileDropdown?: boolean;
@@ -35,10 +36,6 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   showProfileDropdown = true,
   showCreatedByMeIcon = true,
 }) => {
-  // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
-  const [userData, setUserData] = useAtom(userAtom);
-  const [membersData, setMembersData] = useAtom(membersAtom);
-
   const userConfig: AxiosRequestConfig = {
     url: "/users/me",
     method: "GET",
@@ -49,11 +46,9 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     method: "GET",
   };
 
-  const membersConfig: AxiosRequestConfig = {
-    url: `/members`,
-    method: "GET",
-    params: { dashboardId },
-  };
+  // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
+  const [userData, setUserData] = useAtom(userAtom);
+  const [membersData, setMembersData] = useAtom(membersAtom);
 
   const {
     data: fetchedUserData,
@@ -68,27 +63,8 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     data: fetchedMembersData,
     error: membersError,
     isLoading: membersLoading,
-  } = useQuery<MembersResponse>({
-    queryKey: ["membersData"],
-    queryFn: () => fetcher<MembersResponse>(membersConfig),
-    enabled: !!dashboardId,
-  });
+  } = useFetchMembers(dashboardId || 0);
 
-  const {
-    data: dashboardData,
-    error: dashboardError,
-    isLoading: dashboardLoading,
-  } = useQuery<DashboardDetailResponse>({
-    queryKey: ["dashboardData", dashboardId],
-    queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
-    enabled: !!dashboardId,
-  });
-
-  if (userLoading || (dashboardId && dashboardLoading)) {
-    return <div>Loading...</div>;
-  }
-
-  // Data가 업데이트될 때마다 set###Data를 호출
   useEffect(() => {
     if (fetchedUserData) {
       setUserData(fetchedUserData);
@@ -100,6 +76,16 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
       setMembersData(fetchedMembersData.members);
     }
   }, [fetchedMembersData, setMembersData]);
+
+  const {
+    data: dashboardData,
+    error: dashboardError,
+    isLoading: dashboardLoading,
+  } = useQuery<DashboardDetailResponse>({
+    queryKey: ["dashboardData", dashboardId],
+    queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
+    enabled: !!dashboardId,
+  });
 
   if (userLoading || (dashboardId && dashboardLoading)) {
     return <div>Loading...</div>;
@@ -131,8 +117,8 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
               : { title: DashboardTitle, createdByMe }
           }
           showCreatedByMeIcon={showCreatedByMeIcon}
+          dashboardId={dashboardId} // dashboardID (BadgeCounter로) 전달
         />
-
         <div className='flex flex-1 overflow-hidden'>
           <div className='flex-shrink-0'>
             <SideMenu />
