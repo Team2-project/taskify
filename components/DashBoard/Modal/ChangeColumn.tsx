@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import BasicModal from "@/components/Modal/BasicModal";
+import DeleteColumn from "@/components/DashBoard/Modal/DeleteColumn";
 import { useRouter } from "next/router";
 import fetcher from "@/lib/api/fetcher";
 import { CreateColumnRequest } from "@/lib/api/types/columns";
@@ -9,17 +10,18 @@ import { toast } from "react-toastify";
 interface ParentComponentProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
-  columnId: number | null; // columnId props 추가
+  columnId: number | null;
 }
 
 const ChangeColumn: React.FC<ParentComponentProps> = ({
   isModalOpen,
   handleCloseModal,
-  columnId, // props로부터 columnId 받기
+  columnId,
 }) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [showError, setShowError] = useState<boolean>(false);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState<boolean>(false); // 삭제 모달 상태 추가
   const router = useRouter();
   const { dashboardId } = router.query as { dashboardId: string };
 
@@ -64,29 +66,47 @@ const ChangeColumn: React.FC<ParentComponentProps> = ({
     }
   };
 
+  // 삭제 모달 열기 핸들러 수정: 현재 모달을 닫고 삭제 모달을 엽니다
+  const handleOpenDeleteModal = () => {
+    handleCloseModal(); // 현재 모달 닫기
+    setDeleteModalOpen(true); // 삭제 모달 열기
+  };
+
+  // 삭제 모달 닫기 핸들러 추가
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
-    <BasicModal
-      isOpen={isModalOpen}
-      value={inputValue}
-      onClose={handleCloseModal}
-      onSubmit={handleFormSubmit}
-      onChange={handleInputChange}
-      buttonAction={handleButtonAction}
-      title='컬럼 관리'
-      subTitle='이름'
-      placeholder='수정할 칼럼을 입력해주세요'
-      cancelButtonText='취소'
-      createButtonText='변경'
-      error={error}
-      showError={showError}
-      leftCornerContent={
-        <button>
-          <div className='text-sm font-normal text-gray-40 underline underline-offset-1'>
-            삭제하기
-          </div>
-        </button>
-      }
-    />
+    <>
+      <BasicModal
+        isOpen={isModalOpen}
+        value={inputValue}
+        onClose={handleCloseModal}
+        onSubmit={handleFormSubmit}
+        onChange={handleInputChange}
+        buttonAction={handleButtonAction}
+        title='컬럼 관리'
+        subTitle='이름'
+        placeholder='수정할 칼럼을 입력해주세요'
+        cancelButtonText='취소'
+        createButtonText='변경'
+        error={error}
+        showError={showError}
+        leftCornerContent={
+          <button onClick={handleOpenDeleteModal}>
+            <div className='text-sm font-normal text-gray-40 underline underline-offset-1'>
+              삭제하기
+            </div>
+          </button>
+        }
+      />
+      <DeleteColumn
+        isModalOpen={isDeleteModalOpen}
+        handleCloseModal={handleCloseDeleteModal}
+        columnId={columnId}
+      />
+    </>
   );
 };
 

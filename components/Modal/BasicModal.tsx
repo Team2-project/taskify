@@ -55,7 +55,7 @@ export default function BasicModal({
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 box-border h-full w-full bg-black bg-opacity-50'>
+    <div className='fixed inset-0 z-10 box-border h-full w-full bg-black bg-opacity-50'>
       <div className='fixed inset-0 m-auto h-241 w-327 rounded-[8px] bg-white px-[20px] py-[28px] tablet:h-276 tablet:w-540 tablet:py-[32px]'>
         <div className='mb-[16px] text-[20px] font-bold tablet:mb-[22px]'>
           {title}
