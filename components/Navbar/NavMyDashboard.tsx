@@ -4,6 +4,7 @@ NavMyDashboard: Dashboard 내비게이션 컴포넌트
  */
 
 import { FC, useState } from "react";
+import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import NavbarTitle from "./NavbarTitle";
 import ActionButton from "./ActionButton";
@@ -36,9 +37,15 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
 }) => {
   const [userData] = useAtom(userAtom);
   const [isModalOpen, setModalOpen] = useState(false);
+  const router = useRouter();
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
+  const handleManageClick = () => {
+    if (dashboardId) {
+      router.push(`/dashboard/${dashboardId}/edit`);
+    }
+  };
 
   const profileInitial = userData?.nickname.charAt(0).toUpperCase() ?? "";
   const { title, createdByMe } = dashboardData;
@@ -55,7 +62,11 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
           <div className='flex space-x-2 whitespace-nowrap font-medium text-gray-50 tablet:space-x-3 desktop:space-x-8'>
             {showActionButton && (
               <>
-                <ActionButton label='관리' iconSrc='/icon/ic_setting.svg' />
+                <ActionButton
+                  label='관리'
+                  iconSrc='/icon/ic_setting.svg'
+                  onClick={handleManageClick}
+                />
                 <ActionButton
                   label='초대하기'
                   iconSrc='/icon/ic_add_dashboard.svg'
