@@ -9,14 +9,14 @@ interface CardDropdownProps {
   cardId: number;
   dashboardId: number;
   onEdit: () => void;
-  onDelete: () => void; // 삭제 후 처리할 콜백 추가
+  onDelete: () => void;
 }
 
 const CardDropdown: FC<CardDropdownProps> = ({
   cardId,
   dashboardId,
   onEdit,
-  onDelete, // 추가
+  onDelete,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,10 +50,7 @@ const CardDropdown: FC<CardDropdownProps> = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["cards"], // 카드 데이터를 다시 불러오도록 쿼리를 무효화
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["dashboard", dashboardId], // 대시보드 데이터를 다시 불러오도록 쿼리를 무효화
+        queryKey: ["cards", dashboardId],
       });
       onDelete(); // CardDetailsModal을 닫는 콜백 호출
       router.replace(`/dashboard/${dashboardId}`); // 페이지를 다시 로드하여 최신 데이터를 가져옴

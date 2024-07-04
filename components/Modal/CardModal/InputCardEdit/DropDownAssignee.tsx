@@ -5,7 +5,12 @@ interface DropDownProps {
   subTitle: string;
   placeholder?: string;
   dashboardId?: number;
-  membersData?: { id: number; nickname: string; profileImageUrl: string }[];
+  membersData?: {
+    id: number;
+    userId: number;
+    nickname: string;
+    profileImageUrl: string;
+  }[];
   onMemberSelect?: (memberId: number, memberNickname: string) => void;
   initialAssigneeId?: number;
   initialAssigneeNickname?: string;
@@ -36,11 +41,14 @@ export default function DropDownAssignee({
   }, [initialAssigneeId, initialAssigneeNickname]);
 
   const handleMemberSelect = (memberId: number, memberNickname: string) => {
-    setSelectedMemberId(memberId);
-    setSelectedMemberNickname(memberNickname);
-    setDropOpen(false); // 멤버 선택 후 드롭다운 닫기
-    if (onMemberSelect) {
-      onMemberSelect(memberId, memberNickname);
+    const selectedMember = membersData.find((member) => member.id === memberId);
+    if (selectedMember) {
+      setSelectedMemberId(memberId);
+      setSelectedMemberNickname(memberNickname);
+      setDropOpen(false); // 멤버 선택 후 드롭다운 닫기
+      if (onMemberSelect) {
+        onMemberSelect(selectedMember.userId, memberNickname);
+      }
     }
   };
 
