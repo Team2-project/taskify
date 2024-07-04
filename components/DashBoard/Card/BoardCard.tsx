@@ -38,7 +38,7 @@ const BoardCard: React.FC<Props> = ({
       )}
 
       <div className='flex flex-col gap-1.5 tablet:w-full tablet:justify-between desktop:flex-col'>
-        <div className='text-lg font-medium text-black-30 desktop:whitespace-normal'>
+        <div className='text-xl font-medium text-black-30 desktop:whitespace-normal'>
           {title}
         </div>
         <div className='tablet:flex tablet:w-full tablet:gap-2 desktop:flex-col'>
