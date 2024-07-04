@@ -1,7 +1,7 @@
 /*
 my dashboard에서 member들 보여주는 카운터
 */
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import UserBadge from "@/components/UserBadge";
 import { useAtom } from "jotai";
 import { membersAtom } from "@/atoms/membersAtom";
@@ -9,9 +9,9 @@ import useMaxDisplayCount from "./useMaxDisplayCount";
 import useFetchMembers from "@/hooks/useFetchMembers";
 
 const BadgeCounter: FC<{ dashboardId: number }> = ({ dashboardId }) => {
-  const [members, setMembers] = useAtom(membersAtom);
+  const [members] = useAtom(membersAtom);
 
-  useFetchMembers(dashboardId);
+  useFetchMembers(dashboardId); // 멤버 목록 데이터 가져오기
 
   const maxDisplayCount = useMaxDisplayCount();
   const bgColorOptions = [
