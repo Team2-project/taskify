@@ -6,7 +6,7 @@ import InvitationList from "@/components/DashBoardEdit/InvitationList";
 import BackLink from "@/components/MyPage/BackLink";
 import Button from "@/components/Button";
 import DeleteModal from "@/components/Modal/AlarmModal";
-import React, { useState} from "react";
+import React, { useState } from "react";
 import fetcher from "@/lib/api/fetcher";
 
 const DashboardEditPage = () => {
@@ -15,7 +15,9 @@ const DashboardEditPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (!dashboardId || Array.isArray(dashboardId)) {
+  const dashboardIdNumber = Number(dashboardId); //router로 dashboardId가 넘어오기 때문에 string으로 변환됨
+
+  if (!dashboardId || isNaN(dashboardIdNumber)) {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
 
@@ -43,7 +45,7 @@ const DashboardEditPage = () => {
 
   return (
     <DashboardLayout
-      dashboardId={dashboardId}
+      dashboardId={dashboardIdNumber}
       showActionButton={true}
       showBadgeCounter={true}
       showProfileDropdown={true}
@@ -56,7 +58,7 @@ const DashboardEditPage = () => {
           {/* 멤버 목록 표시 컴포넌트 */}
           <MemberList />
           {/* 초대 목록 표시 컴포넌트 */}
-          <InvitationList />        
+          <InvitationList />
         </div>
         <Button.Delete
           onClick={handleOpenModal}

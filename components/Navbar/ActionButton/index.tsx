@@ -8,11 +8,15 @@ import Image from "next/image";
 interface ActionButtonProps {
   label: string;
   iconSrc: string;
+  onClick?: () => void;
 }
 
-const ActionButton: FC<ActionButtonProps> = ({ label, iconSrc }) => {
+const ActionButton: FC<ActionButtonProps> = ({ label, iconSrc, onClick }) => {
   return (
-    <button className='relative inline-flex h-[30px] items-center justify-center rounded-lg border border-gray-30 p-3 tablet:h-[36px] tablet:p-4 desktop:h-[40px] desktop:p-4'>
+    <button
+      onClick={onClick}
+      className='relative inline-flex h-[30px] items-center justify-center rounded-lg border border-gray-30 p-3 tablet:h-[36px] tablet:p-4 desktop:h-[40px] desktop:p-4'
+    >
       <div className='hidden tablet:inline-block desktop:inline-block'>
         <Image
           src={iconSrc}

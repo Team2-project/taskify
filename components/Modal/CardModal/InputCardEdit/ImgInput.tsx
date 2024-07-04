@@ -1,13 +1,20 @@
 import Image from "next/image";
-import { ChangeEvent, useState } from "react";
+import { FC, ChangeEvent, useState, useEffect } from "react";
 
 interface ImgInputProps {
   subTitle: string;
+  initialImgUrl?: string;
   onChange?: (file: File) => void;
 }
 
-export default function ImgInput({ subTitle, onChange }: ImgInputProps) {
-  const [imgSrc, setImgSrc] = useState<string>("");
+const ImgInput: FC<ImgInputProps> = ({ subTitle, initialImgUrl, onChange }) => {
+  const [imgSrc, setImgSrc] = useState<string>(initialImgUrl || "");
+
+  useEffect(() => {
+    if (initialImgUrl) {
+      setImgSrc(initialImgUrl);
+    }
+  }, [initialImgUrl]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -61,5 +68,6 @@ export default function ImgInput({ subTitle, onChange }: ImgInputProps) {
       </div>
     </div>
   );
-}
+};
 
+export default ImgInput;

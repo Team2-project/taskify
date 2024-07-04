@@ -11,13 +11,15 @@ import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import { User } from "@/lib/api/types/users";
 import { userAtom } from "@/atoms/userAtom";
+import { membersAtom } from "@/atoms/membersAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
+import useFetchMembers from "@/hooks/useFetchMembers";
 
 interface DashboardLayoutProps {
   children: ReactNode;
   userData?: User;
   title?: string;
-  dashboardId?: string;
+  dashboardId?: number;
   showActionButton?: boolean;
   showBadgeCounter?: boolean;
   showProfileDropdown?: boolean;
@@ -45,6 +47,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
 
   // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
   const [userData, setUserData] = useAtom(userAtom);
+  const [membersData, setMembersData] = useAtom(membersAtom);
 
   const {
     data: fetchedUserData,
@@ -55,12 +58,23 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     queryFn: () => fetcher<User>(userConfig),
   });
 
-  // userData가 업데이트될 때마다 setUserData를 호출
+  const {
+    data: fetchedMembersData,
+    error: membersError,
+    isLoading: membersLoading,
+  } = useFetchMembers(dashboardId || 0);
+
   useEffect(() => {
     if (fetchedUserData) {
       setUserData(fetchedUserData);
     }
   }, [fetchedUserData, setUserData]);
+
+  useEffect(() => {
+    if (fetchedMembersData) {
+      setMembersData(fetchedMembersData.members);
+    }
+  }, [fetchedMembersData, setMembersData]);
 
   const {
     data: dashboardData,
@@ -102,11 +116,11 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
               : { title: DashboardTitle, createdByMe }
           }
           showCreatedByMeIcon={showCreatedByMeIcon}
+          dashboardId={dashboardId} // dashboardID (BadgeCounter로) 전달
         />
-
         <div className='flex flex-1 overflow-hidden'>
           <div className='flex-shrink-0'>
-            <SideMenu/>
+            <SideMenu />
           </div>
           <div className='ml-[300px] flex-1 overflow-auto max-desktop:ml-[160px] max-tablet:ml-[67px]'>
             {children}
