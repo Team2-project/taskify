@@ -6,6 +6,7 @@
     "strict": true, //엄격한 타입 체크 모드 활성화
     "noEmit": true, //컴파일된 결과물을 생성하지 않음
     "esModuleInterop": true, //ES 모듈 간의 상호 운용성 지원
+    "allowSyntheticDefaultImports": true,
     "module": "esnext", //모듈 시스템을 ESNext로 설정
     "moduleResolution": "bundler", //모듈 해석 전략을 번들러로 설정
     "resolveJsonModule": true, //JSON 모듈을 임포트
