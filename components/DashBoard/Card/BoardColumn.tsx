@@ -87,6 +87,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   };
 
   const handleOpenAddTaskModal = () => {
+    // Todo : 여기에 이제 할일 추가하는 모달창 연결해야 함!!!
     setAddTaskModalOpen(true);
   };
 
@@ -171,6 +172,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
         handleCloseModal={handleCloseChangeColumnModal}
         columnId={selectedColumnId} // 선택된 칼럼의 ID를 ChangeColumn에 props로 전달
       />
+      {/* Todo : 카드 생성 모달창(예시. AddTaskModal 컴포넌트)를 여기에 추가할 예정 */}
     </div>
   );
 };
