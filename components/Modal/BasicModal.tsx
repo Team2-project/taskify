@@ -16,6 +16,7 @@ interface ModalProps {
   placeholder: string;
   error?: string;
   showError?: boolean;
+  leftCornerContent?: React.ReactNode;
 }
 
 export default function BasicModal({
@@ -32,6 +33,7 @@ export default function BasicModal({
   createButtonText,
   error = "",
   showError = false,
+  leftCornerContent,
 }: ModalProps) {
   const [isButtonDisabled, setButtonDisabled] = useState(true);
 
@@ -73,6 +75,11 @@ export default function BasicModal({
             showError={showError}
           />
         </Form>
+        {leftCornerContent && (
+          <div className='absolute bottom-14 left-8 transform'>
+            {leftCornerContent}
+          </div>
+        )}
         <div className='mt-[10px] flex items-center gap-[11px] tablet:justify-end'>
           <Button
             onClick={handleCloseClick}
