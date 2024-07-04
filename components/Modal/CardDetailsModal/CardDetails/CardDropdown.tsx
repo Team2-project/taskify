@@ -9,12 +9,14 @@ interface CardDropdownProps {
   cardId: number;
   dashboardId: number;
   onEdit: () => void;
+  onDelete: () => void; // 추가
 }
 
 const CardDropdown: FC<CardDropdownProps> = ({
   cardId,
   dashboardId,
   onEdit,
+  onDelete, // 추가
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,7 +52,9 @@ const CardDropdown: FC<CardDropdownProps> = ({
       queryClient.invalidateQueries({
         queryKey: ["cards"],
       });
-      router.push(`dashboard/${dashboardId}`); // 카드 삭제 후 대시보드 페이지로 리디렉션
+      setIsModalOpen(false); // 모달 닫기
+      onDelete(); // CardDetailsModal을 닫는 콜백 호출
+      router.push(`/dashboard/${dashboardId}`); // 대시보드 페이지로 리디렉션
     },
     onError: (error) => {
       console.error("Failed to delete card", error);
@@ -65,9 +69,8 @@ const CardDropdown: FC<CardDropdownProps> = ({
     setIsModalOpen(false);
   };
 
-  const handleModalDelete = () => {
-    deleteMutation.mutate();
-    setIsModalOpen(false);
+  const handleModalDelete = async () => {
+    await deleteMutation.mutateAsync(); // 삭제 요청
   };
 
   return (

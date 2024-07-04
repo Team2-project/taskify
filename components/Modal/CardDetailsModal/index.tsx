@@ -20,6 +20,7 @@ interface ModalProps {
   cardId: number;
   dashboardId: number;
   columnId: number;
+  onSuccess: () => void;
 }
 
 const CardDetailsModal: FC<ModalProps> = ({
@@ -32,6 +33,7 @@ const CardDetailsModal: FC<ModalProps> = ({
   cardId,
   dashboardId,
   columnId,
+  onSuccess,
 }) => {
   const {
     isOpen: modalIsOpen,
@@ -58,8 +60,8 @@ const CardDetailsModal: FC<ModalProps> = ({
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = (id: number) => {
-    console.log(`Delete clicked for comment ID: ${id}`);
+  const handleDelete = () => {
+    onClose(); // CardDetailsModal 닫기
   };
 
   return (
@@ -74,6 +76,7 @@ const CardDetailsModal: FC<ModalProps> = ({
                 dashboardId={dashboardId}
                 cardId={cardId}
                 onEdit={() => setIsEditModalOpen(true)}
+                onDelete={handleDelete} // 추가
               />
               <CloseButton onClose={onClose} />
             </div>
