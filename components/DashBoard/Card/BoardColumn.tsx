@@ -130,6 +130,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
       </div>
       {selectedCard && (
         <CardDetailsModal
+          columnId={columnId}
           isOpen={isModalOpen}
           value={inputValue}
           onClose={handleCloseModal}
