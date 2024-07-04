@@ -53,10 +53,13 @@ const CardDetailsModal: FC<ModalProps> = ({
     }
   }, [isOpen, openModal, closeModal]);
 
+  const handleSuccess = () => {
+    onSuccess(); // 추가
+  };
+
   if (!modalIsOpen || !cardDetails) return null;
 
   const handleEdit = (id: number) => {
-    console.log(`Edit clicked for comment ID: ${id}`);
     setIsEditModalOpen(true);
   };
 
@@ -152,7 +155,7 @@ const CardDetailsModal: FC<ModalProps> = ({
         isOpen={isEditModalOpen}
         onSubmit={onSubmit}
         onClose={() => setIsEditModalOpen(false)}
-        buttonAction={() => {}}
+        buttonAction={onSuccess} // 수정 후 성공 시 onSuccess 호출
         createButtonText='수정'
         cancelButtonText='취소'
         cardId={cardId}

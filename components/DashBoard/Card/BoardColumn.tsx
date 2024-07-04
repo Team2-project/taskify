@@ -82,6 +82,12 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
     handleCloseModal();
   };
 
+  const handleSuccess = () => {
+    if (cardsData) {
+      setTotalCount(cardsData.totalCount);
+    }
+  };
+
   return (
     <div className='border-y border-gray-20 desktop:w-354 desktop:border-x desktop:border-y-0'>
       <div className='flex h-22 items-center justify-between px-[15px] pb-[10px] pt-[25px]'>
@@ -139,6 +145,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
           subTitle='Card information'
           cardId={selectedCard.id}
           dashboardId={numDashboardId}
+          onSuccess={handleSuccess}
         />
       )}
     </div>
