@@ -174,10 +174,28 @@ const CardEditModal: FC<ModalProps> = ({
     setFormData((prev) => ({ ...prev, dueDate: value }));
   };
 
+  //Date 형식 변환
+  const formatDate = (date: string): string => {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form Data:", formData); // 로그로 출력
-    mutation.mutate(formData);
+
+    // 서버가 예상하는 형식으로 데이터 변환
+    const submitData: UpdateCardData = {
+      ...formData,
+      dueDate: formatDate(formData.dueDate), // 서버가 기대하는 형식으로 변환
+    };
+
+    console.log("Form Data before submit:", submitData); // 로그로 출력
+    mutation.mutate(submitData);
   };
 
   const membersConfig: AxiosRequestConfig = {
