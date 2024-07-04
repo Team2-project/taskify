@@ -1,16 +1,41 @@
-/*
-my dashboard에서 member들 보여주는 카운터
-우선 MockData와 연결 - 추후 API 연결
-*/
-import { FC } from "react";
+// components/BadgeCounter.tsx
+import { FC, useEffect } from "react";
 import UserBadge from "@/components/UserBadge";
-import { mockMembersData } from "../MockData";
+import { useAtom } from "jotai";
+import { membersAtom } from "@/atoms/membersAtom";
 import useMaxDisplayCount from "./useMaxDisplayCount";
+import fetcher from "@/lib/api/fetcher";
+import { useQuery } from "@tanstack/react-query";
+import { AxiosRequestConfig } from "axios";
+import { MembersResponse } from "@/lib/api/types/members";
 
-const BadgeCounter: FC = () => {
-  const { members, totalCount } = mockMembersData;
+const BadgeCounter: FC<{ dashboardId: number }> = ({ dashboardId }) => {
+  const [members, setMembers] = useAtom(membersAtom);
+
+  const membersConfig: AxiosRequestConfig = {
+    url: `/members`,
+    method: "GET",
+    params: {
+      dashboardId,
+    },
+  };
+
+  const {
+    data: fetchedMembersData,
+    error: membersError,
+    isLoading: membersLoading,
+  } = useQuery<MembersResponse>({
+    queryKey: ["membersData", dashboardId],
+    queryFn: () => fetcher<MembersResponse>(membersConfig),
+  });
+
+  useEffect(() => {
+    if (fetchedMembersData) {
+      setMembers(fetchedMembersData.members);
+    }
+  }, [fetchedMembersData, setMembers]);
+
   const maxDisplayCount = useMaxDisplayCount();
-
   const bgColorOptions = [
     "bg-orange-10",
     "bg-yellow",
@@ -19,9 +44,16 @@ const BadgeCounter: FC = () => {
     "bg-red-10",
   ];
 
+  if (membersLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (membersError) {
+    return <div>데이터를 불러오는 중 오류가 발생했습니다</div>;
+  }
+
   return (
     <div className='flex space-x-[-10px]'>
-      {/* maxDisplayCount까지만 badge display */}
       {members.slice(0, maxDisplayCount).map((member, index) => (
         <UserBadge
           key={member.id}
@@ -32,11 +64,10 @@ const BadgeCounter: FC = () => {
           className='h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]'
         />
       ))}
-      {/* MaxDisplayCount이상일 경우 나머지 인원 +숫자로 표기 */}
-      {totalCount > maxDisplayCount && (
+      {members.length > maxDisplayCount && (
         <UserBadge
           key={members[maxDisplayCount].id}
-          customValue={`+${totalCount - maxDisplayCount}`}
+          customValue={`+${members.length - maxDisplayCount}`}
           bgColor='bg-red-10'
           textColor='text-red-20'
           className='h-[34px] w-[34px] tablet:h-[38px] tablet:w-[38px] desktop:h-[38px] desktop:w-[38px]'

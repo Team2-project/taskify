@@ -2,13 +2,13 @@
 NavMyDashboard: Dashboard 내비게이션 컴포넌트
 - Data는 DashboardLayout에서 Props로 받아옵니다
  */
-
 import { FC } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "@/atoms/userAtom";
 import NavbarTitle from "./NavbarTitle";
 import ActionButton from "./ActionButton";
 import BadgeCounter from "./BadgeCounter";
+
 import ProfileDropdown from "./Dropdown/ProfileDropdown";
 import { User } from "@/lib/api/types/users";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
@@ -22,13 +22,16 @@ interface NavMyDashboardProps {
   showActionButton?: boolean;
   showBadgeCounter?: boolean;
   showProfileDropdown?: boolean;
+  dashboardId?: number; // 추가
 }
+
 const NavMyDashboard: FC<NavMyDashboardProps> = ({
   dashboardData,
   showCreatedByMeIcon = true,
   showActionButton = true,
   showBadgeCounter = true,
   showProfileDropdown = true,
+  dashboardId, // 추가
 }) => {
   const [userData] = useAtom(userAtom);
 
@@ -40,7 +43,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
   const { title, createdByMe } = dashboardData;
 
   return (
-    <div className='h-[60px] content-center border-b border-gray-30 bg-white p-4 tablet:h-[70px] desktop:h-[80px]'>
+    <nav className='h-[60px] content-center border-b border-gray-30 bg-white p-4 tablet:h-[70px] desktop:h-[80px]'>
       <div className='flex items-center justify-between'>
         <NavbarTitle
           title={title}
@@ -62,10 +65,10 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
 
           {showProfileDropdown && (
             <div className='flex items-center space-x-3 tablet:space-x-6 desktop:space-x-8'>
-              {showBadgeCounter && <BadgeCounter />}
-
+              {showBadgeCounter && dashboardId && (
+                <BadgeCounter dashboardId={dashboardId} />
+              )}
               <span className='font-bold'>|</span>
-
               <ProfileDropdown
                 nickname={userData.nickname}
                 profileInitial={profileInitial}
@@ -75,7 +78,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 
