@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { MouseEventHandler, ReactNode, ButtonHTMLAttributes } from "react";
 
 type DefaultButtonProps = {
   children: ReactNode;
@@ -6,6 +6,7 @@ type DefaultButtonProps = {
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   active?: boolean;
+  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 };
 
 export default function DefaultButton({
@@ -14,6 +15,7 @@ export default function DefaultButton({
   className = "",
   onClick,
   active = false,
+  type = "button",
 }: DefaultButtonProps) {
   const baseClasses =
     "border-box select-none rounded-[8px] text-[14px] font-medium";
@@ -28,6 +30,7 @@ export default function DefaultButton({
       disabled={disabled}
       className={`${baseClasses} ${backgroundColor} ${className}`}
       onClick={onClick}
+      type={type}
     >
       {children}
     </button>

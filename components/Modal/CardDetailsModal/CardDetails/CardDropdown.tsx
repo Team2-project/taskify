@@ -8,9 +8,16 @@ import ResModal from "@/components/Modal/ResModal";
 interface CardDropdownProps {
   cardId: number;
   dashboardId: number;
+  onEdit: () => void;
+  onDelete: () => void;
 }
 
-const CardDropdown: FC<CardDropdownProps> = ({ cardId, dashboardId }) => {
+const CardDropdown: FC<CardDropdownProps> = ({
+  cardId,
+  dashboardId,
+  onEdit,
+  onDelete,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -43,9 +50,10 @@ const CardDropdown: FC<CardDropdownProps> = ({ cardId, dashboardId }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["cards"],
+        queryKey: ["cards", dashboardId],
       });
-      router.push(`dashboard/${dashboardId}`); // 카드 삭제 후 대시보드 페이지로 리디렉션
+      onDelete(); // CardDetailsModal을 닫는 콜백 호출
+      router.replace(`/dashboard/${dashboardId}`); // 페이지를 다시 로드하여 최신 데이터를 가져옴
     },
     onError: (error) => {
       console.error("Failed to delete card", error);
@@ -60,9 +68,8 @@ const CardDropdown: FC<CardDropdownProps> = ({ cardId, dashboardId }) => {
     setIsModalOpen(false);
   };
 
-  const handleModalDelete = () => {
-    deleteMutation.mutate();
-    setIsModalOpen(false);
+  const handleModalDelete = async () => {
+    await deleteMutation.mutateAsync(); // 삭제 요청
   };
 
   return (
@@ -93,7 +100,10 @@ const CardDropdown: FC<CardDropdownProps> = ({ cardId, dashboardId }) => {
         <ul className='absolute right-0 z-10 mt-2 w-[120px] rounded border-[1px] border-gray-30 bg-white shadow-lg'>
           <div>
             <li className='p-[8px]'>
-              <button className='focus:bg-purple-bg w-full rounded-[4px] px-4 py-2 text-left text-center hover:bg-purple-10 hover:text-purple focus:outline-none'>
+              <button
+                onClick={onEdit}
+                className='focus:bg-purple-bg w-full rounded-[4px] px-4 py-2 text-left text-center hover:bg-purple-10 hover:text-purple focus:outline-none'
+              >
                 수정하기
               </button>
             </li>
