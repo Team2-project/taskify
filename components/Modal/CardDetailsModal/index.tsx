@@ -70,7 +70,7 @@ const CardDetailsModal: FC<ModalProps> = ({
 
   return (
     <>
-      <div className='fixed inset-0 flex min-w-[370px] items-center justify-center bg-black bg-opacity-50'>
+      <div className='fixed inset-0 z-50 flex min-w-[370px] items-center justify-center bg-black bg-opacity-50'>
         <div className='mx-[24px] max-h-screen w-full overflow-y-auto rounded-[8px] bg-white p-[20px] shadow-lg tablet:max-h-[770px] tablet:w-auto tablet:max-w-[680px] desktop:max-h-[770px] desktop:w-auto desktop:max-w-[730px]'>
           <div className='mb-4 flex items-center justify-between'>
             <h2 className='word-wrap w-full whitespace-normal text-xl font-semibold tablet:w-[420px] desktop:w-[420px]'>
@@ -126,6 +126,17 @@ const CardDetailsModal: FC<ModalProps> = ({
                 {cardDetails.tags.map((tag) => (
                   <Tag key={tag} tag={tag} />
                 ))}
+                <CardEditModal
+                  isOpen={isEditModalOpen}
+                  onSubmit={onSubmit}
+                  onClose={() => setIsEditModalOpen(false)}
+                  buttonAction={onSuccess} // 수정 후 성공 시 onSuccess 호출
+                  createButtonText='수정'
+                  cancelButtonText='취소'
+                  cardId={cardId}
+                  columnId={columnId}
+                  dashboardId={dashboardId}
+                />
               </div>
             </div>
             <div className='col-span-1 row-span-3'>
@@ -150,18 +161,6 @@ const CardDetailsModal: FC<ModalProps> = ({
           </div>
         </div>
       </div>
-
-      <CardEditModal
-        isOpen={isEditModalOpen}
-        onSubmit={onSubmit}
-        onClose={() => setIsEditModalOpen(false)}
-        buttonAction={onSuccess} // 수정 후 성공 시 onSuccess 호출
-        createButtonText='수정'
-        cancelButtonText='취소'
-        cardId={cardId}
-        columnId={columnId}
-        dashboardId={dashboardId}
-      />
     </>
   );
 };
