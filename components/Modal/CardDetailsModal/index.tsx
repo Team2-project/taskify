@@ -5,26 +5,23 @@ import Header from "./components/Header";
 import Body from "./components/Body";
 import CardEditModal from "../CardModal/CardEditModal";
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
-  value: string;
   onClose: () => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  title: string;
-  subTitle: string;
+}
+
+export interface CardDetailsModalProps extends ModalProps {
   cardId: number;
   dashboardId: number;
   columnId: number;
   onSuccess: () => void;
 }
 
-const CardDetailsModal: FC<ModalProps> = ({
+const CardDetailsModal: FC<CardDetailsModalProps> = ({
   isOpen,
-  value,
   onClose,
   onSubmit,
-  title,
-  subTitle,
   cardId,
   dashboardId,
   columnId,
