@@ -1,4 +1,7 @@
-// CardDetailsModal/index.tsx
+/*
+  CardDetailsModal
+*/
+
 import { FC, useState } from "react";
 import useCardDetailsModal from "./hooks/useCardDetailsModal";
 import Header from "./components/Header";
@@ -27,14 +30,13 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
   columnId,
   onSuccess,
 }) => {
-  const { modalIsOpen, isLoading, error, cardDetails } = useCardDetailsModal(
-    isOpen,
-    cardId,
-  );
+  const { modalIsOpen, isLoading, error, cardDetails, refetch } =
+    useCardDetailsModal(isOpen, cardId);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleSuccess = () => {
     onSuccess();
+    refetch(); // 수정: 카드 상세 데이터를 다시 가져오기
   };
 
   if (!modalIsOpen || !cardDetails) return null;
@@ -67,7 +69,10 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
         <CardEditModal
           isOpen={isEditModalOpen}
           onSubmit={onSubmit}
-          onClose={() => setIsEditModalOpen(false)}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            refetch(); // 추가: CardEditModal이 닫힐 때 카드 상세 데이터를 다시 가져오기
+          }}
           buttonAction={handleSuccess}
           createButtonText='수정'
           cancelButtonText='취소'
