@@ -1,50 +1,30 @@
-import { FC, useEffect, useState } from "react";
+/*
+    useCardEditModal의 custom Hook
+*/
+import { useEffect, useState } from "react";
 import {
+  useQuery,
   useMutation,
   useQueryClient,
-  useQuery,
   UseQueryResult,
 } from "@tanstack/react-query";
-import DropDownAssignee from "@/components/Modal/CardModal/InputCardEdit/DropDownAssignee";
-import DropDownColumn from "@/components/Modal/CardModal/InputCardEdit/DropDownColumn";
-import Input from "@/components/Modal/CardModal/InputCardEdit/Input";
-import Textarea from "@/components/Modal/CardModal/InputCardEdit/Textarea";
-import Calendar from "@/components/Modal/CardModal/InputCardEdit/Calendar";
-import TagInput from "@/components/Modal/CardModal/InputCardEdit/TagInput";
-import ImgInput from "@/components/Modal/CardModal/InputCardEdit/ImgInput";
-import Button from "@/components/Button";
 import useModal from "@/hooks/useModal";
-import {
-  FetchCardDetailsResponse,
-  UpdateCardData,
-} from "@/lib/api/types/cards";
-import { AxiosRequestConfig } from "axios";
-import { MembersResponse } from "@/lib/api/types/members";
 import fetcher from "@/lib/api/fetcher";
+import {
+  UpdateCardData,
+  FetchCardDetailsResponse,
+} from "@/lib/api/types/cards";
+import { MembersResponse } from "@/lib/api/types/members";
+import { AxiosRequestConfig } from "axios";
 
-interface ModalProps {
-  isOpen: boolean;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  buttonAction: () => void;
-  onClose: () => void;
-  createButtonText: string;
-  cancelButtonText: string;
-  cardId: number;
-  columnId: number;
-  dashboardId: number;
-}
-
-const CardEditModal: FC<ModalProps> = ({
-  isOpen,
-  onSubmit,
-  onClose,
-  buttonAction,
-  createButtonText,
-  cancelButtonText,
-  cardId,
-  columnId,
-  dashboardId,
-}) => {
+const useCardEditModal = (
+  isOpen: boolean,
+  cardId: number,
+  dashboardId: number,
+  columnId: number,
+  onClose: () => void,
+  buttonAction: () => void,
+) => {
   const queryClient = useQueryClient();
   const {
     isOpen: modalIsOpen,
@@ -259,97 +239,25 @@ const CardEditModal: FC<ModalProps> = ({
     enabled: !!dashboardId,
   });
 
-  if (membersError || columnsError) {
-    return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>;
-  }
-
-  if (membersLoading || columnsLoading) {
-    return <div>데이터를 불러오는 중...</div>;
-  }
-
-  if (!modalIsOpen) return null;
-
-  return (
-    <div className='fixed inset-0 box-border h-full w-full border bg-black bg-opacity-50'>
-      <div className='fixed inset-0 m-auto h-[869px] w-[327px] rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[907px] tablet:w-[506px] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
-        <div className='text-[20px] font-bold tablet:text-[24px]'>
-          할 일 수정
-        </div>
-        <form onSubmit={handleSubmit}>
-          <div className='tablet:flex tablet:items-center tablet:justify-center tablet:gap-[16px]'>
-            <DropDownColumn
-              subTitle='상태'
-              placeholder={
-                columnsData?.data.find((col) => col.id === formData.columnId)
-                  ?.title || "Select"
-              }
-              columnsData={columnsData?.data}
-              onColumnSelect={handleColumnChange}
-              initialColumnId={formData.columnId}
-              initialColumnTitle={
-                columnsData?.data.find((col) => col.id === formData.columnId)
-                  ?.title || "Select"
-              }
-            />
-            <DropDownAssignee
-              subTitle='담당자'
-              placeholder={
-                assigneeNickname || formData.assigneeUserId.toString()
-              }
-              dashboardId={dashboardId}
-              membersData={membersData?.members}
-              onMemberSelect={(assigneeUserId, assigneeNickname) =>
-                handleAssigneeChange(assigneeUserId, assigneeNickname)
-              }
-              initialAssigneeId={formData.assigneeUserId}
-              initialAssigneeNickname={assigneeNickname}
-            />
-          </div>
-          <Input
-            subTitle='제목'
-            name='title'
-            value={formData.title}
-            onChange={handleChange}
-          />
-          <Textarea
-            subTitle='설명'
-            name='description'
-            value={formData.description}
-            onChange={handleChange}
-          />
-          <Calendar
-            subTitle='마감일'
-            value={formData.dueDate}
-            onChange={handleDateChange}
-          />
-          <TagInput
-            subTitle='태그'
-            value={formData.tags.join(",")}
-            onChange={handleTagChange}
-          />
-          <ImgInput
-            subTitle='카드 이미지'
-            onChange={handleImageChange}
-            initialImgUrl={formData.imageUrl} // 초기 이미지 URL 전달
-          />
-          <div className='mt-[18px] flex w-full items-center justify-center gap-[11px] tablet:mt-[26px] tablet:justify-end'>
-            <Button
-              type='submit'
-              className='h-[50px] w-full rounded-[8px] text-white'
-            >
-              {createButtonText}
-            </Button>
-            <Button
-              onClick={onClose}
-              className='h-[50px] w-full rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
-            >
-              {cancelButtonText}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+  return {
+    modalIsOpen,
+    cardDetails,
+    membersData,
+    columnsData,
+    membersLoading,
+    columnsLoading,
+    membersError,
+    columnsError,
+    formData,
+    assigneeNickname,
+    handleChange,
+    handleTagChange,
+    handleAssigneeChange,
+    handleColumnChange,
+    handleImageChange,
+    handleDateChange,
+    handleSubmit,
+  };
 };
 
-export default CardEditModal;
+export default useCardEditModal;
