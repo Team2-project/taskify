@@ -9,6 +9,7 @@ import Button from "@/components/Button";
 import Image from "next/image";
 import CardDetailsModal from "@/components/Modal/CardDetailsModal";
 import ChangeColumn from "@/components/DashBoard/Modal/ChangeColumn";
+import CardAddModal from "@/components/Modal/CardModal/CardAddModal"; // CardAddModal 임포트
 
 interface CardData {
   id: number;
@@ -32,7 +33,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isCardModalOpen, setCardModalOpen] = useState(false);
   const [isChangeColumnModalOpen, setChangeColumnModalOpen] = useState(false);
-  const [isAddTaskModalOpen, setAddTaskModalOpen] = useState(false);
+  const [isAddTaskModalOpen, setAddTaskModalOpen] = useState(false); // AddTaskModal 상태
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [inputValue, setInputValue] = useState("Initial value");
 
@@ -87,12 +88,11 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   };
 
   const handleOpenAddTaskModal = () => {
-    // Todo : 여기에 이제 할일 추가하는 모달창 연결해야 함!!!
-    setAddTaskModalOpen(true);
+    setAddTaskModalOpen(true); // AddTaskModal 열기
   };
 
   const handleCloseAddTaskModal = () => {
-    setAddTaskModalOpen(false);
+    setAddTaskModalOpen(false); // AddTaskModal 닫기
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -172,7 +172,13 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
         handleCloseModal={handleCloseChangeColumnModal}
         columnId={selectedColumnId} // 선택된 칼럼의 ID를 ChangeColumn에 props로 전달
       />
-      {/* Todo : 카드 생성 모달창(예시. AddTaskModal 컴포넌트)를 여기에 추가할 예정 */}
+      <CardAddModal
+        isOpen={isAddTaskModalOpen}
+        onClose={handleCloseAddTaskModal}
+        createButtonText='생성'
+        cancelButtonText='취소'
+        columnId={columnId} // columnId를 CardAddModal에 전달
+      />
     </div>
   );
 };
