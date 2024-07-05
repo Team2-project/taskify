@@ -58,7 +58,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
           createdByMe={showCreatedByMeIcon && createdByMe}
         />
 
-        <div className='ml-auto mr-2 flex items-center justify-end space-x-4 text-sm tablet:mr-10 tablet:space-x-8 tablet:text-base desktop:mr-20 desktop:space-x-10 desktop:text-base'>
+        <div className='ml-auto mr-2 flex items-center justify-end space-x-2 text-sm tablet:mr-10 tablet:space-x-8 tablet:text-base desktop:mr-20 desktop:space-x-10 desktop:text-base'>
           <div className='flex space-x-2 whitespace-nowrap font-medium text-gray-50 tablet:space-x-3 desktop:space-x-8'>
             {showActionButton && createdByMe && (
               <>
@@ -78,7 +78,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
           </div>
 
           {showProfileDropdown && (
-            <div className='flex items-center space-x-3 tablet:space-x-6 desktop:space-x-8'>
+            <div className='flex items-center space-x-1 tablet:space-x-6 desktop:space-x-8'>
               {showBadgeCounter && dashboardId && (
                 <BadgeCounter dashboardId={dashboardId} />
               )}
