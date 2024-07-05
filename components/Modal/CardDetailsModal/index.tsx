@@ -62,8 +62,8 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
   };
 
   return (
-    <div className='fixed inset-0 z-50 flex min-w-[370px] items-center justify-center bg-black bg-opacity-50'>
-      <div className='mx-[24px] max-h-screen w-full overflow-y-auto rounded-[8px] bg-white p-[20px] shadow-lg tablet:max-h-[770px] tablet:w-[730px] desktop:max-h-[770px] desktop:w-[730px]'>
+    <div className='fixed inset-0 z-50 flex w-screen h-screen items-center justify-center bg-black bg-opacity-50'>
+      <div className='mx-[24px] h-[90vh] max-w-[80vw] overflow-y-auto rounded-[8px] bg-white p-[20px] shadow-lg tablet:max-h-[770px] tablet:w-[730px] desktop:max-h-[770px] desktop:w-[730px]'>
         <Header
           title={cardDetails.title}
           cardId={cardId}
