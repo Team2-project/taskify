@@ -5,18 +5,14 @@ NavMyDashboard: Dashboard 내비게이션 컴포넌트
 
 import { FC, useState } from "react";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
 import NavbarTitle from "./NavbarTitle";
 import ActionButton from "./ActionButton";
 import BadgeCounter from "./BadgeCounter";
 import ProfileDropdown from "./Dropdown/ProfileDropdown";
 import InvitationModal from "../DashBoardEdit/InvitationModal";
-import { User } from "@/lib/api/types/users";
-import { userAtom } from "@/atoms/userAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 
 interface NavMyDashboardProps {
-  userData: User | null;
   dashboardData:
     | DashboardDetailResponse
     | { title: string; createdByMe: boolean };
@@ -35,7 +31,6 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
   showProfileDropdown = true,
   dashboardId, // 추가
 }) => {
-  const [userData] = useAtom(userAtom);
   const [isModalOpen, setModalOpen] = useState(false);
   const router = useRouter();
 
@@ -47,7 +42,6 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
     }
   };
 
-  const profileInitial = userData?.nickname.charAt(0).toUpperCase() ?? "";
   const { title, createdByMe } = dashboardData;
 
   return (
@@ -76,17 +70,13 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
             )}
           </div>
 
-          {showProfileDropdown && userData && (
+          {showProfileDropdown && (
             <div className='flex items-center space-x-3 tablet:space-x-6 desktop:space-x-8'>
               {showBadgeCounter && dashboardId && (
                 <BadgeCounter dashboardId={dashboardId} />
               )}
               <span className='font-bold'>|</span>
-              <ProfileDropdown
-                nickname={userData.nickname}
-                profileInitial={profileInitial}
-                profileImageUrl={userData.profileImageUrl ?? undefined}
-              />
+              <ProfileDropdown />
             </div>
           )}
         </div>
