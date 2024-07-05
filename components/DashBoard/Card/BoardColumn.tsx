@@ -27,9 +27,15 @@ interface Props {
   columnId: number;
   title: string;
   color: string;
+  refetchColumns: () => void; // 추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
 }
 
-const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
+const BoardColumn: React.FC<Props> = ({
+  columnId,
+  title,
+  color,
+  refetchColumns, //추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
+}: Props) => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isCardModalOpen, setCardModalOpen] = useState(false);
   const [isChangeColumnModalOpen, setChangeColumnModalOpen] = useState(false);
@@ -75,6 +81,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   const handleCloseCardModal = () => {
     setCardModalOpen(false);
     setSelectedCard(null);
+    refetchColumns(); // 추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
   };
 
   // ChangeColumn 모달을 열 때 선택된 칼럼의 ID를 설정
@@ -105,6 +112,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
     if (cardsData) {
       setTotalCount(cardsData.totalCount);
     }
+    refetchColumns(); // 추가
   };
 
   return (
@@ -165,6 +173,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
           cardId={selectedCard.id}
           dashboardId={numDashboardId}
           onSuccess={handleSuccess}
+          refetchColumns={refetchColumns}
         />
       )}
       <ChangeColumn

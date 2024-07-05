@@ -98,7 +98,9 @@ const Comment: FC<CommentProps> = ({ comment }) => {
             </div>
           </div>
         ) : (
-          <p className='mt-1'>{comment.content}</p>
+          <p className='mt-1 whitespace-pre-wrap break-words'>
+            {comment.content}
+          </p>
         )}
         {!isEditing && (
           <div className='mt-2 flex space-x-2 text-sm text-gray-50'>
