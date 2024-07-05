@@ -4,11 +4,14 @@ import useCardEditModal from "./hooks/useCardEditModal";
 import Header from "./components/Header";
 import FormContent from "./components/FormContent";
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  buttonAction: () => void;
   onClose: () => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+}
+
+export interface CardEditModalProps extends ModalProps {
+  buttonAction: () => void;
   createButtonText: string;
   cancelButtonText: string;
   cardId: number;
@@ -16,9 +19,8 @@ interface ModalProps {
   dashboardId: number;
 }
 
-const CardEditModal: FC<ModalProps> = ({
+const CardEditModal: FC<CardEditModalProps> = ({
   isOpen,
-  onSubmit,
   onClose,
   buttonAction,
   createButtonText,
