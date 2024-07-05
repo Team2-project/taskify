@@ -3,6 +3,7 @@
 */
 
 import { FC, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import useCardDetailsModal from "./hooks/useCardDetailsModal";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -15,13 +16,20 @@ export interface ModalProps {
 }
 
 export interface CardDetailsModalProps extends ModalProps {
+  value: string;
+  title: string;
+  subTitle: string;
   cardId: number;
   dashboardId: number;
   columnId: number;
   onSuccess: () => void;
+  refetchColumns: () => void;
 }
 
 const CardDetailsModal: FC<CardDetailsModalProps> = ({
+  value,
+  title,
+  subTitle,
   isOpen,
   onClose,
   onSubmit,
@@ -29,7 +37,9 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
   dashboardId,
   columnId,
   onSuccess,
+  refetchColumns,
 }) => {
+  const queryClient = useQueryClient();
   const { modalIsOpen, isLoading, error, cardDetails, refetch } =
     useCardDetailsModal(isOpen, cardId);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -37,6 +47,7 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
   const handleSuccess = () => {
     onSuccess();
     refetch(); // 수정: 카드 상세 데이터를 다시 가져오기
+    refetchColumns();
   };
 
   if (!modalIsOpen || !cardDetails) return null;
@@ -71,7 +82,7 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
           onSubmit={onSubmit}
           onClose={() => {
             setIsEditModalOpen(false);
-            refetch(); // 추가: CardEditModal이 닫힐 때 카드 상세 데이터를 다시 가져오기
+            handleSuccess(); // 추가: CardEditModal이 닫힐 때 성공 핸들러 호출
           }}
           buttonAction={handleSuccess}
           createButtonText='수정'

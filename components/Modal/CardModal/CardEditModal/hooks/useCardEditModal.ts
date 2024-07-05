@@ -105,6 +105,10 @@ const useCardEditModal = (
     onSuccess: () => {
       console.log("Update successful");
       queryClient.invalidateQueries({ queryKey: ["cardDetails", cardId] });
+      queryClient.invalidateQueries({
+        queryKey: ["columns", dashboardId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["cardsData", columnId] });
       buttonAction();
       onClose();
     },
