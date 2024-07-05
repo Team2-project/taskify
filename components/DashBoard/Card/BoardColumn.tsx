@@ -8,6 +8,8 @@ import { FetchCardsResponse } from "@/lib/api/types/cards";
 import Button from "@/components/Button";
 import Image from "next/image";
 import CardDetailsModal from "@/components/Modal/CardDetailsModal";
+import ChangeColumn from "@/components/DashBoard/Modal/ChangeColumn";
+import CardAddModal from "@/components/Modal/CardModal/CardAddModal"; // CardAddModal 임포트
 
 interface CardData {
   id: number;
@@ -29,17 +31,16 @@ interface Props {
 
 const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isCardModalOpen, setCardModalOpen] = useState(false);
+  const [isChangeColumnModalOpen, setChangeColumnModalOpen] = useState(false);
+  const [isAddTaskModalOpen, setAddTaskModalOpen] = useState(false); // AddTaskModal 상태
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [inputValue, setInputValue] = useState("Initial value");
 
   const router = useRouter();
   const { dashboardId } = router.query;
   const numDashboardId = Number(dashboardId);
-
-  const handleClick = () => {
-    alert("여기에 이제 할일 추가하는 모달창 연결해야 함!!!");
-  };
+  const [selectedColumnId, setSelectedColumnId] = useState<number | null>(null);
 
   const cardsConfig: AxiosRequestConfig = {
     url: `/cards?size=10&columnId=${columnId}`,
@@ -66,20 +67,38 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
     return <div>유효하지 않은 컬럼 ID</div>;
   }
 
-  const handleOpenModal = (card: CardData) => {
+  const handleOpenCardModal = (card: CardData) => {
     setSelectedCard(card);
-    setModalOpen(true);
+    setCardModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
+  const handleCloseCardModal = () => {
+    setCardModalOpen(false);
     setSelectedCard(null);
+  };
+
+  // ChangeColumn 모달을 열 때 선택된 칼럼의 ID를 설정
+  const handleOpenChangeColumnModal = (columnId: number) => {
+    setSelectedColumnId(columnId);
+    setChangeColumnModalOpen(true);
+  };
+
+  const handleCloseChangeColumnModal = () => {
+    setChangeColumnModalOpen(false);
+  };
+
+  const handleOpenAddTaskModal = () => {
+    setAddTaskModalOpen(true); // AddTaskModal 열기
+  };
+
+  const handleCloseAddTaskModal = () => {
+    setAddTaskModalOpen(false); // AddTaskModal 닫기
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form submitted with value:", inputValue);
-    handleCloseModal();
+    handleCloseCardModal();
   };
 
   const handleSuccess = () => {
@@ -89,7 +108,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   };
 
   return (
-    <div className='border-y border-gray-20 desktop:w-354 desktop:border-x desktop:border-y-0'>
+    <div className='min-w-[283px] border-y border-gray-20 desktop:w-354 desktop:min-w-[354px] desktop:border-x desktop:border-y-0'>
       <div className='flex h-22 items-center justify-between px-[15px] pb-[10px] pt-[25px]'>
         <div className='flex items-center gap-0.5'>
           <div
@@ -101,7 +120,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
             {totalCount}
           </span>
         </div>
-        <button>
+        <button onClick={() => handleOpenChangeColumnModal(columnId)}>
           <Image
             src='/icon/ic_setting.svg'
             alt='톱니바퀴'
@@ -112,7 +131,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
         </button>
       </div>
       <div className='flex flex-col gap-2.5 p-[17px] desktop:w-354'>
-        <Button.Add onClick={handleClick} />
+        <Button.Add onClick={handleOpenAddTaskModal} />
 
         {cardsLoading && <div>로딩 중...</div>}
         {cardsError && <div>데이터를 불러오는 중 오류가 발생했습니다</div>}
@@ -130,16 +149,16 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
               dueDate={card.dueDate}
               assignee={card.assignee.nickname}
               imageUrl={card.imageUrl}
-              onClick={() => handleOpenModal(card)}
+              onClick={() => handleOpenCardModal(card)}
             />
           ))}
       </div>
       {selectedCard && (
         <CardDetailsModal
           columnId={columnId}
-          isOpen={isModalOpen}
+          isOpen={isCardModalOpen}
           value={inputValue}
-          onClose={handleCloseModal}
+          onClose={handleCloseCardModal}
           onSubmit={handleSubmit}
           title='Card Details'
           subTitle='Card information'
@@ -148,6 +167,18 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
           onSuccess={handleSuccess}
         />
       )}
+      <ChangeColumn
+        isModalOpen={isChangeColumnModalOpen}
+        handleCloseModal={handleCloseChangeColumnModal}
+        columnId={selectedColumnId} // 선택된 칼럼의 ID를 ChangeColumn에 props로 전달
+      />
+      <CardAddModal
+        isOpen={isAddTaskModalOpen}
+        onClose={handleCloseAddTaskModal}
+        createButtonText='생성'
+        cancelButtonText='취소'
+        columnId={columnId} // columnId를 CardAddModal에 전달
+      />
     </div>
   );
 };

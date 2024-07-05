@@ -25,10 +25,10 @@ const BoardCard: React.FC<Props> = ({
   return (
     <div
       onClick={onClick}
-      className='flex min-h-[71px] w-auto cursor-pointer flex-col gap-3 rounded-md border border-gray-30 bg-white p-3 tablet:flex-row desktop:w-314 desktop:flex-col'
+      className='flex min-h-[71px] w-auto min-w-[283px] cursor-pointer flex-col gap-3 rounded-md border border-gray-30 bg-white p-3 tablet:flex-row desktop:w-314 desktop:flex-col'
     >
       {imageUrl && (
-        <div className='h-151 w-auto tablet:h-53 desktop:h-161'>
+        <div className='h-auto w-auto tablet:h-53 desktop:h-auto'>
           <img
             className='h-full w-full rounded-md tablet:w-91 desktop:w-full'
             src={imageUrl}
@@ -38,11 +38,11 @@ const BoardCard: React.FC<Props> = ({
       )}
 
       <div className='flex flex-col gap-1.5 tablet:w-full tablet:justify-between desktop:flex-col'>
-        <div className='text-sm font-medium text-black-30 desktop:whitespace-normal'>
+        <div className='text-xl font-medium text-black-30 desktop:whitespace-normal'>
           {title}
         </div>
         <div className='tablet:flex tablet:w-full tablet:gap-2 desktop:flex-col'>
-          <div>
+          <div className='flex flex-wrap gap-1'>
             {tags.map((tag) => (
               <Tag key={tag} tag={tag} />
             ))}

@@ -5,8 +5,9 @@ import Image from "next/image";
 import { instance } from "@/lib/api/axios";
 import { validateEmail, validatePassword } from "@/lib/validation";
 import Modal from "@/components/Modal/AlarmModal";
-import axios from "axios";
+import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 interface LoginData {
   email: string;
@@ -15,10 +16,8 @@ interface LoginData {
 
 interface LoginResponse {
   accessToken: string;
-  user: {
-    // 필요한 경우 사용자 정보에 대한 타입 정의 추가
-  };
-  message?: string; // 예상되는 경우에만 추가
+  user: {};
+  message?: string;
 }
 
 const LoginPage = () => {
@@ -52,7 +51,8 @@ const LoginPage = () => {
         password,
       });
       const accessToken = response.data.accessToken;
-      localStorage.setItem("accessToken", accessToken); // 토큰 저장
+      const expires = 7 * 24 * 60 * 60 * 1000;
+      Cookies.set("accessToken", accessToken, { expires }); // 7일 동안 유효한 쿠키 설정
       return response.data;
     } catch (error) {
       throw error;
@@ -80,7 +80,6 @@ const LoginPage = () => {
 
     try {
       const data = await login({ email, password });
-      console.log("로그인 성공:", data);
       router.push("/mydashboard");
     } catch (error) {
       if (axios.isAxiosError(error)) {
