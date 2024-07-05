@@ -14,6 +14,7 @@ import { userAtom } from "@/atoms/userAtom";
 import { membersAtom } from "@/atoms/membersAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 import useFetchMembers from "@/hooks/useFetchMembers";
+import useFetchUser from "@/hooks/useFetchUser";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -35,46 +36,28 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   showProfileDropdown = true,
   showCreatedByMeIcon = true,
 }) => {
-  const userConfig: AxiosRequestConfig = {
-    url: "/users/me",
-    method: "GET",
-  };
+  // Jotai의 useAtom 훅을 사용하여 Data를 atom에 저장
+  const { data: userData, error: userError, isLoading: userLoading } = useFetchUser();
+  const { data: membersData, error: membersError, isLoading: membersLoading } = useFetchMembers(dashboardId || 0);
+  const [user, setUser] = useAtom(userAtom);
+  const [members, setMembers] = useAtom(membersAtom);
+
+  useEffect(() => {
+    if (userData) {
+      setUser(userData);
+    }
+  }, [userData, setUser]);
+
+  useEffect(() => {
+    if (membersData) {
+      setMembers(membersData.members);
+    }
+  }, [membersData, setMembers]);
 
   const dashboardConfig: AxiosRequestConfig = {
     url: `/dashboards/${dashboardId}`,
     method: "GET",
   };
-
-  // Jotai의 useAtom 훅을 사용하여 userData를 atom에 저장
-  const [userData, setUserData] = useAtom(userAtom);
-  const [membersData, setMembersData] = useAtom(membersAtom);
-
-  const {
-    data: fetchedUserData,
-    error: userError,
-    isLoading: userLoading,
-  } = useQuery<User>({
-    queryKey: ["userData"],
-    queryFn: () => fetcher<User>(userConfig),
-  });
-
-  const {
-    data: fetchedMembersData,
-    error: membersError,
-    isLoading: membersLoading,
-  } = useFetchMembers(dashboardId || 0);
-
-  useEffect(() => {
-    if (fetchedUserData) {
-      setUserData(fetchedUserData);
-    }
-  }, [fetchedUserData, setUserData]);
-
-  useEffect(() => {
-    if (fetchedMembersData) {
-      setMembersData(fetchedMembersData.members);
-    }
-  }, [fetchedMembersData, setMembersData]);
 
   const {
     data: dashboardData,

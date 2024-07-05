@@ -72,6 +72,11 @@ const CardDropdown: FC<CardDropdownProps> = ({
     await deleteMutation.mutateAsync(); // 삭제 요청
   };
 
+  const handleEdit = () => {
+    onEdit();
+    setIsOpen(false); // 드롭다운 메뉴 닫기
+  };
+
   return (
     <div className='relative inline-block' ref={menuRef}>
       {isModalOpen && (
@@ -101,7 +106,7 @@ const CardDropdown: FC<CardDropdownProps> = ({
           <div>
             <li className='p-[8px]'>
               <button
-                onClick={onEdit}
+                onClick={handleEdit}
                 className='focus:bg-purple-bg w-full rounded-[4px] px-4 py-2 text-left text-center hover:bg-purple-10 hover:text-purple focus:outline-none'
               >
                 수정하기
