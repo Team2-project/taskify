@@ -4,7 +4,7 @@ import Form from "@/components/Form/FormField/FormField";
 import Button from "@/components/Button";
 import { validateNickname } from "@/lib/validation";
 import { userAtom } from "@/atoms/userAtom";
-import ImageUploader from "@/components/ImageUploader";
+import ImageUploader from "@/components/MyPage/components/ImageUploader";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
 import { AxiosError } from "axios";

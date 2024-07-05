@@ -4,7 +4,7 @@
 */
 
 import React, { useRef } from "react";
-import ResponsiveImage from "../ResponsiveImage";
+import ResponsiveImage from "../../ResponsiveImage";
 
 interface ImageUploaderProps {
   profileImage: string | ArrayBuffer | null;
