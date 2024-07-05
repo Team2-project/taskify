@@ -17,12 +17,10 @@ const useModal = (initialIsOpen: boolean = false, cardId?: number) => {
 
   const openModal = useCallback(() => {
     setIsOpen(true);
-    console.log("Modal opened, cardId:", cardId);
   }, [cardId]);
 
   const closeModal = useCallback(() => {
     setIsOpen(false);
-    console.log("Modal closed");
   }, []);
 
   useEffect(() => {
@@ -36,7 +34,6 @@ const useModal = (initialIsOpen: boolean = false, cardId?: number) => {
       })
         .then((data) => {
           setCardDetails(data);
-          console.log("Fetched card details:", data);
         })
         .catch((error) => {
           console.error("Failed to fetch card details", error);

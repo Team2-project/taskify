@@ -39,8 +39,6 @@ export default function DropDown({
     queryFn: async () => {
       try {
         const response = await fetcher<MembersResponse>(membersConfig);
-        console.log(response.members);
-        console.log(response);
         return response;
       } catch (error) {
         console.error("API 요청 중 오류 발생:", error);
@@ -114,4 +112,3 @@ export default function DropDown({
     </div>
   );
 }
-
