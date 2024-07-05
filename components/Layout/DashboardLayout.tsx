@@ -37,8 +37,16 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   showCreatedByMeIcon = true,
 }) => {
   // Jotai의 useAtom 훅을 사용하여 Data를 atom에 저장
-  const { data: userData, error: userError, isLoading: userLoading } = useFetchUser();
-  const { data: membersData, error: membersError, isLoading: membersLoading } = useFetchMembers(dashboardId || 0);
+  const {
+    data: userData,
+    error: userError,
+    isLoading: userLoading,
+  } = useFetchUser();
+  const {
+    data: membersData,
+    error: membersError,
+    isLoading: membersLoading,
+  } = useFetchMembers(dashboardId || 0);
   const [user, setUser] = useAtom(userAtom);
   const [members, setMembers] = useAtom(membersAtom);
 
@@ -86,13 +94,12 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   const createdByMe = dashboardData ? dashboardData.createdByMe : false;
 
   return (
-    <div>
+    <div className='min-w-[375px]'>
       <div className='flex h-screen flex-col'>
         <NavMyDashboard
           showActionButton={showActionButton}
           showBadgeCounter={showBadgeCounter}
           showProfileDropdown={showProfileDropdown}
-          userData={userData}
           dashboardData={
             dashboardData
               ? { ...dashboardData, title: DashboardTitle, createdByMe }

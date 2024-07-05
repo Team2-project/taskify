@@ -34,16 +34,24 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ buttonLabel }) => {
             aria-orientation='vertical'
             aria-labelledby='options-menu'
           >
-            <a href='/mypage' className='block px-4 py-2' role='menuitem'>
+            <a
+              href='/mypage'
+              className='focus:bg-purple-bg block rounded-[4px] px-4 py-2 hover:bg-purple-10 hover:text-purple focus:outline-none'
+              role='menuitem'
+            >
               내 정보
             </a>
-            <a href='/mydashboard' className='block px-4 py-2' role='menuitem'>
+            <a
+              href='/mydashboard'
+              className='focus:bg-purple-bg block rounded-[4px] px-4 py-2 hover:bg-purple-10 hover:text-purple focus:outline-none'
+              role='menuitem'
+            >
               내 대시보드
             </a>
             <div className='m-2 border-t border-gray-30'></div> {/* 수평 선 */}
             <a
               href='/'
-              className='block px-4 py-2'
+              className='focus:bg-purple-bg block rounded-[4px] px-4 py-2 hover:bg-purple-10 hover:text-purple focus:outline-none'
               role='menuitem'
               onClick={handleLogout}
             >

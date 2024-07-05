@@ -1,15 +1,14 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Card from "./BoardCard";
-import { AxiosRequestConfig } from "axios";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import fetcher from "@/lib/api/fetcher";
-import { FetchCardsResponse } from "@/lib/api/types/cards";
 import Button from "@/components/Button";
 import Image from "next/image";
 import CardDetailsModal from "@/components/Modal/CardDetailsModal";
 import ChangeColumn from "@/components/DashBoard/Modal/ChangeColumn";
 import CardAddModal from "@/components/Modal/CardModal/CardAddModal"; // CardAddModal 임포트
+import { useAtom } from "jotai";
+import { cardAtom } from "@/atoms/cardAtom";
+import useFetchCards from "@/hooks/useFetchCard";
 
 interface CardData {
   id: number;
@@ -24,12 +23,18 @@ interface CardData {
 }
 
 interface Props {
-  columnId: number;
-  title: string;
+  columnId?: number;
+  title?: string;
   color: string;
+  refetchColumns: () => void; // 추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
 }
 
-const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
+const BoardColumn: React.FC<Props> = ({
+  columnId,
+  title,
+  color,
+  refetchColumns, //추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
+}: Props) => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [isCardModalOpen, setCardModalOpen] = useState(false);
   const [isChangeColumnModalOpen, setChangeColumnModalOpen] = useState(false);
@@ -42,20 +47,18 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   const numDashboardId = Number(dashboardId);
   const [selectedColumnId, setSelectedColumnId] = useState<number | null>(null);
 
-  const cardsConfig: AxiosRequestConfig = {
-    url: `/cards?size=10&columnId=${columnId}`,
-    method: "GET",
-  };
-
   const {
     data: cardsData,
     error: cardsError,
     isLoading: cardsLoading,
-  }: UseQueryResult<FetchCardsResponse, Error> = useQuery({
-    queryKey: ["cardsData", columnId],
-    queryFn: () => fetcher<FetchCardsResponse>(cardsConfig),
-    enabled: !!columnId,
-  });
+  } = useFetchCards(columnId || 0);
+  const [, setCards] = useAtom(cardAtom);
+
+  useEffect(() => {
+    if (cardsData) {
+      setCards(cardsData.cursorId);
+    }
+  }, [cardsData, setCards]);
 
   useEffect(() => {
     if (cardsData && cardsData.cards) {
@@ -75,11 +78,12 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   const handleCloseCardModal = () => {
     setCardModalOpen(false);
     setSelectedCard(null);
+    refetchColumns(); // 추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
   };
 
   // ChangeColumn 모달을 열 때 선택된 칼럼의 ID를 설정
   const handleOpenChangeColumnModal = (columnId: number) => {
-    setSelectedColumnId(columnId);
+    setCards(columnId);
     setChangeColumnModalOpen(true);
   };
 
@@ -105,6 +109,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
     if (cardsData) {
       setTotalCount(cardsData.totalCount);
     }
+    refetchColumns(); // 추가
   };
 
   return (
@@ -165,6 +170,7 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
           cardId={selectedCard.id}
           dashboardId={numDashboardId}
           onSuccess={handleSuccess}
+          refetchColumns={refetchColumns}
         />
       )}
       <ChangeColumn
@@ -184,3 +190,4 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
 };
 
 export default BoardColumn;
+
