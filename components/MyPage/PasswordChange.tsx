@@ -1,60 +1,27 @@
-import React, { useEffect, useState } from "react";
-import Form from "@/components/Form/FormField/FormField";
-import Button from "@/components/Button";
-import { validatePassword } from "@/lib/validation";
+import React, { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import fetcher from "@/lib/api/fetcher";
 import { AxiosError } from "axios";
-import Modal from "../Modal";
+import fetcher from "@/lib/api/fetcher";
+import PasswordForm from "./components/PasswordForm";
+import PasswordModal from "./components/PasswordModal";
+import { usePasswordValidation } from "./hooks/usePasswordValidation";
 
 const PasswordChange: React.FC = () => {
-  // useState를 사용한 입력 상태 관리
   const [currentPassword, setCurrentPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [currentPasswordTouched, setCurrentPasswordTouched] =
-    useState<boolean>(false);
-  const [newPasswordTouched, setNewPasswordTouched] = useState<boolean>(false);
-  const [confirmPasswordTouched, setConfirmPasswordTouched] =
-    useState<boolean>(false);
-  const [currentPasswordError, setCurrentPasswordError] = useState<string>("");
-  const [newPasswordError, setNewPasswordError] = useState<string>("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState<string>("");
-  const [isPasswordFormValid, setIsPasswordFormValid] =
-    useState<boolean>(false);
 
-  // 성공 모달 상태 관리
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
-  // 실패 모달 상태 관리
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // 비밀번호 변경 Form 유효성 검사
-  useEffect(() => {
-    setCurrentPasswordError(validatePassword(currentPassword));
-    setNewPasswordError(validatePassword(newPassword));
-    setConfirmPasswordError(
-      newPassword !== confirmPassword ? "새 비밀번호가 일치하지 않습니다." : "",
-    );
-    setIsPasswordFormValid(
-      currentPassword !== "" &&
-        newPassword !== "" &&
-        confirmPassword !== "" &&
-        !validatePassword(currentPassword) &&
-        !validatePassword(newPassword) &&
-        newPassword === confirmPassword,
-    );
-  }, [
-    currentPassword,
-    newPassword,
-    confirmPassword,
-    setCurrentPasswordError,
-    setNewPasswordError,
-    setConfirmPasswordError,
-    setIsPasswordFormValid,
-  ]);
+  const {
+    currentPasswordError,
+    newPasswordError,
+    confirmPasswordError,
+    isPasswordFormValid,
+  } = usePasswordValidation(currentPassword, newPassword, confirmPassword);
 
-  // 비밀번호 변경 요청을 위한 mutation 훅 설정
   const mutation = useMutation<
     void,
     AxiosError,
@@ -72,9 +39,6 @@ const PasswordChange: React.FC = () => {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      setCurrentPasswordTouched(false);
-      setNewPasswordTouched(false);
-      setConfirmPasswordTouched(false);
     },
     onError: (error) => {
       if (error.response) {
@@ -87,7 +51,6 @@ const PasswordChange: React.FC = () => {
     },
   });
 
-  // 비밀번호 변경 Form 제출 처리 함수
   const handlePasswordChangeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!isPasswordFormValid) return;
@@ -99,89 +62,25 @@ const PasswordChange: React.FC = () => {
       <div className='mb-[24px] text-[20px] font-bold tablet:mb-[32px] tablet:text-[24px] desktop:text-[24px]'>
         비밀번호 변경
       </div>
-      <Form onSubmit={handlePasswordChangeSubmit}>
-        <Form.Field
-          label='현재 비밀번호'
-          type='password'
-          name='currentPassword'
-          value={currentPassword}
-          onChange={(e) => {
-            setCurrentPassword(e.target.value);
-            setCurrentPasswordTouched(true);
-          }}
-          placeholder='현재 비밀번호 입력'
-          error={currentPasswordError}
-          showError={currentPasswordTouched && !!currentPasswordError}
-          width='w-244'
-          tabletWidth='tablet:w-488'
-          desktopWidth='desktop:w-564'
-        />
-        <Form.Field
-          label='새 비밀번호'
-          type='password'
-          name='newPassword'
-          value={newPassword}
-          onChange={(e) => {
-            setNewPassword(e.target.value);
-            setNewPasswordTouched(true);
-          }}
-          placeholder='새 비밀번호 입력'
-          error={newPasswordError}
-          showError={newPasswordTouched && !!newPasswordError}
-          width='w-244'
-          tabletWidth='tablet:w-488'
-          desktopWidth='desktop:w-564'
-        />
-        <Form.Field
-          label='새 비밀번호 확인'
-          type='password'
-          name='confirmPassword'
-          value={confirmPassword}
-          onChange={(e) => {
-            setConfirmPassword(e.target.value);
-            setConfirmPasswordTouched(true);
-          }}
-          onBlur={() => {
-            if (newPassword !== confirmPassword) {
-              setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
-            } else {
-              setConfirmPasswordError("");
-            }
-          }}
-          placeholder='새 비밀번호 다시 입력 '
-          error={confirmPasswordError}
-          showError={confirmPasswordTouched && !!confirmPasswordError}
-          width='w-244'
-          tabletWidth='tablet:w-488'
-          desktopWidth='desktop:w-564'
-        />
-        <div className='mb-[20px] mt-[16px] flex justify-end tablet:mb-[28px] tablet:mt-[24px] desktop:mt-[24px]'>
-          <Button
-            type='submit'
-            disabled={!isPasswordFormValid}
-            className='h-[28px] w-[84px] rounded-[4px] text-[12px] text-white tablet:h-[32px] tablet:text-[14px] desktop:h-[32px] desktop:text-[14px]'
-          >
-            변경
-          </Button>
-        </div>
-      </Form>
-      <Modal.Res
-        isOpen={isSuccessModalOpen}
-        title='비밀번호 변경 성공!'
-        DeleteButtonText='확인'
-        cancelButtonText=''
-        onClose={() => setIsSuccessModalOpen(false)}
-        buttonAction={() => setIsSuccessModalOpen(false)}
-        type='mypage'
+      <PasswordForm
+        currentPassword={currentPassword}
+        newPassword={newPassword}
+        confirmPassword={confirmPassword}
+        currentPasswordError={currentPasswordError}
+        newPasswordError={newPasswordError}
+        confirmPasswordError={confirmPasswordError}
+        isPasswordFormValid={isPasswordFormValid}
+        onCurrentPasswordChange={(e) => setCurrentPassword(e.target.value)}
+        onNewPasswordChange={(e) => setNewPassword(e.target.value)}
+        onConfirmPasswordChange={(e) => setConfirmPassword(e.target.value)}
+        onSubmit={handlePasswordChangeSubmit}
       />
-      <Modal.Res
-        isOpen={isErrorModalOpen}
-        title={errorMessage}
-        DeleteButtonText='확인'
-        cancelButtonText=''
-        onClose={() => setIsErrorModalOpen(false)}
-        buttonAction={() => setIsErrorModalOpen(false)}
-        type='mypage'
+      <PasswordModal
+        isSuccessModalOpen={isSuccessModalOpen}
+        isErrorModalOpen={isErrorModalOpen}
+        errorMessage={errorMessage}
+        onCloseSuccessModal={() => setIsSuccessModalOpen(false)}
+        onCloseErrorModal={() => setIsErrorModalOpen(false)}
       />
     </div>
   );
