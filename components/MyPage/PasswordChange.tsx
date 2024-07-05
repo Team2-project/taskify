@@ -15,6 +15,12 @@ const PasswordChange: React.FC = () => {
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const [currentPasswordTouched, setCurrentPasswordTouched] =
+    useState<boolean>(false);
+  const [newPasswordTouched, setNewPasswordTouched] = useState<boolean>(false);
+  const [confirmPasswordTouched, setConfirmPasswordTouched] =
+    useState<boolean>(false);
+
   const {
     currentPasswordError,
     newPasswordError,
@@ -66,13 +72,26 @@ const PasswordChange: React.FC = () => {
         currentPassword={currentPassword}
         newPassword={newPassword}
         confirmPassword={confirmPassword}
-        currentPasswordError={currentPasswordError}
-        newPasswordError={newPasswordError}
-        confirmPasswordError={confirmPasswordError}
+        currentPasswordError={
+          currentPasswordTouched ? currentPasswordError : ""
+        }
+        newPasswordError={newPasswordTouched ? newPasswordError : ""}
+        confirmPasswordError={
+          confirmPasswordTouched ? confirmPasswordError : ""
+        }
         isPasswordFormValid={isPasswordFormValid}
-        onCurrentPasswordChange={(e) => setCurrentPassword(e.target.value)}
-        onNewPasswordChange={(e) => setNewPassword(e.target.value)}
-        onConfirmPasswordChange={(e) => setConfirmPassword(e.target.value)}
+        onCurrentPasswordChange={(e) => {
+          setCurrentPassword(e.target.value);
+          setCurrentPasswordTouched(true);
+        }}
+        onNewPasswordChange={(e) => {
+          setNewPassword(e.target.value);
+          setNewPasswordTouched(true);
+        }}
+        onConfirmPasswordChange={(e) => {
+          setConfirmPassword(e.target.value);
+          setConfirmPasswordTouched(true);
+        }}
         onSubmit={handlePasswordChangeSubmit}
       />
       <PasswordModal
