@@ -1,3 +1,7 @@
+import { ko } from "date-fns/locale";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 interface CalendarProps {
   subTitle: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;

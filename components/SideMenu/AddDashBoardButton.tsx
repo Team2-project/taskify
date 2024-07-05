@@ -1,18 +1,48 @@
 import useClickOutside from "@/hooks/useClickOutside";
 import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard";
 import { useState, ChangeEvent } from "react";
+import { AxiosRequestConfig } from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CreateDashboardRequest, DashboardResponse } from "@/lib/api/types/dashboards";
+import fetcher from "@/lib/api/fetcher";
+
+//colorvalue 받는 법
+//
 
 const AddDashboardButton = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [inputValue,setInputValue] = useState('')
   const [colorValue,setColorValue] = useState('')
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<DashboardResponse, Error,CreateDashboardRequest>({
+    mutationFn: async (title) => {
+      const response = await fetcher<DashboardResponse>({
+        url: "/dashboards",
+        method: "POST",
+        data: title,
+      });
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["titles"]
+      })},
+      onError: (error) => {
+          console.error(error);
+        }
+    }
+  )
+  const postDashboard = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate({title: inputValue, color: colorValue})
+  };
+
   const handleChangeInput = (e:ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
   };
 
-  const postDashboard = () => {
-  };
 
   return (
     <>
@@ -29,7 +59,7 @@ const AddDashboardButton = () => {
         createButtonText={"생성"} 
         cancelButtonText={"취소"} 
         onClose={()=>{setModalOpen(false)}} 
-        onSubmit={postDashboard}
+        onSubmit={postDashboard} 
         onChange={handleChangeInput}/>
     </>
   );

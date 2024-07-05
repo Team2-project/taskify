@@ -5,15 +5,56 @@ import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard"
 import InvitedDashboard from "@/components/Table/InvitedDashboard/InvitedDashboard";
 import { useRouter } from "next/router";
 import { useState, useEffect, ChangeEvent } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DashboardsResponse } from "@/lib/api/types/dashboards";
 import fetcher from "@/lib/api/fetcher";
-import { AxiosRequestConfig, AxiosResponse } from "axios";
-import Pagination from "@/components/Pagination/Pagination";
+import { AxiosRequestConfig } from "axios";
+import usePagination from "@/components/Pagination/usePagination";
 
 export default function MyDashBoard() {
+  const router = useRouter();
+
+  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setNewDashboardTitle(e.target.value);
+  };
+
+  // data per page
+  const pageSize = 5;
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [newDashBoardTitle, setNewDashboardTitle] = useState("");
+
+  const getDashboardList = async (currentPage?: number, pageSize?: number) => {
+    const response = await fetcher<DashboardsResponse>({
+      url: "/dashboards",
+      params: {
+        navigationMethod: "pagination",
+        page: currentPage,
+        size: 5,
+      },
+    });
+    return response;
+  };
+
+  const [totalCount, setTotalCount] = useState(0);
+
+  // usePagination
+  const { currentPage, renderPaginationButtons } = usePagination({
+    totalCount,
+    pageSize,
+  });
+
+  const { data } = useQuery<DashboardsResponse>({
+    queryKey: ["dashBoards", currentPage, pageSize],
+    queryFn: () => getDashboardList(currentPage, pageSize),
+    placeholderData: keepPreviousData,
+    staleTime: 1000,
+  });
+
+  useEffect(() => {
+    if (!data?.totalCount) return;
+    setTotalCount(data?.totalCount);
+  }, [data?.totalCount]);
 
   const config: AxiosRequestConfig = {
     url: "/dashboards",
@@ -41,24 +82,25 @@ export default function MyDashBoard() {
 
   const dashboardArray = dashboardData.dashboards;
 
-  const router = useRouter();
+  const startDashboard = (currentPage - 1) * pageSize + 1;
+  const endDashboard = startDashboard + pageSize - 1;
 
   const BoardButtons = () => {
-    return dashboardArray.map((dashboard, index) => (
-      <ListButton
-        className='mb-[8px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
-        children={dashboard.title}
-        createdByMe={dashboard.createdByMe}
-        onClick={() => {
-          router.push(`/dashboard/${dashboard.id}`);
-        }}
-      />
-    ));
+    return dashboardArray
+      .slice(startDashboard - 1, endDashboard)
+      .map((dashboard) => (
+        <ListButton
+          className='mb-[8px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
+          children={dashboard.title}
+          createdByMe={dashboard.createdByMe}
+          onClick={() => {
+            router.push(`/dashboard/${dashboard.id}`);
+          }}
+        />
+      ));
   };
 
-  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewDashboardTitle(e.target.value);
-  };
+  const PaginationButtons = renderPaginationButtons();
 
   return (
     <>
@@ -79,8 +121,14 @@ export default function MyDashBoard() {
               }}
               children='새로운 대시보드'
             />
+
             {/* 대시보드 버튼 목록 */}
             <BoardButtons />
+          </div>
+
+          {/* 페이지네이션 구현 */}
+          <div className='mx-[24px] w-full px-[48px] tablet:mx-[20px] tablet:mb-[40px] tablet:px-[40px] desktop:w-[1022px] desktop:px-0'>
+            {data?.totalCount !== 0 && PaginationButtons}
           </div>
 
           {/* 대시보드 생성 모달창 */}

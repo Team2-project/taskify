@@ -1,10 +1,10 @@
-/* 공용 fetcher */
 import { AxiosRequestConfig, AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 import { instance } from "./axios";
 
-// 로컬 스토리지에서 "accessToken"이라는 키를 사용하여 저장된 토큰을 가져오는 함수
-const getToken = (): string | null => {
-  return localStorage.getItem("accessToken");
+// 쿠키에서 "accessToken"이라는 키를 사용하여 저장된 토큰을 가져오는 함수
+const getToken = (): string | undefined => {
+  return Cookies.get("accessToken");
 };
 
 // API 요청 설정 객체 생성 함수
