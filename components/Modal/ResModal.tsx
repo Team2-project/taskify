@@ -33,7 +33,7 @@ export default function ResModal({
   if (!isOpen) return null;
 
   return (
-    <div className='z-10 fixed inset-0 box-border h-full w-full bg-black bg-opacity-50'>
+    <div className='fixed inset-0 z-10 box-border h-full w-full bg-black bg-opacity-50'>
       <div className='fixed inset-0 m-auto h-[220px] w-[327px] rounded-[8px] bg-white px-[20px] py-[28px] tablet:h-[250px] tablet:w-[540px] tablet:p-[28px]'>
         <div className='mt-[53px] flex justify-center text-[16px] font-medium tablet:mt-[80px] tablet:text-[18px]'>
           {title}
@@ -67,4 +67,3 @@ export default function ResModal({
     </div>
   );
 }
-

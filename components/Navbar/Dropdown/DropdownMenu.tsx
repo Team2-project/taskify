@@ -1,8 +1,5 @@
-/*
-Navbar 프로필 버튼 클릭시 나타나는 Dropdown Menu
-*/
-
 import { useState, useRef } from "react";
+import Cookies from "js-cookie"; // js-cookie 라이브러리 추가
 import useClickOutside from "@/hooks/useClickOutside";
 
 interface DropdownMenuProps {
@@ -12,6 +9,12 @@ interface DropdownMenuProps {
 const DropdownMenu: React.FC<DropdownMenuProps> = ({ buttonLabel }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // accessToken 삭제 함수
+  const handleLogout = () => {
+    Cookies.remove("accessToken");
+    setIsOpen(false);
+  };
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -38,8 +41,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ buttonLabel }) => {
               내 대시보드
             </a>
             <div className='m-2 border-t border-gray-30'></div> {/* 수평 선 */}
-            {/* 로그아웃 기능 추가 필요 - 현재는 landing page로 연결만 해 둠 */}
-            <a href='/' className='block px-4 py-2' role='menuitem'>
+            <a
+              href='/'
+              className='block px-4 py-2'
+              role='menuitem'
+              onClick={handleLogout}
+            >
               로그아웃
             </a>
           </div>
