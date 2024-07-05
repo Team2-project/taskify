@@ -122,16 +122,22 @@ const InvitationList: React.FC = () => {
         </DashBoardForm>
       </div>
 
-      <div className='flex flex-col gap-[24px]'>
-        {filteredInvitations.map((invitation) => (
-          <CustomComponent
-            key={invitation.id}
-            title={invitation.invitee.email}
-            buttonLabel='취소'
-            onButtonClick={() => handleButtonClick(invitation.id)}
-          />
-        ))}
-      </div>
+      {filteredInvitations.length === 0 ? (
+        <div className='mt-[100px] flex justify-center'>
+          <p>초대 요청한 구성원이 없습니다</p>
+        </div>
+      ) : (
+        <div className='flex flex-col gap-[24px]'>
+          {filteredInvitations.map((invitation) => (
+            <CustomComponent
+              key={invitation.id}
+              title={invitation.invitee.email}
+              buttonLabel='취소'
+              onButtonClick={() => handleButtonClick(invitation.id)}
+            />
+          ))}
+        </div>
+      )}
 
       <InvitationModal
         isModalOpen={isModalOpen}
