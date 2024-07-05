@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { atom, useAtom } from "jotai";
 import Form from "@/components/Form/FormField/FormField";
 import Button from "@/components/Button";
 import { validatePassword } from "@/lib/validation";
@@ -8,35 +7,20 @@ import fetcher from "@/lib/api/fetcher";
 import { AxiosError } from "axios";
 import Modal from "../Modal";
 
-// Jotai를 사용한 상태 관리
-const currentPasswordAtom = atom("");
-const newPasswordAtom = atom("");
-const confirmPasswordAtom = atom("");
-const currentPasswordErrorAtom = atom("");
-const newPasswordErrorAtom = atom("");
-const confirmPasswordErrorAtom = atom("");
-const isPasswordFormValidAtom = atom(false);
-
 const PasswordChange: React.FC = () => {
-  const [currentPassword, setCurrentPassword] = useAtom(currentPasswordAtom);
-  const [newPassword, setNewPassword] = useAtom(newPasswordAtom);
-  const [confirmPassword, setConfirmPassword] = useAtom(confirmPasswordAtom);
-  const [currentPasswordError, setCurrentPasswordError] = useAtom(
-    currentPasswordErrorAtom,
-  );
-  const [newPasswordError, setNewPasswordError] = useAtom(newPasswordErrorAtom);
-  const [confirmPasswordError, setConfirmPasswordError] = useAtom(
-    confirmPasswordErrorAtom,
-  );
-  const [isPasswordFormValid, setIsPasswordFormValid] = useAtom(
-    isPasswordFormValidAtom,
-  );
-
-  // useState를 사용한 입력 여부 상태 관리
+  // useState를 사용한 입력 상태 관리
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [currentPasswordTouched, setCurrentPasswordTouched] =
     useState<boolean>(false);
   const [newPasswordTouched, setNewPasswordTouched] = useState<boolean>(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] =
+    useState<boolean>(false);
+  const [currentPasswordError, setCurrentPasswordError] = useState<string>("");
+  const [newPasswordError, setNewPasswordError] = useState<string>("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>("");
+  const [isPasswordFormValid, setIsPasswordFormValid] =
     useState<boolean>(false);
 
   // 성공 모달 상태 관리
