@@ -51,7 +51,7 @@ export default function CreateDashBoard({
   };
 
   return (
-    <div className='fixed inset-0 box-border h-full w-full bg-black bg-opacity-50'>
+    <div className='fixed inset-0 z-100 box-border h-full w-full bg-black bg-opacity-50'>
       <div className='fixed inset-0 m-auto h-[293px] w-[327px] rounded-[8px] bg-white px-[20px] py-[28px] tablet:h-[334px] tablet:w-[540px]'>
         <div className='mb-[24px] text-[20px] font-bold tablet:mb-[32px]'>
           {title}
@@ -64,6 +64,9 @@ export default function CreateDashBoard({
             value={value}
             onChange={onChange}
             placeholder={placeholder}
+            width='w-full'
+            tabletWidth='tablet-w-full'
+            desktopWidth='desktop-w-full'
           />
         </Form>
         <div className='mt-[24px] flex justify-around tablet:mt-[28px] tablet:justify-around'>
@@ -106,4 +109,3 @@ export default function CreateDashBoard({
     </div>
   );
 }
-

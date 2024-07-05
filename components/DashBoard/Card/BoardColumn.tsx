@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Card from "./BoardCard";
 import { AxiosRequestConfig } from "axios";
@@ -6,6 +7,19 @@ import fetcher from "@/lib/api/fetcher";
 import { FetchCardsResponse } from "@/lib/api/types/cards";
 import Button from "@/components/Button";
 import Image from "next/image";
+import CardDetailsModal from "@/components/Modal/CardDetailsModal";
+
+interface CardData {
+  id: number;
+  title: string;
+  tags: string[];
+  dueDate: string;
+  assignee: {
+    nickname: string;
+    profileImageUrl: string | null;
+  };
+  imageUrl: string | null;
+}
 
 interface Props {
   columnId: number;
@@ -15,6 +29,13 @@ interface Props {
 
 const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   const [totalCount, setTotalCount] = useState<number>(0);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+  const [inputValue, setInputValue] = useState("Initial value");
+
+  const router = useRouter();
+  const { dashboardId } = router.query;
+  const numDashboardId = Number(dashboardId);
 
   const handleClick = () => {
     alert("여기에 이제 할일 추가하는 모달창 연결해야 함!!!");
@@ -44,6 +65,28 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
   if (!columnId || Array.isArray(columnId)) {
     return <div>유효하지 않은 컬럼 ID</div>;
   }
+
+  const handleOpenModal = (card: CardData) => {
+    setSelectedCard(card);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedCard(null);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Form submitted with value:", inputValue);
+    handleCloseModal();
+  };
+
+  const handleSuccess = () => {
+    if (cardsData) {
+      setTotalCount(cardsData.totalCount);
+    }
+  };
 
   return (
     <div className='border-y border-gray-20 desktop:w-354 desktop:border-x desktop:border-y-0'>
@@ -85,11 +128,26 @@ const BoardColumn: React.FC<Props> = ({ columnId, title, color }: Props) => {
               title={card.title}
               tags={card.tags}
               dueDate={card.dueDate}
-              assignee={card.assignee}
+              assignee={card.assignee.nickname}
               imageUrl={card.imageUrl}
+              onClick={() => handleOpenModal(card)}
             />
           ))}
       </div>
+      {selectedCard && (
+        <CardDetailsModal
+          columnId={columnId}
+          isOpen={isModalOpen}
+          value={inputValue}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmit}
+          title='Card Details'
+          subTitle='Card information'
+          cardId={selectedCard.id}
+          dashboardId={numDashboardId}
+          onSuccess={handleSuccess}
+        />
+      )}
     </div>
   );
 };

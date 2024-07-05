@@ -1,15 +1,9 @@
 import useClickOutside from "@/hooks/useClickOutside";
 import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard";
 import { useState, ChangeEvent } from "react";
-import { AxiosRequestConfig } from "axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateDashboardRequest } from "@/lib/api/types/dashboards";
-import fetcher from "@/lib/api/fetcher";
-
-
 
 const AddDashboardButton = () => {
-  const [modalOpen, setModalOpen] = useState(true)
+  const [modalOpen, setModalOpen] = useState(false)
   const [inputValue,setInputValue] = useState('')
   const [colorValue,setColorValue] = useState('')
 
@@ -18,27 +12,7 @@ const AddDashboardButton = () => {
   };
 
   const postDashboard = () => {
-    const queryClient =useQueryClient();
-    const config:AxiosRequestConfig = {
-      url:"/dashboards",
-      method:"POST",
-      data:{
-        title:`${inputValue}`,
-        color:`${colorValue}`
-      }
-    };
-
-    const mutation = useMutation({
-      mutationFn: () => fetcher<CreateDashboardRequest>(config),
-      onSuccess: () => queryClient.invalidateQueries(),
-      onError: (error) => {
-        console.error(error);
-      }
-    });
-
-    
-
-    };
+  };
 
   return (
     <>
@@ -55,7 +29,7 @@ const AddDashboardButton = () => {
         createButtonText={"생성"} 
         cancelButtonText={"취소"} 
         onClose={()=>{setModalOpen(false)}} 
-        onSubmit={postDashboard} 
+        onSubmit={postDashboard}
         onChange={handleChangeInput}/>
     </>
   );

@@ -42,7 +42,6 @@ export const list: ListItem[] = [
 export const dropButton: DropButton = {
   close: (
     <Image
-      className='rotate-180'
       width={26}
       height={26}
       src='/chip/arrow_drop_down.svg'
@@ -51,6 +50,7 @@ export const dropButton: DropButton = {
   ),
   open: (
     <Image
+      className='rotate-180'
       width={26}
       height={26}
       src='/chip/arrow_drop_down.svg'
@@ -58,4 +58,3 @@ export const dropButton: DropButton = {
     />
   ),
 };
-
