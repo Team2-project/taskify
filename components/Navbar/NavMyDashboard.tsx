@@ -3,7 +3,7 @@ NavMyDashboard: Dashboard 내비게이션 컴포넌트
 - Data는 DashboardLayout에서 Props로 받아옵니다
  */
 
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import NavbarTitle from "./NavbarTitle";
 import ActionButton from "./ActionButton";
@@ -34,6 +34,12 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
   const [isModalOpen, setModalOpen] = useState(false);
   const router = useRouter();
 
+  const [isEditPage, setIsEditPage] = useState(false);
+
+  useEffect(() => {
+    setIsEditPage(router.pathname.includes("/edit"));
+  }, [router.pathname]);
+
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
   const handleManageClick = () => {
@@ -60,6 +66,7 @@ const NavMyDashboard: FC<NavMyDashboardProps> = ({
                   label='관리'
                   iconSrc='/icon/ic_setting.svg'
                   onClick={handleManageClick}
+                  className={isEditPage ? "pointer-events-none opacity-50" : ""} // 관리 페이지에서 흐릿하게 보이도록 설정
                 />
                 <ActionButton
                   label='초대하기'
