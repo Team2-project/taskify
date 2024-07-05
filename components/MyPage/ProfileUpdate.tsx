@@ -74,8 +74,7 @@ const ProfileUpdate: FC = () => {
       return response;
     },
     onSuccess: (data) => {
-      setUserData((prev) => ({ ...prev!, ...data }));
-      queryClient.invalidateQueries({ queryKey: ["userProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["user"] });
       setIsSuccessModalOpen(true);
     },
     onError: (error) => {
