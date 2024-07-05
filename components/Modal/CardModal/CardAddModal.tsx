@@ -162,57 +162,59 @@ export default function CardAddModal({
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 m-auto h-[780px] max-w-[80vw] overflow-auto rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[750px] tablet:max-w-[50vw] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
-      <h1 className='text-[20px] font-bold tablet:text-[24px]'>할 일 생성</h1>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-      >
-        <DropDown
-          dropData={dropData}
-          handleDropClick={handleDropClick}
-          subTitle='담당자'
-          placeholder='이름을 입력해 주세요'
-        />
-        <Input
-          subTitle='제목'
-          placeholder='제목을 입력해 주세요'
-          handleInputChange={handleInputChange}
-          inputData={inputData}
-        />
-        <Textarea
-          subTitle='설명'
-          placeholder='설명을 입력해 주세요'
-          handleTextChange={handleTextChange}
-          textData={textData}
-        />
-        <Calendar
-          subTitle='마감일'
-          handleDateChange={handleDateChange}
-          startDate={startDate ? new Date(startDate) : null}
-        />
-        <TagInput
-          subTitle='태그'
-          placeholder='입력 후 Enter'
-          handleTagChange={handleTagChange}
-        />
-        <ImgInput subTitle='이미지' handleImgChange={handleImgChange} />
-        <div className='mt-[18px] flex w-full items-center justify-center gap-[11px] tablet:mt-[26px] tablet:justify-end'>
-          <Button
-            onClick={handleButtonClick}
-            className='h-[50px] w-full rounded-[8px] text-white'
-          >
-            {createButtonText}
-          </Button>
-          <Button
-            onClick={handleCloseClick}
-            className='h-[50px] w-full rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
-          >
-            {cancelButtonText}
-          </Button>
-        </div>
-      </form>
+    <div className='fixed inset-0 z-50 box-border h-full w-full border bg-black bg-opacity-50'>
+      <div className='fixed inset-0 z-50 m-auto h-[869px] w-[327px] rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[907px] tablet:w-[506px] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
+        <h1 className='text-[20px] font-bold tablet:text-[24px]'>할 일 생성</h1>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+          }}
+        >
+          <DropDown
+            dropData={dropData}
+            handleDropClick={handleDropClick}
+            subTitle='담당자'
+            placeholder='이름을 입력해 주세요'
+          />
+          <Input
+            subTitle='제목'
+            placeholder='제목을 입력해 주세요'
+            handleInputChange={handleInputChange}
+            inputData={inputData}
+          />
+          <Textarea
+            subTitle='설명'
+            placeholder='설명을 입력해 주세요'
+            handleTextChange={handleTextChange}
+            textData={textData}
+          />
+          <Calendar
+            subTitle='마감일'
+            handleDateChange={handleDateChange}
+            startDate={startDate ? new Date(startDate) : null}
+          />
+          <TagInput
+            subTitle='태그'
+            placeholder='입력 후 Enter'
+            handleTagChange={handleTagChange}
+          />
+          <ImgInput subTitle='이미지' handleImgChange={handleImgChange} />
+          <div className='mt-[18px] flex w-full items-center justify-center gap-[11px] tablet:mt-[26px] tablet:justify-end'>
+            <Button
+              onClick={handleButtonClick}
+              className='h-[50px] w-full rounded-[8px] text-white'
+            >
+              {createButtonText}
+            </Button>
+            <Button
+              onClick={handleCloseClick}
+              className='h-[50px] w-full rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
+            >
+              {cancelButtonText}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
