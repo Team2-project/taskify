@@ -271,7 +271,7 @@ const CardEditModal: FC<ModalProps> = ({
 
   return (
     <div className='fixed inset-0 box-border h-full w-full border bg-black bg-opacity-50'>
-      <div className='fixed inset-0 m-auto h-[90vh] max-w-[80vw] overflow-auto rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[95vh] tablet:max-w-[50vw] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
+      <div className='fixed inset-0 m-auto h-[780px] max-w-[80vw] overflow-auto rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[750px] tablet:max-w-[50vw] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
         <div className='text-[20px] font-bold tablet:text-[24px]'>
           할 일 수정
         </div>
