@@ -18,12 +18,18 @@ export const useProfileUpdate = () => {
   const [isProfileFormValid, setIsProfileFormValid] = useState<boolean>(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
-    userData?.profileImageUrl || null,
+    null,
   );
 
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState<boolean>(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  useEffect(() => {
+    if (userData) {
+      setProfileImagePreview(userData.profileImageUrl || null);
+    }
+  }, [userData]);
 
   useEffect(() => {
     const error = validateNickname(userData?.nickname || "");
@@ -61,6 +67,8 @@ export const useProfileUpdate = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
       setIsSuccessModalOpen(true);
+      setUserData(data);
+      setProfileImagePreview(data.profileImageUrl); // 업데이트 후 미리보기 이미지 설정
     },
     onError: (error) => {
       if (error.response) {

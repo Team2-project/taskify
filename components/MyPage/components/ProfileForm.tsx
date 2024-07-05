@@ -1,10 +1,9 @@
 /*
     ProfileUpdate 컴포넌트 안의 Form 입력 컴포넌트
 */
-
 import React, { FC } from "react";
 import Form from "@/components/Form/FormField/FormField";
-import ImageUploader from "@/components/MyPage/components/ImageUploader";
+import ImageUploader from "./ImageUploader";
 import Button from "@/components/Button";
 import { User } from "@/lib/api/types/users";
 
@@ -49,7 +48,7 @@ const ProfileForm: FC<ProfileFormProps> = ({
     <Form onSubmit={handleProfileSubmit}>
       <div className='flex flex-col gap-4 tablet:flex-row tablet:items-center'>
         <ImageUploader
-          profileImage={profileImagePreview}
+          profileImage={profileImagePreview} // 기존 프로필 이미지 미리보기
           onImageChange={handleImageChange}
           mobileHeight='h-[100px]'
           mobileWidth='w-[100px]'

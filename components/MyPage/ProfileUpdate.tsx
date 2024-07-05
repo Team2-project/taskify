@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import ProfileForm from "./components/ProfileForm";
 import ProfileUpdateModal from "./components/ProfileUpdateModal";
 import { useProfileUpdate } from "./hooks/useProfileUpdate";
@@ -8,7 +8,7 @@ const ProfileUpdate: FC = () => {
     userData,
     nicknameError,
     isProfileFormValid,
-    profileImagePreview,
+    profileImagePreview, // 기존 프로필 이미지 URL
     setProfileImagePreview,
     setProfileImage,
     setNickname,
@@ -27,7 +27,7 @@ const ProfileUpdate: FC = () => {
       </div>
       <ProfileForm
         userData={userData}
-        profileImagePreview={profileImagePreview}
+        profileImagePreview={profileImagePreview} // 초기 프로필 이미지 미리보기 설정
         nicknameError={nicknameError}
         isProfileFormValid={isProfileFormValid}
         setProfileImage={setProfileImage}

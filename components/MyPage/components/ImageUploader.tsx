@@ -1,10 +1,8 @@
 /*
-이미지를 업로드하는 기능이 있는 컴포넌트
-계정관리(MyPage) 와 할일생성Modal 에서 사용
+  사용자(User)의 프로필 업데이트시, 이미지를 업로드하는 기능이 있는 컴포넌트
 */
 
 import React, { useRef } from "react";
-import ResponsiveImage from "../../ResponsiveImage";
 
 interface ImageUploaderProps {
   profileImage: string | ArrayBuffer | null;
@@ -45,13 +43,17 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
           className='h-full w-full rounded-[6px] object-cover'
         />
       ) : (
-        <ResponsiveImage
-          src='/icon/ic_add_profile.png'
-          alt='사진 추가'
-          mobile={{ width: 20, height: 20 }}
-          tablet={{ width: 30, height: 30 }}
-          desktop={{ width: 30, height: 30 }}
-        />
+        <div className='flex items-center justify-center'>
+          <img
+            src='/icon/ic_add_profile.png'
+            alt='사진 추가'
+            className='object-cover'
+            style={{
+              width: "20px",
+              height: "20px",
+            }}
+          />
+        </div>
       )}
       <input
         type='file'
