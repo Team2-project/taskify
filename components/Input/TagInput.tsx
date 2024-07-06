@@ -80,33 +80,46 @@ export default function TagInput({
         {subTitle}
       </div>
       <div className='relative flex h-[42px] w-full items-center justify-center rounded-[6px] border-[1px] border-gray-30 p-3 tablet:h-[48px]'>
-        {hashArr.map((item) => (
-          <div
-            key={item.id}
-            className={`mr-[6px] flex items-center justify-center gap-[5px] rounded-[6px] ${item.bgColor} tablet:gap-[7px]`}
-          >
+        <div className='flex w-full flex-nowrap items-center gap-[6px] overflow-hidden'>
+          {hashArr.map((item) => (
             <div
-              className={`text-[10px] font-normal tablet:text-[12px] ${item.textColor}`}
+              key={item.id}
+              className={`flex items-center justify-center gap-[5px] rounded-[6px] px-[7px] ${item.bgColor} tablet:gap-[7px]`}
+              style={{
+                maxWidth: "150px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              }}
             >
-              {item.tag}
+              <div
+                className={`text-[10px] font-normal tablet:text-[12px] ${item.textColor}`}
+                style={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {item.tag}
+              </div>
+              <span
+                className='cursor-pointer font-semibold'
+                onClick={() => removeTag(item.id)}
+              >
+                &times;
+              </span>
             </div>
-            <span
-              className='cursor-pointer font-semibold'
-              onClick={() => removeTag(item.id)}
-            >
-              &times;
-            </span>
-          </div>
-        ))}
-        {hashArr.length > 4 || (
-          <input
-            placeholder={placeholder}
-            className='flex-grow text-[10px] font-normal outline-none tablet:text-[12px]'
-            value={hashtag}
-            onChange={onChangeHashtag}
-            onKeyUp={onKeyUp}
-          />
-        )}
+          ))}
+          {hashArr.length < 5 && (
+            <input
+              placeholder={placeholder}
+              className='flex-grow text-[10px] font-normal outline-none tablet:text-[12px]'
+              value={hashtag}
+              onChange={onChangeHashtag}
+              onKeyUp={onKeyUp}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
