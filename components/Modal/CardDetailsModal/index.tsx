@@ -8,6 +8,7 @@ import useCardDetailsModal from "./hooks/useCardDetailsModal";
 import Header from "./components/Header";
 import Body from "./components/Body";
 import CardEditModal from "../CardModal/CardEditModal";
+import useCards from "@/hooks/useCards";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -42,6 +43,7 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
   const queryClient = useQueryClient();
   const { modalIsOpen, isLoading, error, cardDetails, refetch } =
     useCardDetailsModal(isOpen, cardId);
+  const { deleteCard } = useCards();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleSuccess = () => {
@@ -56,9 +58,14 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = () => {
-    onClose(); // CardDetailsModal 닫기
-    window.location.reload(); // 페이지 리로드하여 최신 데이터 반영
+  const handleDelete = async () => {
+    try {
+      await deleteCard.mutateAsync(cardId);
+      onClose(); // CardDetailsModal 닫기
+      handleSuccess(); // 성공 시 데이터 갱신
+    } catch (error) {
+      console.error("Failed to delete card:", error);
+    }
   };
 
   return (

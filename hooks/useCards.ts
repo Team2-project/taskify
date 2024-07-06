@@ -125,20 +125,21 @@ const useCards = () => {
   });
 
   // 카드 삭제
-  const deleteCard = (cardId: number) => {
-    return useMutation<{ message: string }, Error, number>({
-      mutationKey: ["deleteCard", cardId],
-      mutationFn: () =>
-        fetcher<{ message: string }>({
-          url: `/cards/${cardId}`,
-          method: "DELETE",
-        }),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["cardDetails", cardId] });
-        queryClient.invalidateQueries({ queryKey: ["cardsData"] });
-      },
-    });
-  };
+  const deleteCard = useMutation<{ message: string }, Error, number>({
+    mutationFn: async (cardId) => {
+      return await fetcher<{ message: string }>({
+        url: `/cards/${cardId}`,
+        method: "DELETE",
+      });
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["cardDetails", variables] });
+      queryClient.invalidateQueries({ queryKey: ["cardsData"] });
+    },
+    onError: (error) => {
+      console.error("Failed to delete card", error);
+    },
+  });
 
   return {
     fetchCards,
