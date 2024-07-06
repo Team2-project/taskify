@@ -1,5 +1,8 @@
 import fetcher from "@/lib/api/fetcher";
-import { DashboardsResponse, DashboardResponse } from "@/lib/api/types/dashboards";
+import {
+  DashboardsResponse,
+  DashboardResponse,
+} from "@/lib/api/types/dashboards";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import ColorChip from "@/public/chip/circle_small.svg";
@@ -9,7 +12,7 @@ import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import { dashboardTitleAtom, dashboardColorAtom } from "@/atoms/dashboardAtom";
 
-const getDashboard = (): DashboardResponse[] | null | JSX.Element => {
+const getDashboard = () => {
   const config: AxiosRequestConfig = {
     url: "/dashboards",
     method: "GET",
@@ -22,21 +25,20 @@ const getDashboard = (): DashboardResponse[] | null | JSX.Element => {
   const {
     data: dashboardData,
     error: dashboardError,
-    isLoading: dashboardloading,
+    isLoading: dashboardLoading,
   } = useQuery<DashboardsResponse>({
     queryKey: ["DashboardsResponse"],
     queryFn: () => fetcher<DashboardsResponse>(config),
   });
 
-  if (dashboardloading) {
+  if (dashboardLoading) {
     return <div>Loading...</div>;
   }
   if (dashboardError || !dashboardData) {
     return null;
   }
 
-  const dashboardArray = dashboardData.dashboards;
-  return dashboardArray;
+  return dashboardData.dashboards;
 };
 
 const ButtonList = () => {

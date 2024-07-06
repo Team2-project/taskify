@@ -17,7 +17,7 @@ const DashboardEditPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const dashboardIdNumber = Number(dashboardId);
+  const dashboardIdNumber = Number(dashboardId); // router로 dashboardId가 넘어오기 때문에 string으로 변환됨
 
   if (!dashboardId || isNaN(dashboardIdNumber)) {
     return <div>유효하지 않은 대시보드 ID</div>;
@@ -55,7 +55,7 @@ const DashboardEditPage = () => {
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
-      <div className='p-[12px] tablet:p-[20]'>
+      <div className='p-[12px] tablet:p-[20px]'>
         <BackLink href={`/dashboard/${dashboardId}`} label='돌아가기' />
         <div className='flex flex-col gap-[11px] tablet:gap-3'>
           {/* 대시보드 정보 변경 컴포넌트 */}
