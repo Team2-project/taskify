@@ -17,7 +17,7 @@ const getDashboard = (): DashboardResponse[] | null | JSX.Element => {
     url: "/dashboards",
     method: "GET",
     params: {
-      navigationMethod: "infiniteScroll",
+      navigationMethod: "pagination",
       size: 40,
     },
   };
