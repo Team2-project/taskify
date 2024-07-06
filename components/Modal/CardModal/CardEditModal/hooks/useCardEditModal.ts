@@ -2,14 +2,10 @@
     useCardEditModal의 custom Hook
 */
 import { useEffect, useState } from "react";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import useModal from "@/hooks/useModal";
 import fetcher from "@/lib/api/fetcher";
+import useCards from "@/hooks/useCards";
 import {
   UpdateCardData,
   FetchCardDetailsResponse,
@@ -25,7 +21,7 @@ const useCardEditModal = (
   onClose: () => void,
   buttonAction: () => void,
 ) => {
-  const queryClient = useQueryClient();
+  const { updateCard, uploadCardImage, fetchCardDetails } = useCards();
   const {
     isOpen: modalIsOpen,
     cardDetails,
@@ -69,53 +65,6 @@ const useCardEditModal = (
       setAssigneeNickname(cardDetails.assignee.nickname);
     }
   }, [cardDetails]);
-
-  const uploadCardImg = async (
-    columnId: number,
-    data: File,
-  ): Promise<{ imageUrl: string }> => {
-    try {
-      const formData = new FormData();
-      formData.append("image", data);
-
-      const response = await fetcher<{ imageUrl: string }>({
-        url: `columns/${columnId}/card-image`,
-        method: "POST",
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      return response;
-    } catch (error: any) {
-      console.error("Image upload error:", error);
-      throw error;
-    }
-  };
-
-  const mutation = useMutation<unknown, Error, UpdateCardData>({
-    mutationFn: async (updatedCard: UpdateCardData) => {
-      console.log("Sending update request:", updatedCard);
-      return await fetcher({
-        url: `cards/${cardId}`,
-        method: "PUT",
-        data: updatedCard,
-      });
-    },
-    onSuccess: () => {
-      console.log("Update successful");
-      queryClient.invalidateQueries({ queryKey: ["cardDetails", cardId] });
-      queryClient.invalidateQueries({
-        queryKey: ["columns", dashboardId],
-      });
-      queryClient.invalidateQueries({ queryKey: ["cardsData", columnId] });
-      buttonAction();
-      onClose();
-    },
-    onError: (error) => {
-      console.error("Failed to update card", error);
-    },
-  });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -169,18 +118,30 @@ const useCardEditModal = (
     try {
       let imageUrl = formData.imageUrl;
       if (imageFile) {
-        const response = await uploadCardImg(formData.columnId, imageFile);
-        imageUrl = response.imageUrl;
+        imageUrl = await uploadCardImage(formData.columnId, imageFile);
       }
 
       const submitData: UpdateCardData = {
         ...formData,
         imageUrl,
-        dueDate: formatDate(formData.dueDate), // 서버가 기대하는 형식으로 변환
+        dueDate: formatDate(formData.dueDate),
       };
 
-      console.log("Form Data before submit:", submitData); // 로그로 출력
-      mutation.mutate(submitData);
+      updateCard.mutate(
+        {
+          cardId,
+          cardData: submitData,
+        },
+        {
+          onSuccess: () => {
+            buttonAction();
+            onClose();
+          },
+          onError: () => {
+            console.error("Failed to update card");
+          },
+        },
+      );
     } catch (error) {
       console.error("Error uploading image or submitting form:", error);
     }

@@ -1,11 +1,8 @@
-import { AxiosError } from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import React, { useState } from "react";
+import useCards from "@/hooks/useCards"; //변경
 import { CreateCardData } from "@/lib/api/types/cards";
 
-import fetcher from "@/lib/api/fetcher";
 import Button from "@/components/Button";
 import Input from "@/components/Input/Input";
 import Calendar from "@/components/Input/Calendar";
@@ -44,48 +41,9 @@ export default function CardAddModal({
   const [imgFile, setImgFile] = useState<File | null>(null);
 
   const router = useRouter();
-  const { dashboardId } = router.query;
+  const dashboardId = router.query.dashboardId as string;
 
-  const queryClient = useQueryClient();
-
-  const uploadCardImg = async (
-    columnId: number,
-    data: File,
-  ): Promise<string> => {
-    const formData = new FormData();
-    formData.append("image", data);
-
-    const response = await fetcher<{ imageUrl: string }>({
-      url: `columns/${columnId}/card-image`,
-      method: "POST",
-      data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    return response.imageUrl;
-  };
-
-  const createCard = async (cardData: CreateCardData): Promise<void> => {
-    await fetcher<void>({
-      url: "/cards",
-      method: "POST",
-      data: cardData,
-    });
-  };
-
-  const mutation = useMutation<void, AxiosError, CreateCardData>({
-    mutationFn: createCard,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["cards"] });
-    },
-    onError: (error) => {
-      if (error.response) {
-        throw error;
-      }
-    },
-  });
+  const { createCardMutation } = useCards();
 
   const handleDropClick = (userId: number, nickname: string) => {
     setDropData(nickname);
@@ -102,7 +60,7 @@ export default function CardAddModal({
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
-      const formattedDate = dayjs(date).format("YYYY-MM-DD HH:MM");
+      const formattedDate = dayjs(date).format("YYYY-MM-DD HH:mm");
       setStartDate(formattedDate);
     } else {
       setStartDate("");
@@ -117,16 +75,11 @@ export default function CardAddModal({
     setImgFile(file);
   };
 
-  const handleButtonClick = async () => {
-    let imgData: string= "";
-    if (imgFile) {
-      try {
-        imgData = await uploadCardImg(columnId, imgFile);
-      } catch (error) {
-        throw error;
-      }
-    }
+  const handleCloseClick = () => {
+    onClose();
+  };
 
+  const handleButtonClick = () => {
     const cardData: CreateCardData = {
       assigneeUserId: assigneeUserId || 0,
       dashboardId: Number(dashboardId),
@@ -135,10 +88,9 @@ export default function CardAddModal({
       description: textData,
       dueDate: startDate || "",
       tags: tagData,
-      ...(imgData ? { imageUrl: imgData } : {}),
     };
 
-    mutation.mutate(cardData);
+    createCardMutation.mutate({ cardData, file: imgFile ?? undefined });
 
     if (buttonAction) {
       buttonAction();
@@ -146,12 +98,8 @@ export default function CardAddModal({
     onClose();
   };
 
-  const handleCloseClick = () => {
-    onClose();
-  };
-
   if (!isOpen) return null;
-
+  if (!isOpen) return null;
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
       <div className='relative max-h-[760px] w-[90vw] max-w-[327px] overflow-y-auto rounded-[8px] bg-white p-[20px] tablet:max-h-[760px] tablet:w-[70vw] tablet:max-w-[506px] tablet:p-[28px] desktop:max-h-[760px] desktop:w-[50vw] desktop:max-w-[506px]'>
@@ -209,4 +157,3 @@ export default function CardAddModal({
     </div>
   );
 }
-
