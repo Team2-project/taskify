@@ -64,6 +64,9 @@ export default function InvitedDashboard() {
       queryClient.invalidateQueries({
         queryKey: ["InvitationsResponse"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["DashboardsResponse"],
+      });
     },
     onError: (error) => {
       console.error(error);
