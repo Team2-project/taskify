@@ -8,7 +8,13 @@ interface TagInputProps {
   handleTagChange: (newTags: string[]) => void;
 }
 
-const colors = ["bg-pink-bg", "bg-orange-10", "bg-blue", "bg-green"];
+const colors = [
+  { bgColor: "bg-pink-bg", textColor: "text-pink" },
+  { bgColor: "bg-violet-10", textColor: "text-violet-20" },
+  { bgColor: "bg-[#f9eee3]", textColor: "text-[#D58D49]" },
+  { bgColor: "bg-blue-bg", textColor: "text-blue-text" },
+  { bgColor: "bg-green-bg", textColor: "text-green-text" },
+];
 
 export default function TagInput({
   subTitle,
@@ -17,20 +23,23 @@ export default function TagInput({
   onChange,
   handleTagChange,
 }: TagInputProps) {
-  const [hashtag, setHashtag] = useState<string>(""); // onChange로 관리할 문자열
+  const [hashtag, setHashtag] = useState<string>("");
   const [hashArr, setHashArr] = useState<
-    { id: number; tag: string; color: string }[]
+    { id: number; tag: string; bgColor: string; textColor: string }[]
   >([]);
-  // 해시태그를 담을 배열
 
   useEffect(() => {
     if (value) {
       setHashArr(
-        value.split(",").map((tag, index) => ({
-          id: index,
-          tag: tag.trim(),
-          color: colors[Math.floor(Math.random() * colors.length)], // 랜덤 색상 할당
-        })),
+        value.split(",").map((tag, index) => {
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          return {
+            id: index,
+            tag: tag.trim(),
+            bgColor: color.bgColor,
+            textColor: color.textColor,
+          };
+        }),
       );
     }
   }, [value]);
@@ -38,11 +47,12 @@ export default function TagInput({
   const onKeyUp = useCallback(
     (e: any) => {
       if (e.keyCode === 13 && e.target.value.trim() !== "") {
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const color = colors[Math.floor(Math.random() * colors.length)];
         const newTag = {
           id: Date.now(),
           tag: e.target.value,
-          color: randomColor,
+          bgColor: color.bgColor,
+          textColor: color.textColor,
         };
         const newHashArr = [...hashArr, newTag];
         setHashArr(newHashArr);
@@ -73,9 +83,11 @@ export default function TagInput({
         {hashArr.map((item) => (
           <div
             key={item.id}
-            className={`mr-[6px] flex items-center justify-center gap-[5px] rounded-[6px] ${item.color} tablet:gap-[7px]`}
+            className={`mr-[6px] flex items-center justify-center gap-[5px] rounded-[6px] ${item.bgColor} tablet:gap-[7px]`}
           >
-            <div className='text-[10px] font-normal tablet:text-[12px]'>
+            <div
+              className={`text-[10px] font-normal tablet:text-[12px] ${item.textColor}`}
+            >
               {item.tag}
             </div>
             <span
