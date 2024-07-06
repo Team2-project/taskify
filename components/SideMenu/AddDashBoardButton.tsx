@@ -10,10 +10,22 @@ const AddDashboardButton = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
 
+  const colors: { [key: string]: string } =
+  {"green":"#7AC555",
+    "purple":"#760DDE",
+    "orange":"#FFA500",
+    "blue":"#76A5EA",
+    "pink":"#E876EA"
+  };
+  
+  function getColor(key: string):string{
+    return colors[key];
+  }
+
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<DashboardResponse, Error,CreateDashboardRequest>({
-    mutationFn: async ({title, color}) => {
+  const mutation = useMutation({
+    mutationFn: async ({title, color}:CreateDashboardRequest) => {
       const response = await fetcher<DashboardResponse>({
         url: "/dashboards",
         method: "POST",
@@ -23,8 +35,9 @@ const AddDashboardButton = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["titles"]
-      })},
+        queryKey: ["DashboardsResponse"]
+      });
+      setModalOpen(false)},
       onError: (error) => {
           console.error(error)
         }
@@ -33,8 +46,12 @@ const AddDashboardButton = () => {
   const postDashboard = (e: React.FormEvent, color: string) => {
     // 자식 컴포넌트가 부모 컴포넌트한테 값을 전달해주려면
     // 함수를 통해, (함수의 parameter를 통해) 전달이 가능하다!
+
+    const colorCode = getColor(color);
     e.preventDefault();
-    mutation.mutate({title: inputValue, color})
+
+    
+    mutation.mutate({title: inputValue, color:colorCode})
   };
 
   const handleChangeInput = (e:ChangeEvent<HTMLInputElement>) => {
