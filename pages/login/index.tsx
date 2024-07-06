@@ -60,6 +60,16 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
+    // 페이지 진입 시 쿠키에서 accessToken을 가져옴
+    const accessToken = Cookies.get("accessToken");
+
+    // 만약 accessToken이 존재한다면, 이미 로그인된 상태이므로 대시보드 페이지로 리다이렉트
+    if (accessToken) {
+      router.push("/mydashboard");
+    }
+  }, []);
+
+  useEffect(() => {
     const emailValidation = validateEmail(email);
     const passwordValidation = validatePassword(password);
 
