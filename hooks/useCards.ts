@@ -1,5 +1,5 @@
 /*
-   useCards: 카드 목록 조회, 상세 조회, 생성, 수정, 삭제 기능
+   useCards: 카드 목록 조회, 상세 조회, 생성, 수정, 삭제 기능 + 카드 이미지 업로드
 */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
@@ -10,6 +10,7 @@ import {
   FetchCardDetailsResponse,
   DeleteCardData,
 } from "@/lib/api/types/cards";
+import { UploadCardImageResponse } from "@/lib/api/types/columns";
 
 const useCards = () => {
   const queryClient = useQueryClient();
@@ -27,21 +28,55 @@ const useCards = () => {
     });
   };
 
-  // 카드 생성
-  const createCard = (cardData: CreateCardData) => {
-    const createConfig = {
+  // 카드 생성 및 이미지 업로드
+  const createCard = async (cardData: CreateCardData, file?: File) => {
+    let imageUrl = "";
+
+    // 이미지가 제공된 경우 먼저 업로드
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      const imgResponse = await fetcher<UploadCardImageResponse>({
+        url: `/cards/images/upload`, // 예시 URL, 실제 API 경로에 따라 수정 필요
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      imageUrl = imgResponse.imageUrl;
+    }
+
+    // 카드 데이터에 이미지 URL 추가
+    const completeCardData = {
+      ...cardData,
+      ...(imageUrl && { imageUrl }),
+    };
+
+    // 카드 생성 요청
+    await fetcher<FetchCardDetailsResponse>({
       url: "/cards",
       method: "POST",
-      data: cardData,
-    };
-    return useMutation<FetchCardDetailsResponse, Error, CreateCardData>({
-      mutationKey: ["createCard"],
-      mutationFn: () => fetcher<FetchCardDetailsResponse>(createConfig),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["cardsData"] });
-      },
+      data: completeCardData,
     });
+
+    queryClient.invalidateQueries({ queryKey: ["cardsData"] });
   };
+
+  const createCardMutation = useMutation<
+    void,
+    Error,
+    { cardData: CreateCardData; file?: File }
+  >({
+    mutationFn: ({ cardData, file }) => createCard(cardData, file),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["cardsData"] });
+    },
+    onError: (error) => {
+      console.error("Error creating card with image:", error);
+      throw error;
+    },
+  });
 
   // 카드 상세 조회
   const fetchCardDetails = (cardId: number) => {
