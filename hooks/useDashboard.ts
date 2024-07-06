@@ -37,14 +37,14 @@ const useDashboard = () => {
 
   const queryKey = [
     "dashboards",
-    { navigationMethod: "pagination", page: 1, size: 10 },
+    { navigationMethod: "pagination", page: 1, size: 30 },
   ];
   const initialData = queryClient.getQueryData<DashboardsResponse>(queryKey);
 
   const { data, error, isLoading } = useQuery<DashboardsResponse, Error>({
     queryKey,
     queryFn: () =>
-      fetchDashboards({ navigationMethod: "pagination", page: 1, size: 10 }),
+      fetchDashboards({ navigationMethod: "pagination", page: 1, size: 30 }),
     initialData,
   });
 

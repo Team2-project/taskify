@@ -78,6 +78,7 @@ export default function MyDashBoard() {
                 key={dashboard.id}
                 children={dashboard.title}
                 createdByMe={dashboard.createdByMe}
+                backgroundColor={dashboard.color} // 대시보드의 색상을 backgroundColor로 전달
                 onClick={() => {
                   router.push(`/dashboard/${dashboard.id}`);
                 }}
