@@ -41,7 +41,7 @@ const useCards = () => {
       const formData = new FormData();
       formData.append("image", file);
       const imgResponse = await fetcher<UploadCardImageResponse>({
-        url: `/cards/images/upload`,
+        url: `columns/${cardData.columnId}/card-image`,
         method: "POST",
         data: formData,
         headers: { "Content-Type": "multipart/form-data" },
@@ -121,7 +121,7 @@ const useCards = () => {
 
   return {
     fetchCards,
-    createCard,
+    createCardMutation,
     fetchCardDetails,
     updateCard,
     deleteCard,
