@@ -1,3 +1,5 @@
+import React from "react";
+
 interface InputProps {
   subTitle: string;
   placeholder?: string;
@@ -11,6 +13,12 @@ export default function Input({
   handleInputChange,
   inputData,
 }: InputProps) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault(); // 엔터 키 입력을 무시하여 드롭다운이 열리고 닫히는 것을 방지
+    }
+  };
+
   return (
     <div className='mt-[18px] flex flex-col gap-[10px] tablet:mt-[26px]'>
       <div className='text-[16px] font-medium tablet:text-[18px]'>
@@ -23,9 +31,9 @@ export default function Input({
           onChange={handleInputChange}
           type='text'
           value={inputData}
+          onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
         />
       </div>
     </div>
   );
 }
-

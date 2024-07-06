@@ -11,7 +11,7 @@ export interface CreateCardData {
   description: string;
   dueDate: string;
   tags: string[];
-  imageUrl: string;
+  // imageUrl: string ;
 }
 
 // 카드 목록 조회 시 반환되는 데이터 타입
