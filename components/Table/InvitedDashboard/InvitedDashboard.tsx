@@ -143,11 +143,8 @@ export default function InvitedDashboard() {
 
   const Invitations = () => {
     return filteredInvitations.map((invitation) => (
-      <tbody className='tablet:w-full tablet:table-fixed'>
-        <tr
-          key={invitation.id}
-          className='w-full border-b-[1px] border-gray-30 tablet:table-row tablet:h-[70px]'
-        >
+      <tbody key={invitation.id} className='tablet:w-full tablet:table-fixed'>
+        <tr className='w-full border-b-[1px] border-gray-30 tablet:table-row tablet:h-[70px]'>
           <td className='mb-[10px] mt-[16px] flex text-[14px] text-black-20 tablet:table-cell tablet:text-[16px]'>
             <p className='mr-[28px] text-[14px] text-gray-40 tablet:hidden'>
               이름
@@ -186,7 +183,7 @@ export default function InvitedDashboard() {
       {invitationArray.length === 0 ? (
         <NoInvitations />
       ) : (
-        <section className='mx-[24px] my-[24px] box-border max-w-[1022px] rounded-md bg-white px-[16px] tablet:mx-[40px] desktop:ml-[40px]'>
+        <section className='mx-[24px] my-[24px] box-border max-w-[1022px] rounded-md bg-white px-[16px] relative -z-20 tablet:mx-[40px] desktop:ml-[40px]'>
           <h2 className='px-[16px] py-[24px] text-[20px] font-bold tablet:text-[24px]'>
             초대받은 대시보드
           </h2>
@@ -199,7 +196,7 @@ export default function InvitedDashboard() {
             <thead>
               <tr>
                 <th colSpan={3}>
-                  <form className='relative mb-[24px] flex items-center'>
+                  <form className='relative -z-10 mb-[24px] flex items-center'>
                     <button className='absolute mx-[5px]'>
                       <ReactSVG
                         src='/icon/ic_search.svg'
