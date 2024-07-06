@@ -81,11 +81,7 @@ const useDashboard = () => {
     },
   };
 
-  const { mutate: addDashboard } = useMutation<
-    DashboardResponse,
-    Error,
-    CreateDashboardRequest
-  >(mutationOptions);
+  const { mutate: addDashboard } = useMutation(mutationOptions);
 
   // 대시보드 수정
   const updateDashboard = async (
