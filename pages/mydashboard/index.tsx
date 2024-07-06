@@ -1,7 +1,7 @@
 import DashboardLayout from "@/components/Layout/DashboardLayout";
 import AddButton from "@/components/Button/AddButton/AddButton";
 import ListButton from "@/components/Button/ListButton/ListButton";
-import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard";
+import CreateDashBoardModal from "@/components/SideMenu/CreateDashBoardModal"; // 수정된 부분
 import InvitedDashboard from "@/components/Table/InvitedDashboard/InvitedDashboard";
 import { useRouter } from "next/router";
 import { useState, useEffect, ChangeEvent } from "react";
@@ -35,6 +35,8 @@ export default function MyDashBoard() {
   const postDashboard = (e: React.FormEvent, color: string) => {
     e.preventDefault();
     addDashboard({ title: inputValue, color });
+    setIsModalOpen(false); // 모달 닫기
+    setInputValue(""); //입력필드 초기화
   };
 
   if (isLoading) {
@@ -65,43 +67,35 @@ export default function MyDashBoard() {
               onClick={() => {
                 setIsModalOpen(true);
               }}
-              children='새로운 대시보드'
-            />
+            >
+              새로운 대시보드
+            </AddButton>
 
             {/* 대시보드 버튼 목록 */}
             {dashboards.slice(startDashboard, endDashboard).map((dashboard) => (
               <ListButton
                 className='mb-[8px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
+                key={dashboard.id}
                 children={dashboard.title}
                 createdByMe={dashboard.createdByMe}
                 onClick={() => {
                   router.push(`/dashboard/${dashboard.id}`);
                 }}
-                key={dashboard.id}
               />
             ))}
           </div>
+
           {/* 페이지네이션 구현 */}
           <div className='mx-[24px] w-full px-[48px] tablet:mx-[20px] tablet:mb-[40px] tablet:px-[40px] desktop:w-[1022px] desktop:px-0'>
             {dashboards.length > 0 && renderPaginationButtons()}
           </div>
 
           {/* 대시보드 생성 모달창 */}
-          <CreateDashBoard
+          <CreateDashBoardModal
             isOpen={isModalOpen}
-            title='새로운 대시보드'
-            value={inputValue}
-            subTitle='대시보드 이름'
-            placeholder='대시보드 이름'
-            createButtonText='생성'
-            cancelButtonText='취소'
             onClose={() => {
               setIsModalOpen(false);
             }}
-            onSubmit={() => {
-              postDashboard;
-            }}
-            onChange={handleChangeInput}
           />
 
           {/* 초대받은 대시보드 - 있는 경우와 없는 경우에 따른 구현 */}
