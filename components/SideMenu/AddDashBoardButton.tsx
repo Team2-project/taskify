@@ -6,13 +6,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateDashboardRequest, DashboardResponse } from "@/lib/api/types/dashboards";
 import fetcher from "@/lib/api/fetcher";
 
-//colorvalue 받는 법
-//
-
 const AddDashboardButton = () => {
   const [modalOpen, setModalOpen] = useState(false)
-  const [inputValue,setInputValue] = useState('')
-  const [colorValue,setColorValue] = useState('')
+  const [inputValue, setInputValue] = useState('')
 
   const queryClient = useQueryClient();
 
@@ -30,13 +26,15 @@ const AddDashboardButton = () => {
         queryKey: ["titles"]
       })},
       onError: (error) => {
-          console.error(error);
+          console.error(error)
         }
     }
   )
-  const postDashboard = (e: React.FormEvent) => {
+  const postDashboard = (e: React.FormEvent, color: string) => {
+    // 자식 컴포넌트가 부모 컴포넌트한테 값을 전달해주려면
+    // 함수를 통해, (함수의 parameter를 통해) 전달이 가능하다!
     e.preventDefault();
-    mutation.mutate({title: inputValue, color: colorValue})
+    mutation.mutate({title: inputValue, color})
   };
 
   const handleChangeInput = (e:ChangeEvent<HTMLInputElement>) => {

@@ -11,11 +11,10 @@ interface ModalProps {
   createButtonText: string;
   cancelButtonText: string;
   onClose: () => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>, color: string) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   buttonAction?: () => void;
 }
-
 export default function CreateDashBoard({
   isOpen,
   title,
@@ -29,7 +28,7 @@ export default function CreateDashBoard({
   buttonAction,
   onChange,
 }: ModalProps) {
-  const [selectedCircle, setSelectedCircle] = useState<string | null>(null);
+  const [selectedCircle, setSelectedCircle] = useState<string>('');
 
   const colors = ["green", "purple", "orange", "blue", "pink"];
 
@@ -56,7 +55,7 @@ export default function CreateDashBoard({
         <div className='mb-[24px] text-[20px] font-bold tablet:mb-[32px]'>
           {title}
         </div>
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={(e) => onSubmit(e, selectedCircle)}>
           <Form.Field
             label={subTitle}
             type='text'
