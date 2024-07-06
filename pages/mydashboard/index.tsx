@@ -10,9 +10,14 @@ import { DashboardsResponse } from "@/lib/api/types/dashboards";
 import fetcher from "@/lib/api/fetcher";
 import { AxiosRequestConfig } from "axios";
 import usePagination from "@/components/Pagination/usePagination";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CreateDashboardRequest, DashboardResponse } from "@/lib/api/types/dashboards";
+
 
 export default function MyDashBoard() {
   const router = useRouter();
+  const [inputValue, setInputValue] = useState('')
+
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setNewDashboardTitle(e.target.value);
@@ -73,17 +78,32 @@ export default function MyDashBoard() {
     queryFn: () => fetcher<DashboardsResponse>(config),
   });
 
-  if (dashboardloading) {
-    return <div>Loading...</div>;
-  }
-  if (dashboardError || !dashboardData) {
-    return null;
-  }
+  const queryClient = useQueryClient();
 
-  const dashboardArray = dashboardData.dashboards;
-
-  const startDashboard = (currentPage - 1) * pageSize + 1;
-  const endDashboard = startDashboard + pageSize - 1;
+  const mutation = useMutation<DashboardResponse, Error,CreateDashboardRequest>({
+    mutationFn: async (title) => {
+      const response = await fetcher<DashboardResponse>({
+        url: "/dashboards",
+        method: "POST",
+        data: title,
+      });
+      return response;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["titles"]
+      })},
+      onError: (error) => {
+          console.error(error)
+        }
+    }
+  )
+  const postDashboard = (e: React.FormEvent, color: string) => {
+    // 자식 컴포넌트가 부모 컴포넌트한테 값을 전달해주려면
+    // 함수를 통해, (함수의 parameter를 통해) 전달이 가능하다!
+    e.preventDefault();
+    mutation.mutate({title: inputValue, color})
+  };
 
   const BoardButtons = () => {
     return dashboardArray
@@ -96,11 +116,23 @@ export default function MyDashBoard() {
           onClick={() => {
             router.push(`/dashboard/${dashboard.id}`);
           }}
+          key={dashboard.id}
         />
       ));
   };
 
   const PaginationButtons = renderPaginationButtons();
+
+  if (dashboardloading) {
+    return <div>Loading...</div>;
+  }
+  if (dashboardError || !dashboardData) {
+    return null;
+  }
+  const dashboardArray = dashboardData.dashboards;
+
+  const startDashboard = (currentPage - 1) * pageSize + 1;
+  const endDashboard = startDashboard + pageSize - 1;
 
   return (
     <>
@@ -143,7 +175,7 @@ export default function MyDashBoard() {
             onClose={() => {
               setIsModalOpen(false);
             }}
-            onSubmit={() => {}}
+            onSubmit={() => {postDashboard}}
             onChange={handleChangeInput}
           />
 
