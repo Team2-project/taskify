@@ -3,37 +3,37 @@ import Button from "@/components/Button";
 import Form from "../Form/FormField/FormField";
 
 interface ModalProps {
-  isOpen: boolean;
   value: string;
+  title: string;
+  error?: string;
+  isOpen: boolean;
+  subTitle: string;
+  showError?: boolean;
+  placeholder: string;
+  createButtonText: string;
+  cancelButtonText: string;
+  leftCornerContent?: React.ReactNode;
   onClose: () => void;
-  buttonAction?: () => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  cancelButtonText: string;
-  createButtonText: string;
-  title: string;
-  subTitle: string;
-  placeholder: string;
-  error?: string;
-  showError?: boolean;
-  leftCornerContent?: React.ReactNode;
+  buttonAction?: () => void;
 }
 
 export default function BasicModal({
-  isOpen,
   value,
+  title,
+  error = "",
+  isOpen,
+  subTitle,
+  showError = false,
+  placeholder,
+  cancelButtonText,
+  createButtonText,
+  leftCornerContent,
   onClose,
   onSubmit,
   onChange,
   buttonAction,
-  title,
-  subTitle,
-  placeholder,
-  cancelButtonText,
-  createButtonText,
-  error = "",
-  showError = false,
-  leftCornerContent,
 }: ModalProps) {
   const [isButtonDisabled, setButtonDisabled] = useState(true);
 
@@ -101,3 +101,4 @@ export default function BasicModal({
     </div>
   );
 }
+

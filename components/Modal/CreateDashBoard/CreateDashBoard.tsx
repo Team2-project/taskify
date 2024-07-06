@@ -3,9 +3,9 @@ import Button from "@/components/Button";
 import Form from "@/components/Form/FormField/FormField";
 
 interface ModalProps {
-  isOpen: boolean;
   title: string;
   value: string;
+  isOpen: boolean;
   subTitle: string;
   placeholder: string;
   createButtonText: string;
@@ -17,9 +17,9 @@ interface ModalProps {
 }
 
 export default function CreateDashBoard({
-  isOpen,
   title,
   value,
+  isOpen,
   subTitle,
   placeholder,
   createButtonText,
