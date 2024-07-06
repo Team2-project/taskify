@@ -27,7 +27,10 @@ const ButtonList = () => {
   }
 
   return (
-    <div className='flex flex-col-reverse items-start justify-start'>
+    <div
+      className='flex flex-col-reverse items-start justify-start'
+      style={{ overflowY: "auto" }}
+    >
       {dashboards.map((dashboard: DashboardResponse, index: number) => {
         const isCurrentDashboard = dashboard.id === Number(dashboardId);
         const title = dashboard.title;

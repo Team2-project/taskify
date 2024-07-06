@@ -26,7 +26,7 @@ const SideMenu = () => {
       </Link>
       <div
         className='fixed left-[12px] top-[110px] flex h-full w-[276px] flex-col items-center justify-start gap-[22px] max-desktop:w-[134px] max-tablet:left-0 max-tablet:top-[80px] max-tablet:w-[67px]'
-        style={{ overflowY: "auto" }}
+        
       >
         <AddDashboardButton />
         <ButtonList />
