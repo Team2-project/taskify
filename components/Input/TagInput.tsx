@@ -44,20 +44,23 @@ export default function TagInput({
     }
   }, [value]);
 
-  const onKeyUp = useCallback(
-    (e: any) => {
-      if (e.keyCode === 13 && e.target.value.trim() !== "") {
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        const newTag = {
-          id: Date.now(),
-          tag: e.target.value,
-          bgColor: color.bgColor,
-          textColor: color.textColor,
-        };
-        const newHashArr = [...hashArr, newTag];
-        setHashArr(newHashArr);
-        handleTagChange(newHashArr.map((item) => item.tag));
-        setHashtag("");
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault(); // 엔터 키 입력을 무시하여 폼 제출 방지
+        if (e.currentTarget.value.trim() !== "") {
+          const color = colors[Math.floor(Math.random() * colors.length)];
+          const newTag = {
+            id: Date.now(),
+            tag: e.currentTarget.value,
+            bgColor: color.bgColor,
+            textColor: color.textColor,
+          };
+          const newHashArr = [...hashArr, newTag];
+          setHashArr(newHashArr);
+          handleTagChange(newHashArr.map((item) => item.tag));
+          setHashtag("");
+        }
       }
     },
     [hashArr, handleTagChange],
@@ -116,7 +119,7 @@ export default function TagInput({
               className='flex-grow text-[10px] font-normal outline-none tablet:text-[12px]'
               value={hashtag}
               onChange={onChangeHashtag}
-              onKeyUp={onKeyUp}
+              onKeyDown={onKeyDown} // onKeyDown 이벤트 핸들러 추가
             />
           )}
         </div>
@@ -124,4 +127,3 @@ export default function TagInput({
     </div>
   );
 }
-
