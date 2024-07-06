@@ -1,41 +1,39 @@
-import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { CreateCardData } from "@/lib/api/types/cards";
+
+import fetcher from "@/lib/api/fetcher";
+import Button from "@/components/Button";
+import Input from "@/components/Input/Input";
 import Calendar from "@/components/Input/Calendar";
 import DropDown from "@/components/Input/DropDown";
-import Input from "@/components/Input/Input";
 import Textarea from "@/components/Input/Textarea";
 import TagInput from "@/components/Input/TagInput";
 import ImgInput from "@/components/Input/ImgInput";
-import Button from "@/components/Button";
-import {
-  UseQueryResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import fetcher from "@/lib/api/fetcher";
-import { AxiosError, AxiosRequestConfig } from "axios";
-import { CreateCardData } from "@/lib/api/types/cards";
+
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useRouter } from "next/router";
 dayjs.extend(customParseFormat);
 
 interface CardAddProps {
   isOpen: boolean;
+  columnId: number;
   onClose: () => void;
   buttonAction?: () => void;
   createButtonText: string;
   cancelButtonText: string;
-  columnId: number;
 }
 
 export default function CardAddModal({
   isOpen,
-  buttonAction,
+  columnId,
   onClose,
+  buttonAction,
   createButtonText,
   cancelButtonText,
-  columnId,
 }: CardAddProps) {
   const [dropData, setDropData] = useState<string>("");
   const [assigneeUserId, setAssigneeUserId] = useState<number | null>(null);
@@ -84,7 +82,7 @@ export default function CardAddModal({
     },
     onError: (error) => {
       if (error.response) {
-        console.error(error.response.data);
+        throw error;
       }
     },
   });
@@ -119,15 +117,6 @@ export default function CardAddModal({
     setImgFile(file);
   };
 
-  useEffect(() => {
-    console.log(assigneeUserId);
-    console.log(inputData);
-    console.log(textData);
-    console.log(startDate);
-    console.log(tagData);
-    console.log(imgFile);
-  }, [assigneeUserId, inputData, textData, startDate, tagData, imgFile]);
-
   const handleButtonClick = async () => {
     let imgData = "";
     if (imgFile) {
@@ -144,10 +133,6 @@ export default function CardAddModal({
       tags: tagData,
     };
 
-    // if (imgData) {
-    //   cardData.imageUrl = imgData;
-    // }
-
     mutation.mutate(cardData);
 
     if (buttonAction) {
@@ -163,8 +148,8 @@ export default function CardAddModal({
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 box-border h-screen w-screen border bg-black bg-opacity-50'>
-      <div className='fixed inset-0 m-auto h-[780px] max-w-[80vw] overflow-auto rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[750px] tablet:max-w-[50vw] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
+    <div className='fixed inset-0 z-50 box-border h-full w-full border bg-black bg-opacity-50'>
+      <div className='fixed inset-0 z-50 m-auto h-[869px] w-[327px] rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[907px] tablet:w-[506px] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
         <h1 className='text-[20px] font-bold tablet:text-[24px]'>할 일 생성</h1>
         <form
           onSubmit={(e) => {
@@ -219,3 +204,4 @@ export default function CardAddModal({
     </div>
   );
 }
+

@@ -1,12 +1,18 @@
 /* 대시보드 이름이나 색 변경에 관한 코드 */
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DashBoardForm from "./components/DashBoardForm";
 import { useRouter } from "next/router";
 import { AxiosRequestConfig, AxiosError } from "axios";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
-import { useQuery, UseQueryResult, useMutation } from "@tanstack/react-query";
+import {
+  useQuery,
+  UseQueryResult,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
+import { useAtom } from "jotai";
+import { dashboardTitleAtom, dashboardColorAtom } from "@/atoms/dashboardAtom";
 
 const colors = ["green", "purple", "orange", "blue", "pink"] as const;
 type Color = (typeof colors)[number];
@@ -23,6 +29,7 @@ const colorMap: Record<Color, string> = {
 const ChangeCard = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
+  const queryClient = useQueryClient();
 
   // 대시보드 데이터 GET
   const dashboardConfig: AxiosRequestConfig = {
@@ -40,6 +47,30 @@ const ChangeCard = () => {
     enabled: !!dashboardId,
   });
 
+  // 초기 선택 색상을 설정
+  const initialColor =
+    (Object.keys(colorMap) as Color[]).find(
+      (key) => colorMap[key] === dashboardData?.color,
+    ) || "green";
+
+  const [changeTitle, setChangeTitle] = useState("");
+  const [selectedColor, setSelectedColor] = useState<Color>(initialColor);
+  const [dashboardTitle, setDashboardTitle] = useAtom(dashboardTitleAtom);
+  const [dashboardColor, setDashboardColor] = useAtom(dashboardColorAtom);
+
+  // 데이터가 로드될 때마다 상태를 업데이트합니다.
+  useEffect(() => {
+    if (dashboardData) {
+      setDashboardTitle(dashboardData.title);
+      setDashboardColor(dashboardData.color);
+      setSelectedColor(
+        (Object.keys(colorMap) as Color[]).find(
+          (key) => colorMap[key] === dashboardData.color,
+        ) || "green",
+      );
+    }
+  }, [dashboardData, setDashboardTitle, setDashboardColor]);
+
   const mutation = useMutation<
     DashboardDetailResponse,
     AxiosError,
@@ -55,6 +86,9 @@ const ChangeCard = () => {
     },
     onSuccess: (data) => {
       // 성공적으로 대시보드 정보가 업데이트된 경우 호출됨
+      queryClient.invalidateQueries({
+        queryKey: ["dashboardData", dashboardId],
+      });
       setChangeTitle("");
       setSelectedColor(initialColor);
       setDashboardTitle(data.title);
@@ -64,21 +98,6 @@ const ChangeCard = () => {
       console.error(error);
     },
   });
-
-  //초기 선택 색상을 설정
-  const initialColor =
-    (Object.keys(colorMap) as Color[]).find(
-      (key) => colorMap[key] === dashboardData?.color,
-    ) || "green";
-
-  const [changeTitle, setChangeTitle] = useState("");
-  const [selectedColor, setSelectedColor] = useState<Color>(initialColor);
-  const [dashboardTitle, setDashboardTitle] = useState(
-    dashboardData?.title || "",
-  );
-  const [dashboardColor, setDashboardColor] = useState(
-    dashboardData?.color || "",
-  );
 
   // 색상 변경 시 호출되는 함수
   const handleColorChange = (color: Color) => {
@@ -149,7 +168,7 @@ const ChangeCard = () => {
           name='title'
           value={changeTitle}
           onChange={handleTitleChange}
-          placeholder='변경버튼 누르고 새로고침하시면 적용됩니다'
+          placeholder='수정할 대시보드 제목 입력해주세요'
         />
         <DashBoardForm.Button type='button' onClick={handleSubmit}>
           변경

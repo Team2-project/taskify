@@ -4,7 +4,7 @@ import Button from "@/components/Button";
 import fetcher from "@/lib/api/fetcher";
 import { useRouter } from "next/router";
 import { DashboardInvitationsResponse } from "@/lib/api/types/dashboards";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import DashBoardForm from "./components/DashBoardForm";
 import InvitationModal from "./InvitationModal";
@@ -26,6 +26,8 @@ const InvitationList: React.FC = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
 
+  const queryClient = useQueryClient();
+
   const invitationsConfig: AxiosRequestConfig = {
     url: `/dashboards/${dashboardId}/invitations?page=${page}&size=${size}`,
     method: "GET",
@@ -36,23 +38,28 @@ const InvitationList: React.FC = () => {
     error: invitationsError,
     isLoading: invitationsLoading,
     refetch: refetchInvitations,
-  }: UseQueryResult<DashboardInvitationsResponse, Error> = useQuery({
+  } = useQuery({
     queryKey: ["invitationsData", dashboardId, page],
     queryFn: () => fetcher<DashboardInvitationsResponse>(invitationsConfig),
     enabled: !!dashboardId,
   });
 
-  const handleButtonClick = async (invitationId: number) => {
-    try {
-      await fetcher({
+  const mutation = useMutation({
+    mutationFn: (invitationId: number) =>
+      fetcher({
         url: `dashboards/${dashboardId}/invitations/${invitationId}`,
         method: "DELETE",
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["invitationsData", dashboardId, page],
       });
+    },
+  });
 
-      setDeletedInvitations((prevDeleted) => [...prevDeleted, invitationId]);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleButtonClick = (invitationId: number) => {
+    mutation.mutate(invitationId);
+    setDeletedInvitations((prevDeleted) => [...prevDeleted, invitationId]);
   };
 
   const handleInvitation = () => {
@@ -122,16 +129,22 @@ const InvitationList: React.FC = () => {
         </DashBoardForm>
       </div>
 
-      <div className='flex flex-col gap-[24px]'>
-        {filteredInvitations.map((invitation) => (
-          <CustomComponent
-            key={invitation.id}
-            title={invitation.invitee.email}
-            buttonLabel='취소'
-            onButtonClick={() => handleButtonClick(invitation.id)}
-          />
-        ))}
-      </div>
+      {filteredInvitations.length === 0 ? (
+        <div className='mt-[100px] flex justify-center'>
+          <p>초대 요청한 구성원이 없습니다</p>
+        </div>
+      ) : (
+        <div className='flex flex-col gap-[24px]'>
+          {filteredInvitations.map((invitation) => (
+            <CustomComponent
+              key={invitation.id}
+              title={invitation.invitee.email}
+              buttonLabel='취소'
+              onButtonClick={() => handleButtonClick(invitation.id)}
+            />
+          ))}
+        </div>
+      )}
 
       <InvitationModal
         isModalOpen={isModalOpen}
