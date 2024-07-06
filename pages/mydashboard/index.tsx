@@ -1,23 +1,26 @@
-import DashboardLayout from "@/components/Layout/DashboardLayout";
-import AddButton from "@/components/Button/AddButton/AddButton";
-import ListButton from "@/components/Button/ListButton/ListButton";
-import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard";
-import InvitedDashboard from "@/components/Table/InvitedDashboard/InvitedDashboard";
-import { useRouter } from "next/router";
-import { useState, useEffect, ChangeEvent } from "react";
+// MyDashboard.tsx
+
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { DashboardsResponse } from "@/lib/api/types/dashboards";
 import fetcher from "@/lib/api/fetcher";
 import { AxiosRequestConfig } from "axios";
 import usePagination from "@/components/Pagination/usePagination";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateDashboardRequest, DashboardResponse } from "@/lib/api/types/dashboards";
+import {
+  CreateDashboardRequest,
+  DashboardResponse,
+} from "@/lib/api/types/dashboards";
+import DashboardLayout from "@/components/Layout/DashboardLayout";
+import AddButton from "@/components/Button/AddButton/AddButton";
+import ListButton from "@/components/Button/ListButton/ListButton";
+import CreateDashBoard from "@/components/Modal/CreateDashBoard/CreateDashBoard";
+import InvitedDashboard from "@/components/Table/InvitedDashboard/InvitedDashboard";
+import { useRouter } from "next/router";
 
-
-export default function MyDashBoard() {
+const MyDashBoard = () => {
   const router = useRouter();
-  const [inputValue, setInputValue] = useState('')
-
+  const [inputValue, setInputValue] = useState("");
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setNewDashboardTitle(e.target.value);
@@ -80,7 +83,11 @@ export default function MyDashBoard() {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<DashboardResponse, Error,CreateDashboardRequest>({
+  const mutation = useMutation<
+    DashboardResponse,
+    Error,
+    CreateDashboardRequest
+  >({
     mutationFn: async (title) => {
       const response = await fetcher<DashboardResponse>({
         url: "/dashboards",
@@ -91,18 +98,17 @@ export default function MyDashBoard() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["titles"]
-      })},
-      onError: (error) => {
-          console.error(error)
-        }
-    }
-  )
+        queryKey: ["titles"],
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const postDashboard = (e: React.FormEvent, color: string) => {
-    // 자식 컴포넌트가 부모 컴포넌트한테 값을 전달해주려면
-    // 함수를 통해, (함수의 parameter를 통해) 전달이 가능하다!
     e.preventDefault();
-    mutation.mutate({title: inputValue, color})
+    mutation.mutate({ title: inputValue, color });
   };
 
   const BoardButtons = () => {
@@ -112,6 +118,7 @@ export default function MyDashBoard() {
         <ListButton
           className='mb-[8px] w-full tablet:mx-[5px] tablet:my-[5px] desktop:w-332'
           children={dashboard.title}
+          backgroundColor={dashboard.color} // 대시보드의 색상을 backgroundColor로 전달
           createdByMe={dashboard.createdByMe}
           onClick={() => {
             router.push(`/dashboard/${dashboard.id}`);
@@ -151,8 +158,9 @@ export default function MyDashBoard() {
               onClick={() => {
                 setIsModalOpen(true);
               }}
-              children='새로운 대시보드'
-            />
+            >
+              새로운 대시보드
+            </AddButton>
 
             {/* 대시보드 버튼 목록 */}
             <BoardButtons />
@@ -175,7 +183,9 @@ export default function MyDashBoard() {
             onClose={() => {
               setIsModalOpen(false);
             }}
-            onSubmit={() => {postDashboard}}
+            onSubmit={() => {
+              postDashboard;
+            }}
             onChange={handleChangeInput}
           />
 
@@ -187,4 +197,6 @@ export default function MyDashBoard() {
       </DashboardLayout>
     </>
   );
-}
+};
+
+export default MyDashBoard;
