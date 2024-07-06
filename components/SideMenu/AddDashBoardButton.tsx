@@ -35,8 +35,9 @@ const AddDashboardButton = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["titles"]
-      })},
+        queryKey: ["DashboardsResponse"]
+      });
+      ()=>setModalOpen(false)},
       onError: (error) => {
           console.error(error)
         }

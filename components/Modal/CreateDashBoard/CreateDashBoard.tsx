@@ -91,7 +91,7 @@ export default function CreateDashBoard({
         </div>
         <div className='flex items-center justify-center gap-[11px] py-[20px] tablet:py-[24px]'>
           <Button
-            //onClick={handleButtonClick}
+            onClick={handleButtonClick}
             type='submit'
             className='h-[42px] w-[138px] rounded-[8px] text-white'
           >
