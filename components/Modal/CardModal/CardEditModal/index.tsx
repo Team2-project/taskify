@@ -67,8 +67,8 @@ const CardEditModal: FC<CardEditModalProps> = ({
   if (!modalIsOpen) return null;
 
   return (
-    <div className='fixed inset-0 box-border h-full w-full border bg-black bg-opacity-50'>
-      <div className='fixed inset-0 m-auto h-[869px] w-[327px] rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[907px] tablet:w-[506px] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50'>
+      <div className='relative max-h-[760px] w-[90vw] max-w-[327px] overflow-y-auto rounded-[8px] bg-white p-[20px] tablet:max-h-[760px] tablet:w-[70vw] tablet:max-w-[506px] tablet:p-[28px] desktop:max-h-[760px] desktop:w-[50vw] desktop:max-w-[506px]'>
         <Header title='할 일 수정' onClose={onClose} />
         <FormContent
           formData={formData}

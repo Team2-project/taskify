@@ -1,12 +1,12 @@
-import Link from "next/link";
 import { UrlObject } from "url";
-import DefaultButton from "../Button";
 import { ReactNode } from "react";
+import Link from "next/link";
+import DefaultButton from "../Button";
 
 type LinkButtonProps = {
-  className?: string;
-  children: ReactNode;
   to: string | UrlObject;
+  children: ReactNode;
+  className?: string;
 };
 
 export default function LinkButton({

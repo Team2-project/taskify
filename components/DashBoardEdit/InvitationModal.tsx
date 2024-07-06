@@ -1,5 +1,3 @@
-/* 초대하기 모달창 관련 코드 */
-
 import React, { useState } from "react";
 import BasicModal from "@/components/Modal/BasicModal";
 import { validateEmail } from "@/lib/validation";
@@ -8,10 +6,15 @@ import fetcher from "@/lib/api/fetcher";
 import { InviteDashboardRequest } from "@/lib/api/types/dashboards";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ParentComponentProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
+}
+
+interface ErrorResponse {
+  message: string;
 }
 
 const InvitationModal: React.FC<ParentComponentProps> = ({
@@ -24,11 +27,13 @@ const InvitationModal: React.FC<ParentComponentProps> = ({
   const router = useRouter();
   const { dashboardId } = router.query as { dashboardId: string };
 
+  const queryClient = useQueryClient();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
 
-    //이메일 유효성 검사
+    // 이메일 유효성 검사
     const errorMessage = validateEmail(value);
     if (errorMessage) {
       setError(errorMessage);
@@ -39,36 +44,36 @@ const InvitationModal: React.FC<ParentComponentProps> = ({
     }
   };
 
-  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
-  const handleButtonAction = async () => {
-    try {
-      const formData: InviteDashboardRequest = {
-        email: inputValue,
-      };
-
-      // 대시보드 초대 요청
-      const response = await fetcher<InviteDashboardRequest>({
+  const mutation = useMutation({
+    mutationFn: (formData: InviteDashboardRequest) =>
+      fetcher<InviteDashboardRequest>({
         url: `/dashboards/${dashboardId}/invitations`,
         method: "POST",
         data: formData,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["invitationsData", dashboardId],
       });
-
-      console.log(response);
-      toast.success("초대 요청이 완료되었습니다!"); // 성공 토스트 메시지
-
-      setError("");
-      setShowError(false);
+      toast.success("초대 요청이 완료되었습니다!");
       handleCloseModal();
-    } catch (error: unknown) {
-      if (error instanceof AxiosError && error.response) {
-        toast.error(error.response.data.message);
+    },
+    onError: (error: AxiosError) => {
+      if (error.response) {
+        const responseData = error.response.data as ErrorResponse;
+        toast.error(responseData.message);
       } else {
         toast.error("초대 요청 중 오류가 발생했습니다.");
       }
-    }
+    },
+  });
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData: InviteDashboardRequest = {
+      email: inputValue,
+    };
+    mutation.mutate(formData);
   };
 
   return (
@@ -78,7 +83,7 @@ const InvitationModal: React.FC<ParentComponentProps> = ({
       onClose={handleCloseModal}
       onSubmit={handleFormSubmit}
       onChange={handleInputChange}
-      buttonAction={handleButtonAction}
+      buttonAction={(e) => handleFormSubmit(e as any)}
       title='초대하기'
       subTitle='이메일'
       placeholder='이메일을 입력하세요'

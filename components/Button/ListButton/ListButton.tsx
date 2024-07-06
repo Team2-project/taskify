@@ -30,7 +30,7 @@ export default function ListButton({
           <div className='whitespace-nowrap text-[14px] tablet:text-[16px]'>
             {children}
           </div>
-          {createdByMe && <img src='icon/ic_crown.svg' alt='왕관' />}
+          {createdByMe && <img src='icon/ic_crown.svg' alt='왕관' className="w-[20px]"/>}
         </div>
       </div>
       <img src='icon/ic_arrow_forward.svg' alt='화살표' />

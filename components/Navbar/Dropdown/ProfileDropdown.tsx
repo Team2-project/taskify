@@ -3,16 +3,36 @@
 */
 
 import { FC } from "react";
-import { useAtom } from "jotai";
+import { useQuery } from "@tanstack/react-query";
 import UserBadge from "../../UserBadge";
 import DropdownMenu from "./DropdownMenu";
-import { userAtom } from "@/atoms/userAtom";
+import fetcher from "@/lib/api/fetcher";
+import { User } from "@/lib/api/types/users";
+
+const fetchUser = async () => {
+  const response = await fetcher<User>({
+    url: "/users/me",
+    method: "GET",
+  });
+  return response;
+};
 
 const ProfileDropdown: FC = () => {
-  const [user] = useAtom(userAtom);
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
 
-  if (!user) {
-    return null; // 사용자 정보가 없으면 아무것도 렌더링하지 않음
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error || !user) {
+    return null;
   }
 
   return (
@@ -21,7 +41,7 @@ const ProfileDropdown: FC = () => {
         <div className='flex items-center space-x-3'>
           <div className='relative inline-block'>
             <UserBadge
-              nickname={user.nickname.charAt(0)} // 프로필의 첫 글자 사용
+              nickname={user.nickname.charAt(0)} // 닉네임의 첫 글자 사용
               profileImageUrl={user.profileImageUrl ?? undefined}
               bgColor='bg-green-10'
               textColor='text-white'

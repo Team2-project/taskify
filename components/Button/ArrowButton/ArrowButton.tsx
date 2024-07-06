@@ -1,15 +1,15 @@
 import React, { MouseEventHandler } from "react";
 
 type ArrowButtonProps = {
-  direction: "left" | "right";
   onClick: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
+  direction: "left" | "right";
 };
 
 export default function ArrowButton({
-  direction = "left",
   onClick,
   disabled = false,
+  direction = "left",
 }: ArrowButtonProps) {
   const baseClasses =
     "box-border h-[36px] w-[36px] border-[1px] border-gray-30 bg-white tablet:h-[40px] tablet:w-[40px]";
@@ -39,3 +39,4 @@ export default function ArrowButton({
     </button>
   );
 }
+
