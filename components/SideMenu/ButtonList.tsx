@@ -46,11 +46,12 @@ const getDashboard = ():DashboardResponse[] | null | JSX.Element => {
 const ButtonList = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
-  const dashboardArray = getDashboard()
-  const [buttonColor,setButtonColor] = useState(false);
+  const dashboardArray = getDashboard();
+  type buttonColor = number;
+  const [buttonColor,setButtonColor] = useState(-1);
 
-  const handleButtonColor = () => {
-
+  const handleButtonColor = (index:number) => {
+    return setButtonColor(index)
   }
 
   if(Array.isArray(dashboardArray)){
@@ -58,7 +59,7 @@ const ButtonList = () => {
       <div className="flex flex-col-reverse justify-start items-start">
       {dashboardArray.map((dashboard:DashboardResponse, index:number)=>(
         <Link key={index} href={`/dashboard/${dashboard.id}`}>
-          <button className="flex justify-start items-center w-[276px] h-[45px] cursor-pointer active:bg-[#F1EFFD] rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit">
+          <button onClick={()=>handleButtonColor(index)} className={`${buttonColor === index ? 'bg-[#F1EFFD]' : 'bg-none' } flex justify-start items-center w-[276px] h-[45px] cursor-pointer hover:bg-[#F1EFFD] rounded-[4px] max-desktop:w-[134px] max-tablet:w-fit`}>
             <ColorChip fill={dashboard.color}/>
             <p className="flex items-center justify-start truncate gap-2 text-gray-50  w-[275px] h-[45px] max-desktop:w-[134px] max-desktop:gap-1.5 max-tablet:hidden">{dashboard.title}{dashboard.createdByMe ? <CrownIcon className="w-[18px] h-[14px] viewBox-[0 0 18 14] max-desktop:w-[16px] max-desktop:h-[12px]"/> : null}</p>
             </button>
