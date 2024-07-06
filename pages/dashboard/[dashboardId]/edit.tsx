@@ -7,32 +7,31 @@ import BackLink from "@/components/MyPage/BackLink";
 import Button from "@/components/Button";
 import DeleteModal from "@/components/Modal/AlarmModal";
 import React, { useState } from "react";
-import fetcher from "@/lib/api/fetcher";
+import useDashboard from "@/hooks/useDashboard";
 
 const DashboardEditPage = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
+  const dashboardIdNumber = Number(dashboardId); //router로 dashboardId가 넘어오면 string으로 변환되어 Number로 전환
+
+  const { removeDashboard } = useDashboard(); // useDashboard 훅 사용
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const dashboardIdNumber = Number(dashboardId); //router로 dashboardId가 넘어오기 때문에 string으로 변환됨
 
   if (!dashboardId || isNaN(dashboardIdNumber)) {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
 
   const handleDelete = async () => {
-    try {
-      await fetcher({
-        url: `/dashboards/${dashboardId}`,
-        method: "DELETE",
-      });
-
-      console.log(`${dashboardId} 삭제되었습니다.`);
-      router.push("/mydashboard");
-    } catch (error) {
-      console.error("오류가 발생했습니다:", error);
-    }
+    removeDashboard(dashboardIdNumber, {
+      onSuccess: () => {
+        console.log(`${dashboardId} 삭제되었습니다.`);
+        router.push("/mydashboard");
+      },
+      onError: (error: Error) => {
+        console.error("오류가 발생했습니다:", error);
+      },
+    });
   };
 
   const handleOpenModal = () => {

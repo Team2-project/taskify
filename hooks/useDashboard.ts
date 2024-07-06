@@ -65,6 +65,7 @@ const useDashboard = () => {
     }
   };
 
+  // 대시보드 생성 mutation 옵션
   const mutationOptions: UseMutationOptions<
     DashboardResponse,
     Error,
@@ -79,6 +80,12 @@ const useDashboard = () => {
       console.error("Create dashboard failed:", error);
     },
   };
+
+  const { mutate: addDashboard } = useMutation<
+    DashboardResponse,
+    Error,
+    CreateDashboardRequest
+  >(mutationOptions);
 
   // 대시보드 수정
   const updateDashboard = async (
@@ -130,6 +137,14 @@ const useDashboard = () => {
       console.error("Delete dashboard failed", error);
     },
   });
+  return {
+    dashboards: displayData?.dashboards,
+    isLoading,
+    error,
+    addDashboard,
+    editDashboard,
+    removeDashboard,
+  };
 };
 
 export default useDashboard;
