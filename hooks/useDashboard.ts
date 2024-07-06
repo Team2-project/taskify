@@ -140,6 +140,7 @@ const useDashboard = () => {
     addDashboard,
     editDashboard,
     removeDashboard,
+    updateDashboard, // 추가: updateDashboard 함수를 반환
   };
 };
 

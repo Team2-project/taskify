@@ -2,17 +2,9 @@
 import React, { useState, useEffect } from "react";
 import DashBoardForm from "./components/DashBoardForm";
 import { useRouter } from "next/router";
-import { AxiosRequestConfig, AxiosError } from "axios";
-import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
-import {
-  useQuery,
-  UseQueryResult,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import fetcher from "@/lib/api/fetcher";
 import { useAtom } from "jotai";
 import { dashboardTitleAtom, dashboardColorAtom } from "@/atoms/dashboardAtom";
+import useDashboard from "@/hooks/useDashboard";
 
 const colors = ["green", "purple", "orange", "blue", "pink"] as const;
 type Color = (typeof colors)[number];
@@ -29,23 +21,12 @@ const colorMap: Record<Color, string> = {
 const ChangeCard = () => {
   const router = useRouter();
   const { dashboardId } = router.query;
-  const queryClient = useQueryClient();
+  const { dashboards, isLoading, error, editDashboard } = useDashboard();
 
-  // 대시보드 데이터 GET
-  const dashboardConfig: AxiosRequestConfig = {
-    url: `/dashboards/${dashboardId}`,
-    method: "GET",
-  };
-
-  const {
-    data: dashboardData,
-    error: dashboardError,
-    isLoading: dashboardLoading,
-  }: UseQueryResult<DashboardDetailResponse, Error> = useQuery({
-    queryKey: ["dashboardData", dashboardId],
-    queryFn: () => fetcher<DashboardDetailResponse>(dashboardConfig),
-    enabled: !!dashboardId,
-  });
+  // 대시보드 데이터를 가져옵니다.
+  const dashboardData = dashboards?.find(
+    (dashboard) => dashboard.id === Number(dashboardId),
+  );
 
   // 초기 선택 색상을 설정
   const initialColor =
@@ -71,49 +52,22 @@ const ChangeCard = () => {
     }
   }, [dashboardData, setDashboardTitle, setDashboardColor]);
 
-  const mutation = useMutation<
-    DashboardDetailResponse,
-    AxiosError,
-    { title: string; color: string }
-  >({
-    mutationFn: async (variables) => {
-      const response = await fetcher<DashboardDetailResponse>({
-        url: `/dashboards/${dashboardId}`,
-        method: "PUT",
-        data: variables,
-      });
-      return response;
-    },
-    onSuccess: (data) => {
-      // 성공적으로 대시보드 정보가 업데이트된 경우 호출됨
-      queryClient.invalidateQueries({
-        queryKey: ["dashboardData", dashboardId],
-      });
-      setChangeTitle("");
-      setSelectedColor(initialColor);
-      setDashboardTitle(data.title);
-      setDashboardColor(data.color);
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
-  // 색상 변경 시 호출되는 함수
   const handleColorChange = (color: Color) => {
     setSelectedColor(color);
   };
 
-  // 제목 입력값 변경 시 호출되는 함수
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChangeTitle(e.target.value);
   };
 
   const handleSubmit = async () => {
     try {
-      await mutation.mutateAsync({
-        title: changeTitle || dashboardTitle,
-        color: colorMap[selectedColor],
+      editDashboard({
+        dashboardId: Number(dashboardId),
+        dashboardData: {
+          title: changeTitle || dashboardTitle,
+          color: colorMap[selectedColor],
+        },
       });
     } catch (error) {
       console.error("대시보드 변경 중 오류가 발생했습니다:", error);
@@ -124,11 +78,11 @@ const ChangeCard = () => {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
 
-  if (dashboardLoading) {
+  if (isLoading) {
     return <div>로딩 중...</div>;
   }
 
-  if (dashboardError || !dashboardData) {
+  if (error || !dashboardData) {
     return <div>데이터를 불러오는 중 오류가 발생했습니다</div>;
   }
 
