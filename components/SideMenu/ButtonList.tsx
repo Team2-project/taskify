@@ -19,7 +19,7 @@ const getDashboard = () => {
     method: "GET",
     params: {
       navigationMethod: "pagination",
-      size: 40,
+      size: 50,
     },
   };
 
@@ -28,7 +28,7 @@ const getDashboard = () => {
     error: dashboardError,
     isLoading: dashboardLoading,
   } = useQuery<DashboardsResponse>({
-    queryKey: ["DashboardsResponse"],
+    queryKey: ["DashboardsResponse", config.params],
     queryFn: () => fetcher<DashboardsResponse>(config),
   });
 
@@ -53,10 +53,10 @@ const ButtonList = () => {
 
   //버튼 클릭 시 색 변하도록 하는 함수
   type buttonColor = number;
-  const [buttonColor,setButtonColor] = useState(-1);
-  const handleButtonColor = (index:number) => {
-    return setButtonColor(index)
-  }
+  const [buttonColor, setButtonColor] = useState(-1);
+  const handleButtonColor = (index: number) => {
+    return setButtonColor(index);
+  };
 
   if (Array.isArray(dashboardArray)) {
     return (
@@ -74,9 +74,12 @@ const ButtonList = () => {
 
           return (
             <Link href={`/dashboard/${dashboard.id}`} key={index}>
-              <button onClick={()=>handleButtonColor(index)} className={`${buttonColor === index ? 'bg-[#F1EFFD]' : 'bg-none'} flex h-[45px] w-[276px] cursor-pointer items-center justify-start rounded-[4px] hover:bg-[#F1EFFD] max-desktop:w-[134px] max-tablet:w-fit`}>
+              <button
+                onClick={() => handleButtonColor(index)}
+                className={`${buttonColor === index ? "bg-[#F1EFFD]" : "bg-none"} flex h-[45px] w-[276px] cursor-pointer items-center justify-start rounded-[4px] hover:bg-[#F1EFFD] max-desktop:w-[134px] max-tablet:w-fit`}
+              >
                 <ColorChip fill={color} />
-                <p className='flex items-center justify-start gap-2 text-gray-50 truncate max-desktop:gap-1.5 max-tablet:hidden'>
+                <p className='flex items-center justify-start gap-2 truncate text-gray-50 max-desktop:gap-1.5 max-tablet:hidden'>
                   {title}
                   {dashboard.createdByMe ? (
                     <CrownIcon className='viewBox-[0 0 18 14] h-[14px] w-[18px] max-desktop:h-[12px] max-desktop:w-[16px]' />
