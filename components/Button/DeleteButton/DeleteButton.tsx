@@ -1,14 +1,14 @@
-import { MouseEventHandler, ReactNode } from "react";
+import { MouseEventHandler } from "react";
 
 type DeleteButtonProps = {
-  className?: string;
-  onDelete?: MouseEventHandler<HTMLButtonElement>;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  onDelete?: MouseEventHandler<HTMLButtonElement>;
+  className?: string;
 };
 
 export default function DeleteButton({
-  onDelete,
   onClick,
+  onDelete,
   className = "",
 }: DeleteButtonProps) {
   const baseClasses =
@@ -34,3 +34,4 @@ export default function DeleteButton({
     </button>
   );
 }
+

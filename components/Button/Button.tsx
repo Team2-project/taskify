@@ -1,21 +1,21 @@
 import { MouseEventHandler, ReactNode, ButtonHTMLAttributes } from "react";
 
 type DefaultButtonProps = {
+  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
+  active?: boolean;
   children: ReactNode;
   disabled?: boolean;
   className?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
-  active?: boolean;
-  type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
 };
 
 export default function DefaultButton({
+  type = "button",
+  active = false,
   children = "",
   disabled = false,
   className = "",
   onClick,
-  active = false,
-  type = "button",
 }: DefaultButtonProps) {
   const baseClasses =
     "border-box select-none rounded-[8px] text-[14px] font-medium";
@@ -36,3 +36,4 @@ export default function DefaultButton({
     </button>
   );
 }
+
