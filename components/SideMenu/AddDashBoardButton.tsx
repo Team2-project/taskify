@@ -5,7 +5,6 @@ import { AxiosRequestConfig } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateDashboardRequest, DashboardResponse } from "@/lib/api/types/dashboards";
 import fetcher from "@/lib/api/fetcher";
-import DashBoard from "../DashBoard/DashBoard";
 
 const AddDashboardButton = () => {
   const [modalOpen, setModalOpen] = useState(false)

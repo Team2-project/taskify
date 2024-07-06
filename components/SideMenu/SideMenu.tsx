@@ -18,6 +18,7 @@ const LogoButton = () => {
   );
 };
 
+
 const SideMenu = () => {   
   return (
     <div className='fixed left-0 top-0 flex h-full w-[300px] flex-col items-center justify-start gap-[40px] border-r-[1px] border-gray-30 bg-white max-desktop:w-[160px] max-tablet:w-[67px]'>

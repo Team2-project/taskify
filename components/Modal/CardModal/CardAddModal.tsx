@@ -45,8 +45,6 @@ export default function CardAddModal({
   const [tagData, setTagData] = useState<string[]>([]);
   const [imgFile, setImgFile] = useState<File | null>(null);
 
-  // const columnId = 34499; // Mocked columnId
-
   const router = useRouter();
   const { dashboardId } = router.query;
 
@@ -117,7 +115,7 @@ export default function CardAddModal({
     setTagData(newTags);
   };
 
-  const handleImgChange = (file: File) => {
+  const handleImgChange = (file: File | null) => {
     setImgFile(file);
   };
 
@@ -144,8 +142,11 @@ export default function CardAddModal({
       description: textData,
       dueDate: startDate || "",
       tags: tagData,
-      imageUrl: imgData || "",
     };
+
+    // if (imgData) {
+    //   cardData.imageUrl = imgData;
+    // }
 
     mutation.mutate(cardData);
 
@@ -218,4 +219,3 @@ export default function CardAddModal({
     </div>
   );
 }
-
