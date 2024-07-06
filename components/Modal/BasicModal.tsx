@@ -56,9 +56,14 @@ export default function BasicModal({
 
   return (
     <div className='fixed inset-0 z-10 box-border h-full w-full bg-black bg-opacity-50'>
-      <div className='fixed inset-0 m-auto h-241 w-327 rounded-[8px] bg-white px-[20px] py-[28px] tablet:h-276 tablet:w-540 tablet:py-[32px]'>
+      <div className='fixed inset-0 m-auto h-274 w-327 rounded-[8px] bg-white px-[20px] py-[28px] tablet:h-276 tablet:w-540 tablet:py-[32px]'>
         <div className='mb-[16px] text-[20px] font-bold tablet:mb-[22px]'>
           {title}
+          {leftCornerContent && (
+            <div className='bottom-18 absolute right-8 transform'>
+              {leftCornerContent}
+            </div>
+          )}
         </div>
         <Form onSubmit={onSubmit}>
           <Form.Field
@@ -75,12 +80,8 @@ export default function BasicModal({
             showError={showError}
           />
         </Form>
-        {leftCornerContent && (
-          <div className='absolute bottom-14 left-8 transform'>
-            {leftCornerContent}
-          </div>
-        )}
-        <div className='mt-[10px] flex items-center gap-[11px] tablet:justify-end'>
+
+        <div className='mt-[36px] flex items-center gap-[11px] tablet:justify-end'>
           <Button
             onClick={handleCloseClick}
             className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50 tablet:h-48 tablet:w-120'
@@ -101,4 +102,3 @@ export default function BasicModal({
     </div>
   );
 }
-
