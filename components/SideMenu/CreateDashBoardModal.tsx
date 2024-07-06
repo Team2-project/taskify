@@ -26,6 +26,7 @@ const DashboardModal: React.FC<DashboardModalProps> = ({ isOpen, onClose }) => {
     e.preventDefault();
     const colorCode = colors[color];
     addDashboard({ title: inputValue, color: colorCode });
+    setInputValue(""); // 입력 필드 초기화
     onClose(); // 모달 닫기
   };
 
