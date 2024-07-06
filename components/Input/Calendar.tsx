@@ -4,14 +4,14 @@ import "react-datepicker/dist/react-datepicker.css";
 
 interface CalendarProps {
   subTitle: string;
-  handleDateChange: (date: Date | null) => void;
   startDate: Date | null;
+  handleDateChange: (date: Date | null) => void;
 }
 
 export default function Calendar({
   subTitle,
-  handleDateChange,
   startDate,
+  handleDateChange,
 }: CalendarProps) {
   const handleColor = (time: Date) => {
     return time.getHours() > 12 ? "text-success" : "text-error";
@@ -24,17 +24,17 @@ export default function Calendar({
       </div>
       <div className='relative flex h-[42px] items-center rounded-[6px] border-[1px] border-gray-30 p-4 active:border-[1px] active:border-violet-20 tablet:h-[48px]'>
         <DatePicker
-          showTimeSelect
-          timeClassName={handleColor}
-          showIcon
-          toggleCalendarOnIconClick
-          dateFormat='yyyy-MM-dd HH:mm'
-          selected={startDate}
           locale={ko}
+          showIcon
+          withPortal
+          showTimeSelect
+          selected={startDate}
+          toggleCalendarOnIconClick
+          timeClassName={handleColor}
+          dateFormat='yyyy-MM-dd HH:mm'
+          placeholderText='날짜를 선택해주세요'
           onChange={(date) => handleDateChange(date)}
           className='text-[14px] font-light tablet:text-[16px]'
-          withPortal
-          placeholderText='날자를 선택해주세요'
         />
       </div>
     </div>

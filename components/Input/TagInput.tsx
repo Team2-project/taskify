@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
 interface TagInputProps {
+  value?: string;
   subTitle: string;
   placeholder?: string;
-  value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleTagChange: (newTags: string[]) => void;
 }
@@ -17,9 +17,9 @@ const colors = [
 ];
 
 export default function TagInput({
+  value,
   subTitle,
   placeholder,
-  value,
   onChange,
   handleTagChange,
 }: TagInputProps) {
@@ -47,7 +47,7 @@ export default function TagInput({
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
-        e.preventDefault(); // 엔터 키 입력을 무시하여 폼 제출 방지
+        e.preventDefault();
         if (e.currentTarget.value.trim() !== "") {
           const color = colors[Math.floor(Math.random() * colors.length)];
           const newTag = {
@@ -119,7 +119,7 @@ export default function TagInput({
               className='flex-grow text-[10px] font-normal outline-none tablet:text-[12px]'
               value={hashtag}
               onChange={onChangeHashtag}
-              onKeyDown={onKeyDown} // onKeyDown 이벤트 핸들러 추가
+              onKeyDown={onKeyDown}
             />
           )}
         </div>
@@ -127,3 +127,4 @@ export default function TagInput({
     </div>
   );
 }
+

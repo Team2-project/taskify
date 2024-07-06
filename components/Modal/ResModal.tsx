@@ -1,23 +1,23 @@
 import Button from "@/components/Button";
 
 interface ModalProps {
-  isOpen: boolean;
+  type: "col" | "mypage";
   title: string;
-  DeleteButtonText: string;
+  isOpen: boolean;
   cancelButtonText: string;
+  DeleteButtonText: string;
   onClose: () => void;
   buttonAction?: () => void;
-  type: "col" | "mypage";
 }
 
 export default function ResModal({
-  isOpen,
+  type = "col",
   title,
+  isOpen,
+  cancelButtonText,
+  DeleteButtonText,
   onClose,
   buttonAction,
-  DeleteButtonText,
-  cancelButtonText,
-  type = "col",
 }: ModalProps) {
   const handleDeleteClick = () => {
     if (buttonAction) {
@@ -67,3 +67,4 @@ export default function ResModal({
     </div>
   );
 }
+

@@ -1,23 +1,20 @@
 import React from "react";
-import { useRouter } from "next/router";
 
 interface ModalProps {
   isOpen: boolean;
-  onClose: () => void;
   message: string;
   buttonText: string;
+  onClose: () => void;
   buttonAction?: (memberId?: number) => void;
 }
 
 const AlarmModal: React.FC<ModalProps> = ({
   isOpen,
-  onClose,
   message,
   buttonText,
+  onClose,
   buttonAction,
 }) => {
-  const router = useRouter();
-
   const handleButtonClick = () => {
     if (buttonAction) {
       buttonAction();
@@ -56,3 +53,4 @@ const AlarmModal: React.FC<ModalProps> = ({
 };
 
 export default AlarmModal;
+

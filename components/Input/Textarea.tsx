@@ -1,14 +1,14 @@
 interface TextareaProps {
   subTitle: string;
+  textData: string;
   placeholder?: string;
   handleTextChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  textData: string;
 }
 
 export default function Textarea({
   subTitle,
-  placeholder,
   textData,
+  placeholder,
   handleTextChange,
 }: TextareaProps) {
   return (

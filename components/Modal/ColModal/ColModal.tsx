@@ -7,12 +7,12 @@ interface ModalProps {
   title: string;
   subTitle: string;
   type: "add" | "edit";
+  placeholder: string;
   createButtonText: string;
   cancelButtonText: string;
-  placeholder: string;
+  onClose: () => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClose: () => void;
   buttonAction?: () => void;
 }
 
@@ -22,12 +22,12 @@ export default function ColModal({
   title,
   subTitle,
   type = "add",
+  placeholder,
   createButtonText,
   cancelButtonText,
-  placeholder,
+  onClose,
   onSubmit,
   onChange,
-  onClose,
   buttonAction,
 }: ModalProps) {
   const handleButtonClick = () => {
@@ -75,7 +75,7 @@ export default function ColModal({
               삭제하기
             </button>
           )}
-          <div className='flex w-full items-center justify-center tablet:justify-end gap-[11px]'>
+          <div className='flex w-full items-center justify-center gap-[11px] tablet:justify-end'>
             <Button
               onClick={handleButtonClick}
               className='h-[42px] w-[138px] rounded-[8px] text-white'

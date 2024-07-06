@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { dropButton } from "../Modal/CardModal/list";
 import { useRouter } from "next/router";
+import { dropButton } from "../Modal/CardModal/list";
 import { MembersResponse } from "@/lib/api/types/members";
 import { AxiosRequestConfig } from "axios";
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
@@ -9,21 +9,21 @@ import fetcher from "@/lib/api/fetcher";
 
 interface DropDownProps {
   subTitle: string;
+  dropData: string;
   placeholder?: string;
   handleDropClick: (userId: number, nickname: string) => void;
-  dropData: string;
 }
 
 export default function DropDown({
   subTitle,
+  dropData,
   placeholder,
   handleDropClick,
-  dropData,
 }: DropDownProps) {
-  const [dropOpen, setDropOpen] = useState<boolean>(false);
-
   const router = useRouter();
   const { dashboardId } = router.query;
+
+  const [dropOpen, setDropOpen] = useState<boolean>(false);
 
   const membersConfig: AxiosRequestConfig = {
     url: `/members?dashboardId=${dashboardId}`,
@@ -41,7 +41,6 @@ export default function DropDown({
         const response = await fetcher<MembersResponse>(membersConfig);
         return response;
       } catch (error) {
-        console.error("API 요청 중 오류 발생:", error);
         throw error;
       }
     },
