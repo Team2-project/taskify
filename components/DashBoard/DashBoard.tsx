@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import BoardColumn from "./Card/BoardColumn";
 import { useRouter } from "next/router";
 import { AxiosRequestConfig } from "axios";
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import {
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
 import { ColumnResponse } from "@/lib/api/types/columns";
 import Button from "@/components/Button";
@@ -16,6 +20,7 @@ const DashBoard = ({ color }: Props) => {
   const router = useRouter();
   const { dashboardId } = router.query;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const queryClient = useQueryClient(); //추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
 
   const handleClick = () => {
     setIsModalOpen(true);
@@ -44,6 +49,12 @@ const DashBoard = ({ color }: Props) => {
     enabled: !!dashboardId,
   });
 
+  const refetchColumns = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["columns", Number(dashboardId)],
+    });
+  }; //추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
+
   if (!dashboardId || Array.isArray(dashboardId)) {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
@@ -71,6 +82,7 @@ const DashBoard = ({ color }: Props) => {
           columnId={item.id}
           title={item.title}
           color={color}
+          refetchColumns={refetchColumns} //추가(진): 카드수정 후 새로고침하지 않고 update 반영하기 위해
         />
       ))}
       <div className='p-[9px] desktop:m-[20px] desktop:mt-[60px]'>

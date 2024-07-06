@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { dropButton } from "../list";
+import { dropButton } from "../../list";
 
 interface DropDownProps {
   subTitle: string;
