@@ -32,7 +32,7 @@ export default function Calendar({
           toggleCalendarOnIconClick
           timeClassName={handleColor}
           dateFormat='yyyy-MM-dd HH:mm'
-          placeholderText='날자를 선택해주세요'
+          placeholderText='날짜를 선택해주세요'
           onChange={(date) => handleDateChange(date)}
           className='text-[14px] font-light tablet:text-[16px]'
         />
