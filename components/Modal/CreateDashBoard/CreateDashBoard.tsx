@@ -67,7 +67,7 @@ export default function CreateDashBoard({
             tabletWidth='tablet-w-full'
             desktopWidth='desktop-w-full'
           />
-          <div className='mt-[24px] flex justify-around tablet:mt-[28px] tablet:justify-around'>
+          <div className='mr-[107px] mt-[24px] flex justify-around gap-[10px] tablet:mr-[291px] tablet:mt-[32px] tablet:justify-around'>
             {colors.map((color) => (
               <div
                 key={color}
@@ -89,17 +89,17 @@ export default function CreateDashBoard({
               </div>
             ))}
           </div>
-          <div className='flex items-center justify-center gap-[11px] py-[20px] tablet:py-[24px]'>
+          <div className='flex items-center justify-center gap-[11px] py-[20px] tablet:justify-end tablet:py-[10px]'>
             <Button
               //onClick={handleButtonClick}
               type='submit'
-              className='h-[42px] w-[138px] rounded-[8px] text-white'
+              className='h-[42px] w-[138px] rounded-[8px] text-white tablet:h-48 tablet:w-120'
             >
               {createButtonText}
             </Button>
             <Button
               onClick={handleCloseClick}
-              className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50'
+              className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50 tablet:h-48 tablet:w-120'
             >
               {cancelButtonText}
             </Button>
