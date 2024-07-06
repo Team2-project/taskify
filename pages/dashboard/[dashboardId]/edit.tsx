@@ -7,37 +7,31 @@ import BackLink from "@/components/MyPage/BackLink";
 import Button from "@/components/Button";
 import DeleteModal from "@/components/Modal/AlarmModal";
 import React, { useState } from "react";
-import fetcher from "@/lib/api/fetcher";
-import { useQueryClient } from "@tanstack/react-query";
+import useDashboard from "@/hooks/useDashboard";
 
 const DashboardEditPage = () => {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const { dashboardId } = router.query;
+  const dashboardIdNumber = Number(dashboardId); //router로 dashboardId가 넘어오면 string으로 변환되어 Number로 전환
+
+  const { removeDashboard } = useDashboard(); // useDashboard 훅 사용
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const dashboardIdNumber = Number(dashboardId); // router로 dashboardId가 넘어오기 때문에 string으로 변환됨
 
   if (!dashboardId || isNaN(dashboardIdNumber)) {
     return <div>유효하지 않은 대시보드 ID</div>;
   }
 
   const handleDelete = async () => {
-    try {
-      await fetcher({
-        url: `/dashboards/${dashboardId}`,
-        method: "DELETE",
-      });
-
-      // 대시보드 삭제 후 쿼리 무효화 및 다시 가져오기
-      await queryClient.invalidateQueries({ queryKey: ["DashboardsResponse"] });
-
-      console.log(`${dashboardId} 삭제되었습니다.`);
-      router.push("/mydashboard");
-    } catch (error) {
-      console.error("오류가 발생했습니다:", error);
-    }
+    removeDashboard(dashboardIdNumber, {
+      onSuccess: () => {
+        console.log(`${dashboardId} 삭제되었습니다.`);
+        router.push("/mydashboard");
+      },
+      onError: (error: Error) => {
+        console.error("오류가 발생했습니다:", error);
+      },
+    });
   };
 
   const handleOpenModal = () => {
@@ -55,7 +49,7 @@ const DashboardEditPage = () => {
       showBadgeCounter={true}
       showProfileDropdown={true}
     >
-      <div className='p-[12px] tablet:p-[20px]'>
+      <div className='p-[12px] tablet:p-[20]'>
         <BackLink href={`/dashboard/${dashboardId}`} label='돌아가기' />
         <div className='flex flex-col gap-[11px] tablet:gap-3'>
           {/* 대시보드 정보 변경 컴포넌트 */}

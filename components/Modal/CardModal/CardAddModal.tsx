@@ -118,9 +118,13 @@ export default function CardAddModal({
   };
 
   const handleButtonClick = async () => {
-    let imgData = "";
+    let imgData: string= "";
     if (imgFile) {
-      imgData = await uploadCardImg(columnId, imgFile);
+      try {
+        imgData = await uploadCardImg(columnId, imgFile);
+      } catch (error) {
+        throw error;
+      }
     }
 
     const cardData: CreateCardData = {
@@ -131,6 +135,7 @@ export default function CardAddModal({
       description: textData,
       dueDate: startDate || "",
       tags: tagData,
+      ...(imgData ? { imageUrl: imgData } : {}),
     };
 
     mutation.mutate(cardData);
