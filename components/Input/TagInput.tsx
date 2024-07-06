@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 
 interface TagInputProps {
   value?: string;
@@ -27,10 +27,11 @@ export default function TagInput({
   const [hashArr, setHashArr] = useState<
     { id: number; tag: string; bgColor: string; textColor: string }[]
   >([]);
+  const [isComposing, setIsComposing] = useState<boolean>(false);
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter") {
+      if (!isComposing && e.key === "Enter") {
         e.preventDefault();
         if (e.currentTarget.value.trim() !== "") {
           if (hashArr.length >= 5) {
@@ -51,7 +52,7 @@ export default function TagInput({
         }
       }
     },
-    [hashArr, handleTagChange],
+    [hashArr, handleTagChange, isComposing],
   );
 
   const onChangeHashtag = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +65,21 @@ export default function TagInput({
     setHashArr(newHashArr);
     handleTagChange(newHashArr.map((item) => item.tag));
   };
+
+  useEffect(() => {
+    const inputElement = document.querySelector("#tagInput") as HTMLInputElement;
+
+    const handleCompositionStart = () => setIsComposing(true);
+    const handleCompositionEnd = () => setIsComposing(false);
+
+    inputElement.addEventListener("compositionstart", handleCompositionStart);
+    inputElement.addEventListener("compositionend", handleCompositionEnd);
+
+    return () => {
+      inputElement.removeEventListener("compositionstart", handleCompositionStart);
+      inputElement.removeEventListener("compositionend", handleCompositionEnd);
+    };
+  }, []);
 
   return (
     <div className='mt-[18px] flex flex-col gap-[10px] tablet:mt-[26px]'>
@@ -102,6 +118,7 @@ export default function TagInput({
           ))}
           {hashArr.length < 5 && (
             <input
+              id="tagInput"
               placeholder={placeholder}
               className='flex-grow text-[10px] font-normal outline-none tablet:text-[12px]'
               value={hashtag}
