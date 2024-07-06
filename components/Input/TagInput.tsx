@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 interface TagInputProps {
   value?: string;
@@ -28,27 +28,15 @@ export default function TagInput({
     { id: number; tag: string; bgColor: string; textColor: string }[]
   >([]);
 
-  useEffect(() => {
-    if (value) {
-      setHashArr(
-        value.split(",").map((tag, index) => {
-          const color = colors[Math.floor(Math.random() * colors.length)];
-          return {
-            id: index,
-            tag: tag.trim(),
-            bgColor: color.bgColor,
-            textColor: color.textColor,
-          };
-        }),
-      );
-    }
-  }, [value]);
-
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter") {
         e.preventDefault();
         if (e.currentTarget.value.trim() !== "") {
+          if (hashArr.length >= 5) {
+            alert("최대 5개의 해시태그만 추가할 수 있습니다.");
+            return;
+          }
           const color = colors[Math.floor(Math.random() * colors.length)];
           const newTag = {
             id: Date.now(),
@@ -68,11 +56,11 @@ export default function TagInput({
 
   const onChangeHashtag = (e: React.ChangeEvent<HTMLInputElement>) => {
     setHashtag(e.target.value);
-    onChange && onChange(e);
+    if (onChange) onChange(e);
   };
 
   const removeTag = (idToRemove: number) => {
-    const newHashArr = hashArr.filter((item) => item.id !== idToRemove);
+    const newHashArr = hashArr.filter((tag) => tag.id !== idToRemove);
     setHashArr(newHashArr);
     handleTagChange(newHashArr.map((item) => item.tag));
   };
@@ -82,21 +70,25 @@ export default function TagInput({
       <div className='text-[16px] font-medium tablet:text-[18px]'>
         {subTitle}
       </div>
-      <div className='relative flex h-[42px] w-full items-center justify-center rounded-[6px] border-[1px] border-gray-30 p-3 tablet:h-[48px]'>
+      <div
+        id='modal'
+        className='relative flex h-[42px] w-full items-center justify-center rounded-[6px] border-[1px] border-gray-30 p-3 tablet:h-[48px]'
+      >
         <div className='flex w-full flex-nowrap items-center gap-[6px] overflow-hidden'>
           {hashArr.map((item) => (
             <div
               key={item.id}
-              className={`flex items-center justify-center gap-[5px] rounded-[6px] px-[7px] ${item.bgColor} tablet:gap-[7px]`}
+              className={`flex items-center justify-center gap-[5px] rounded-[6px] px-[7px] ${item.bgColor} ${item.textColor} tablet:gap-[7px]`}
               style={{
                 maxWidth: "150px",
                 overflow: "hidden",
                 whiteSpace: "nowrap",
                 textOverflow: "ellipsis",
               }}
+              onClick={() => removeTag(item.id)}
             >
               <div
-                className={`text-[10px] font-normal tablet:text-[12px] ${item.textColor}`}
+                className='text-[10px] font-normal tablet:text-[12px]'
                 style={{
                   overflow: "hidden",
                   whiteSpace: "nowrap",
@@ -105,12 +97,7 @@ export default function TagInput({
               >
                 {item.tag}
               </div>
-              <span
-                className='cursor-pointer font-semibold'
-                onClick={() => removeTag(item.id)}
-              >
-                &times;
-              </span>
+              <span className='cursor-pointer font-semibold'>&times;</span>
             </div>
           ))}
           {hashArr.length < 5 && (
@@ -127,4 +114,3 @@ export default function TagInput({
     </div>
   );
 }
-
