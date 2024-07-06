@@ -15,6 +15,7 @@ import { membersAtom } from "@/atoms/membersAtom";
 import { DashboardDetailResponse } from "@/lib/api/types/dashboards";
 import useFetchMembers from "@/hooks/useFetchMembers";
 import useFetchUser from "@/hooks/useFetchUser";
+import { dashboardTitleAtom } from "@/atoms/dashboardAtom";
 
 interface DashboardLayoutProps {
   children: ReactNode;
@@ -49,6 +50,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
   } = useFetchMembers(dashboardId || 0);
   const [user, setUser] = useAtom(userAtom);
   const [members, setMembers] = useAtom(membersAtom);
+  const [dashboardTitle] = useAtom(dashboardTitleAtom);
 
   useEffect(() => {
     if (userData) {
@@ -90,7 +92,7 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({
     return <div>데이터를 불러오는 중 오류가 발생했습니다</div>;
   }
 
-  const DashboardTitle = title || (dashboardData ? dashboardData.title : "");
+  const DashboardTitle = title || dashboardTitle;
   const createdByMe = dashboardData ? dashboardData.createdByMe : false;
 
   return (
