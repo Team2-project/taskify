@@ -5,6 +5,7 @@ import { AxiosRequestConfig } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateDashboardRequest, DashboardResponse } from "@/lib/api/types/dashboards";
 import fetcher from "@/lib/api/fetcher";
+import DashBoard from "../DashBoard/DashBoard";
 
 const AddDashboardButton = () => {
   const [modalOpen, setModalOpen] = useState(false)
@@ -13,11 +14,11 @@ const AddDashboardButton = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation<DashboardResponse, Error,CreateDashboardRequest>({
-    mutationFn: async (title) => {
+    mutationFn: async ({title, color}) => {
       const response = await fetcher<DashboardResponse>({
         url: "/dashboards",
         method: "POST",
-        data: title,
+        data: {title, color}
       });
       return response;
     },
@@ -41,12 +42,11 @@ const AddDashboardButton = () => {
     setInputValue(e.target.value)
   };
 
-
   return (
     <>
       <button onClick={()=>setModalOpen(true)} className='flex h-[20px] w-[276px] items-center justify-between max-desktop:w-[112px] max-tablet:w-[67px] max-tablet:justify-center'>
         <p className='text-[12px] max-tablet:hidden'>Dash Boards</p>
-        <img src='/icon/ic_add_dashboard.svg' className='h-[14px] w-[14px]'/>
+        <img src='/icon/ic_add_dashboard.svg' className='h-[20px] w-[20px]'/>
       </button>
       <CreateDashBoard
         isOpen={modalOpen}

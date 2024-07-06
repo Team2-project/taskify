@@ -9,13 +9,19 @@ interface ActionButtonProps {
   label: string;
   iconSrc: string;
   onClick?: () => void;
+  className?: string;
 }
 
-const ActionButton: FC<ActionButtonProps> = ({ label, iconSrc, onClick }) => {
+const ActionButton: FC<ActionButtonProps> = ({
+  label,
+  iconSrc,
+  onClick,
+  className,
+}) => {
   return (
     <button
       onClick={onClick}
-      className='relative inline-flex h-[30px] items-center justify-center rounded-lg border border-gray-30 p-3 tablet:h-[36px] tablet:p-4 desktop:h-[40px] desktop:p-4'
+      className={`relative inline-flex h-[30px] items-center justify-center rounded-lg border border-gray-30 p-3 tablet:h-[36px] tablet:p-4 desktop:h-[40px] desktop:p-4 ${className}`}
     >
       <div className='hidden tablet:inline-block desktop:inline-block'>
         <Image
