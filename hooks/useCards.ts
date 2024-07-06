@@ -28,33 +28,29 @@ const useCards = () => {
     });
   };
 
-  // 카드 생성 및 이미지 업로드
-  const createCard = async (cardData: CreateCardData, file?: File) => {
+  // 카드 생성 및 이미지 업로드 통합 로직
+  const createCard = async ({
+    cardData,
+    file,
+  }: {
+    cardData: CreateCardData;
+    file?: File;
+  }) => {
     let imageUrl = "";
-
-    // 이미지가 제공된 경우 먼저 업로드
     if (file) {
       const formData = new FormData();
       formData.append("image", file);
       const imgResponse = await fetcher<UploadCardImageResponse>({
-        url: `/cards/images/upload`, // 예시 URL, 실제 API 경로에 따라 수정 필요
+        url: `/cards/images/upload`,
         method: "POST",
         data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
       imageUrl = imgResponse.imageUrl;
     }
 
-    // 카드 데이터에 이미지 URL 추가
-    const completeCardData = {
-      ...cardData,
-      ...(imageUrl && { imageUrl }),
-    };
-
-    // 카드 생성 요청
-    await fetcher<FetchCardDetailsResponse>({
+    const completeCardData = { ...cardData, ...(imageUrl && { imageUrl }) };
+    await fetcher<void>({
       url: "/cards",
       method: "POST",
       data: completeCardData,
@@ -68,13 +64,12 @@ const useCards = () => {
     Error,
     { cardData: CreateCardData; file?: File }
   >({
-    mutationFn: ({ cardData, file }) => createCard(cardData, file),
+    mutationFn: createCard,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cardsData"] });
     },
     onError: (error) => {
       console.error("Error creating card with image:", error);
-      throw error;
     },
   });
 
