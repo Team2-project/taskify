@@ -8,14 +8,16 @@ import Button from "@/components/Button";
 import DeleteModal from "@/components/Modal/AlarmModal";
 import React, { useState } from "react";
 import fetcher from "@/lib/api/fetcher";
+import { useQueryClient } from "@tanstack/react-query";
 
 const DashboardEditPage = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { dashboardId } = router.query;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const dashboardIdNumber = Number(dashboardId); //router로 dashboardId가 넘어오기 때문에 string으로 변환됨
+  const dashboardIdNumber = Number(dashboardId);
 
   if (!dashboardId || isNaN(dashboardIdNumber)) {
     return <div>유효하지 않은 대시보드 ID</div>;
@@ -27,6 +29,9 @@ const DashboardEditPage = () => {
         url: `/dashboards/${dashboardId}`,
         method: "DELETE",
       });
+
+      // 대시보드 삭제 후 쿼리 무효화 및 다시 가져오기
+      await queryClient.invalidateQueries({ queryKey: ["DashboardsResponse"] });
 
       console.log(`${dashboardId} 삭제되었습니다.`);
       router.push("/mydashboard");

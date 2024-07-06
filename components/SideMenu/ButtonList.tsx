@@ -1,8 +1,5 @@
 import fetcher from "@/lib/api/fetcher";
-import {
-  DashboardsResponse,
-  DashboardResponse,
-} from "@/lib/api/types/dashboards";
+import { DashboardsResponse, DashboardResponse } from "@/lib/api/types/dashboards";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosRequestConfig } from "axios";
 import ColorChip from "@/public/chip/circle_small.svg";
