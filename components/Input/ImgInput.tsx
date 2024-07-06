@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from "react";
 
 interface ImgInputProps {
   subTitle: string;
-  handleImgChange: (file: File) => void;
+  handleImgChange: (file: File | null) => void;
 }
 
 export default function ImgInput({ subTitle, handleImgChange }: ImgInputProps) {
@@ -15,6 +15,9 @@ export default function ImgInput({ subTitle, handleImgChange }: ImgInputProps) {
       const imgUrl = URL.createObjectURL(file);
       setImgSrc(imgUrl);
       handleImgChange(file);
+    } else {
+      setImgSrc("");
+      handleImgChange(null);
     }
   };
 
