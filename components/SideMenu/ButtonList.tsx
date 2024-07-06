@@ -17,7 +17,8 @@ const getDashboard = (): DashboardResponse[] | null | JSX.Element => {
     url: "/dashboards",
     method: "GET",
     params: {
-      navigationMethod: "pagination",
+      navigationMethod: "infiniteScroll",
+      size: 40,
     },
   };
 
@@ -38,7 +39,6 @@ const getDashboard = (): DashboardResponse[] | null | JSX.Element => {
   }
 
   const dashboardArray = dashboardData.dashboards;
-
   return dashboardArray;
 };
 
