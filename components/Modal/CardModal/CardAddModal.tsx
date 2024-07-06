@@ -148,8 +148,8 @@ export default function CardAddModal({
   if (!isOpen) return null;
 
   return (
-    <div className='fixed inset-0 box-border h-screen w-screen border bg-black bg-opacity-50'>
-      <div className='fixed inset-0 m-auto h-[780px] max-w-[80vw] overflow-auto rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[750px] tablet:max-w-[50vw] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
+    <div className='fixed inset-0 z-50 box-border h-full w-full border bg-black bg-opacity-50'>
+      <div className='fixed inset-0 z-50 m-auto h-[869px] w-[327px] rounded-[8px] bg-white px-[20px] pb-[20px] pt-[28px] tablet:h-[907px] tablet:w-[506px] tablet:px-[28px] tablet:pb-[28px] tablet:pt-[32px]'>
         <h1 className='text-[20px] font-bold tablet:text-[24px]'>할 일 생성</h1>
         <form
           onSubmit={(e) => {

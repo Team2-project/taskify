@@ -16,7 +16,7 @@ interface ModalProps {
   onClose: () => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  buttonAction?: () => void;
+  buttonAction?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function BasicModal({
@@ -41,9 +41,9 @@ export default function BasicModal({
     setButtonDisabled(value.trim() === "");
   }, [value]);
 
-  const handleButtonClick = () => {
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (buttonAction) {
-      buttonAction();
+      buttonAction(e);
     }
     onClose();
   };

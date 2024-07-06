@@ -11,6 +11,7 @@ import {
 } from "@/lib/validation";
 import Modal from "@/components/Modal/AlarmModal";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 interface SignupData {
   email: string;
@@ -114,6 +115,13 @@ const SignupPage = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const accessToken = Cookies.get("accessToken");
+    if (accessToken) {
+      router.push("/mydashboard");
+    }
+  }, []);
 
   useEffect(() => {
     const emailValidation = validateEmail(email);
