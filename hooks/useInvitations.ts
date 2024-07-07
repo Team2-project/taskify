@@ -44,6 +44,7 @@ const useInvitations = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["InvitationsResponse"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboards"] }); // 대시보드 목록 쿼리 무효화
     },
   });
 
