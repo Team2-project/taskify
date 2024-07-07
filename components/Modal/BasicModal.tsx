@@ -65,38 +65,40 @@ export default function BasicModal({
             </div>
           )}
         </div>
-        <Form onSubmit={onSubmit}>
-          <Form.Field
-            label={subTitle}
-            type='text'
-            name={subTitle}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            width='w-287'
-            tabletWidth='tablet:w-498'
-            desktopWidth='desktop:w-498'
-            error={error}
-            showError={showError}
-          />
-        </Form>
+        <div className='flex flex-col space-y-4'>
+          <Form onSubmit={onSubmit}>
+            <Form.Field
+              label={subTitle}
+              type='text'
+              name={subTitle}
+              value={value}
+              onChange={onChange}
+              placeholder={placeholder}
+              width='w-287'
+              tabletWidth='tablet:w-498'
+              desktopWidth='desktop:w-498'
+              error={error}
+              showError={showError}
+            />
+          </Form>
 
-        <div className='mt-[36px] flex items-center gap-[11px] tablet:justify-end'>
-          <Button
-            onClick={handleCloseClick}
-            className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50 tablet:h-48 tablet:w-120'
-          >
-            {cancelButtonText}
-          </Button>
-          <Button
-            onClick={handleButtonClick}
-            className={`h-[42px] w-[138px] rounded-[8px] text-white tablet:h-48 tablet:w-120 ${
-              isButtonDisabled ? "bg-gray-40" : "bg-violet-20"
-            }`}
-            disabled={isButtonDisabled}
-          >
-            {createButtonText}
-          </Button>
+          <div className='mt-[36px] flex items-center gap-[11px] tablet:justify-end'>
+            <Button
+              onClick={handleCloseClick}
+              className='h-[42px] w-[138px] rounded-[8px] border-[1px] border-gray-30 bg-white text-gray-50 tablet:h-48 tablet:w-120'
+            >
+              {cancelButtonText}
+            </Button>
+            <Button
+              onClick={handleButtonClick}
+              className={`h-[42px] w-[138px] rounded-[8px] text-white tablet:h-48 tablet:w-120 ${
+                isButtonDisabled ? "bg-gray-40" : "bg-violet-20"
+              }`}
+              disabled={isButtonDisabled}
+            >
+              {createButtonText}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

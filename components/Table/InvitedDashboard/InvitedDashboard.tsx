@@ -1,14 +1,8 @@
 import { useState, ChangeEvent } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import fetcher from "@/lib/api/fetcher";
-import { AxiosRequestConfig } from "axios";
 import { ReactSVG } from "react-svg";
 import Image from "next/image";
-import {
-  InvitationsResponse,
-  InvitationResponse,
-} from "@/lib/api/types/invitations";
 import { useRouter } from "next/router";
+import useInvitations from "@/hooks/useInvitations"; //추가
 
 // 초대받은 대시보드가 없는 경우
 function NoInvitations() {
@@ -33,47 +27,15 @@ function NoInvitations() {
 
 export default function InvitedDashboard() {
   const [searchTitle, setSearchTitle] = useState("");
-
-  // 거절한 초대 대시보드
-  const [deletedInvitations, setDeletedInvitations] = useState<number[]>([]);
-
-  // 수락한 초대 대시보드
-  const [addedInvitations, setAddedInvitations] = useState<number[]>([]);
-
+  const [deletedInvitations, setDeletedInvitations] = useState<number[]>([]); // 거절한 초대 대시보드
+  const [addedInvitations, setAddedInvitations] = useState<number[]>([]); // 수락한 초대 대시보드
   const router = useRouter();
-
-  const queryClient = useQueryClient();
-
-  // 초대 응답 PUT Request
-  const mutation = useMutation({
-    mutationFn: async ({
-      inviteAccepted,
-      invitationId,
-    }: {
-      inviteAccepted: boolean;
-      invitationId: number;
-    }) => {
-      const response = await fetcher<InvitationResponse>({
-        url: `/invitations/${invitationId}`,
-        method: "PUT",
-        data: { inviteAccepted },
-      });
-      return response;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["InvitationsResponse"],
-      });
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const { invitations, isLoading, error, respondInvitation } = useInvitations();
 
   // 수락 버튼 클릭 -> inviteAccepted: true / 대시보드 목록에 추가
   const handleClickAcceptButton = async (invitationId: number) => {
     try {
-      mutation.mutate({ inviteAccepted: true, invitationId });
+      respondInvitation({ invitationId, response: { inviteAccepted: true } });
       setAddedInvitations((prevAdded) => [...prevAdded, invitationId]);
     } catch (error) {
       console.error("수락 오류");
@@ -83,50 +45,30 @@ export default function InvitedDashboard() {
   // 거절 버튼 클릭 -> inviteAccepted: false / 초대 목록에서 사라짐
   const handleClickRefuseButton = async (invitationId: number) => {
     try {
-      mutation.mutate({ inviteAccepted: false, invitationId });
+      respondInvitation({ invitationId, response: { inviteAccepted: false } });
       setDeletedInvitations((prevDeleted) => [...prevDeleted, invitationId]);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 초대받은 대시보드 GET Config
-  const invitationConfig: AxiosRequestConfig = {
-    url: `/invitations`,
-    method: "GET",
-  };
-
-  // 초대받은 대시보드 목록 가져오기
-  const {
-    data: invitationData,
-    error: invitationError,
-    isLoading: invitationLoading,
-  } = useQuery<InvitationsResponse>({
-    queryKey: ["InvitationsResponse"],
-    queryFn: () => fetcher<InvitationsResponse>(invitationConfig),
-  });
-
   // 검색 - input
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchTitle(event.target.value);
   };
-
-  if (invitationLoading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
-  if (invitationError || !invitationData) {
+  if (error || !invitations) {
     return null;
   }
 
-  // 초대받은 대시보드 목록
-  const invitationArray = invitationData.invitations;
-
   // 거절한 것 제외한 초대받은 대시보드 목록
-  const filteredDeletedInvitation = invitationArray.filter(
+  const filteredDeletedInvitation = invitations.filter(
     (invitation) => !deletedInvitations.includes(invitation.id),
   );
 
-  // 검색 결과 fiter 하기
+  // 검색 결과 filter 하기
   const getFilteredInvitations = () => {
     if (searchTitle === "") {
       return filteredDeletedInvitation;
@@ -144,10 +86,10 @@ export default function InvitedDashboard() {
   const Invitations = () => {
     return filteredInvitations.map((invitation) => (
       <tbody className='tablet:w-full tablet:table-fixed'>
-      <tr
-        key={invitation.id}
-        className='w-full border-b-[1px] border-gray-30 tablet:table-row tablet:h-[70px]'
-      >
+        <tr
+          key={invitation.id}
+          className='w-full border-b-[1px] border-gray-30 tablet:table-row tablet:h-[70px]'
+        >
           <td className='mb-[10px] mt-[16px] flex text-[14px] text-black-20 tablet:table-cell tablet:text-[16px]'>
             <p className='mr-[28px] text-[14px] text-gray-40 tablet:hidden'>
               이름
@@ -183,7 +125,7 @@ export default function InvitedDashboard() {
 
   return (
     <div>
-      {invitationArray.length === 0 ? (
+      {invitations.length === 0 ? (
         <NoInvitations />
       ) : (
         <section className='mx-[24px] my-[24px] box-border max-w-[1022px] rounded-md bg-white px-[16px] tablet:mx-[40px] desktop:ml-[40px]'>
