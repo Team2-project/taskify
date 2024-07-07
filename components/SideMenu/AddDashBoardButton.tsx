@@ -6,21 +6,24 @@ const AddDashboardButton = () => {
 
   return (
     <>
+      <div className='relative'>
+        <CreateDashBoardModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      </div>
       <button
         onClick={() => setModalOpen(true)}
         className='flex h-[20px] w-[276px] items-center justify-between max-desktop:w-[112px] max-tablet:w-[67px] max-tablet:justify-center'
       >
-        <p className='text-[12px] max-tablet:hidden'>Dash Boards</p>
+        <p className='text-[14px] max-tablet:hidden'>Dash Boards</p>
+
         <img
           src='/icon/ic_add_dashboard.svg'
           className='h-[20px] w-[20px]'
           alt='Dashboard'
         />
       </button>
-      <CreateDashBoardModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-      />
     </>
   );
 };
