@@ -17,6 +17,10 @@ import {
 } from "@/lib/api/types/cards";
 import { UploadCardImageResponse } from "@/lib/api/types/columns";
 
+type DeleteCardContext = {
+  onSuccess?: () => void;
+};
+
 const useCards = () => {
   const queryClient = useQueryClient();
 
@@ -125,16 +129,24 @@ const useCards = () => {
   });
 
   // 카드 삭제
-  const deleteCard = useMutation<{ message: string }, Error, number>({
+  const deleteCard = useMutation<
+    { message: string },
+    Error,
+    number,
+    DeleteCardContext
+  >({
     mutationFn: async (cardId) => {
       return await fetcher<{ message: string }>({
         url: `/cards/${cardId}`,
         method: "DELETE",
       });
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables, context) => {
       queryClient.invalidateQueries({ queryKey: ["cardDetails", variables] });
       queryClient.invalidateQueries({ queryKey: ["cardsData"] });
+      if (context?.onSuccess) {
+        context.onSuccess(); // 성공 시 추가 작업을 수행하는 함수 호출
+      }
     },
     onError: (error) => {
       console.error("Failed to delete card", error);
