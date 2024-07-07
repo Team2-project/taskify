@@ -3,6 +3,7 @@
 */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import fetcher from "@/lib/api/fetcher";
+import { AxiosRequestConfig } from "axios";
 import {
   InvitationsRequest,
   InvitationsResponse,
@@ -13,69 +14,44 @@ import {
 const useInvitations = () => {
   const queryClient = useQueryClient();
 
-  // 초대 목록 조회
-  const fetchInvitations = async (
-    params: InvitationsRequest,
-  ): Promise<InvitationsResponse> => {
-    try {
-      return await fetcher<InvitationsResponse>({
-        url: "/invitations",
-        method: "GET",
-        params,
-      });
-    } catch (error) {
-      throw new Error("Failed to fetch invitations");
-    }
+  // 초대받은 대시보드 목록 가져오기
+  const fetchInvitations = async (): Promise<InvitationsResponse> => {
+    const config: AxiosRequestConfig = {
+      url: `/invitations`,
+      method: "GET",
+    };
+    return fetcher<InvitationsResponse>(config);
   };
 
-  const queryKey = ["invitations"];
-  const initialData = queryClient.getQueryData<InvitationsResponse>(queryKey);
-
-  const { data, error, isLoading } = useQuery<InvitationsResponse, Error>({
-    queryKey,
-    queryFn: () => fetchInvitations({}),
-    initialData,
+  const { data, error, isLoading } = useQuery<InvitationsResponse>({
+    queryKey: ["InvitationsResponse"],
+    queryFn: fetchInvitations,
   });
 
-  const displayData = isLoading && initialData ? initialData : data;
-
-  // 초대 응답
-  const respondToInvitation = async (
-    invitationId: number,
-    response: InvitationResponseRequest,
-  ): Promise<InvitationResponse> => {
-    try {
-      return await fetcher<InvitationResponse>({
-        url: `/invitations/${invitationId}`,
-        method: "PUT",
-        data: response,
-      });
-    } catch (error) {
-      throw new Error("Failed to respond to invitation");
-    }
-  };
-
-  const { mutate: respondInvitation } = useMutation<
+  // 초대 응답 mutation
+  const mutation = useMutation<
     InvitationResponse,
     Error,
     { invitationId: number; response: InvitationResponseRequest }
   >({
-    mutationFn: ({ invitationId, response }) =>
-      respondToInvitation(invitationId, response),
-    onSuccess: () => {
-      // 초대 응답 후 초대 목록 쿼리를 무효화하여 최신 데이터로 갱신
-      queryClient.invalidateQueries({ queryKey: ["invitations"] });
+    mutationFn: async ({ invitationId, response }) => {
+      const config: AxiosRequestConfig = {
+        url: `/invitations/${invitationId}`,
+        method: "PUT",
+        data: response,
+      };
+      return fetcher<InvitationResponse>(config);
     },
-    onError: (error) => {
-      console.error("Respond to invitation failed:", error);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["InvitationsResponse"] });
     },
   });
 
   return {
-    invitations: displayData?.invitations,
+    invitations: data?.invitations || [],
     isLoading,
     error,
-    respondInvitation,
+    respondInvitation: mutation.mutate,
   };
 };
 
