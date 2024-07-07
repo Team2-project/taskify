@@ -1,14 +1,12 @@
 /*
   CardDetailsModal
 */
-
 import { FC, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import useCardDetailsModal from "./hooks/useCardDetailsModal";
 import Header from "./components/Header";
 import Body from "./components/Body";
 import CardEditModal from "../CardModal/CardEditModal";
-import useCards from "@/hooks/useCards";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -25,6 +23,7 @@ export interface CardDetailsModalProps extends ModalProps {
   columnId: number;
   onSuccess: () => void;
   refetchColumns: () => void;
+  onDelete: (cardId: number) => void; // 추가된 부분
 }
 
 const CardDetailsModal: FC<CardDetailsModalProps> = ({
@@ -39,11 +38,11 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
   columnId,
   onSuccess,
   refetchColumns,
+  onDelete, // 추가된 부분
 }) => {
   const queryClient = useQueryClient();
   const { modalIsOpen, isLoading, error, cardDetails, refetch } =
     useCardDetailsModal(isOpen, cardId);
-  const { deleteCard } = useCards();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleSuccess = () => {
@@ -58,14 +57,9 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
     setIsEditModalOpen(true);
   };
 
-  const handleDelete = async () => {
-    try {
-      await deleteCard.mutateAsync(cardId);
-      onClose(); // CardDetailsModal 닫기
-      handleSuccess(); // 성공 시 데이터 갱신
-    } catch (error) {
-      console.error("Failed to delete card:", error);
-    }
+  const handleDelete = () => {
+    onDelete(cardId); // 추가된 부분: onDelete 함수 호출
+    onClose(); // CardDetailsModal 닫기
   };
 
   return (
@@ -76,7 +70,7 @@ const CardDetailsModal: FC<CardDetailsModalProps> = ({
           cardId={cardId}
           dashboardId={dashboardId}
           onEdit={handleEdit}
-          onDelete={handleDelete}
+          onDelete={handleDelete} // 수정된 부분
           onClose={onClose}
         />
         <Body

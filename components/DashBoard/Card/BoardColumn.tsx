@@ -1,3 +1,4 @@
+// BoardColumn.tsx
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Card from "./BoardCard";
@@ -115,6 +116,12 @@ const BoardColumn: React.FC<Props> = ({
     refetchColumns(); // 추가
   };
 
+  const handleDelete = (cardId: number) => {
+    // 여기에 카드 삭제 로직 추가
+    console.log(`Card ${cardId} deleted`);
+    handleCloseCardModal(); // CardDetailsModal 닫기
+  };
+
   return (
     <div className='min-w-[283px] border-y border-gray-20 desktop:w-354 desktop:min-w-[354px] desktop:border-x desktop:border-y-0'>
       <div className='flex h-22 items-center justify-between px-[15px] pb-[10px] pt-[25px]'>
@@ -174,6 +181,7 @@ const BoardColumn: React.FC<Props> = ({
           dashboardId={numDashboardId}
           onSuccess={handleSuccess}
           refetchColumns={refetchColumns}
+          onDelete={handleDelete} // 추가된 부분
         />
       )}
       <ChangeColumn

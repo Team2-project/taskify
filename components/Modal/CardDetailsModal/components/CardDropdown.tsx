@@ -1,8 +1,6 @@
 import { FC, useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import fetcher from "@/lib/api/fetcher";
-import { useRouter } from "next/router";
+import useCards from "@/hooks/useCards";
 import ResModal from "@/components/Modal/ResModal";
 
 interface CardDropdownProps {
@@ -21,8 +19,7 @@ const CardDropdown: FC<CardDropdownProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const queryClient = useQueryClient();
-  const router = useRouter();
+  const { deleteCard } = useCards();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -41,26 +38,7 @@ const CardDropdown: FC<CardDropdownProps> = ({
     };
   }, []);
 
-  const deleteMutation = useMutation<void, Error>({
-    mutationFn: async () => {
-      await fetcher({
-        url: `cards/${cardId}`,
-        method: "DELETE",
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["cards", dashboardId],
-      });
-      onDelete(); // CardDetailsModal을 닫는 콜백 호출
-      router.replace(`/dashboard/${dashboardId}`); // 페이지를 다시 로드하여 최신 데이터를 가져옴
-    },
-    onError: (error) => {
-      console.error("Failed to delete card", error);
-    },
-  });
-
-  const handleDelete = () => {
+  const handleDeleteClick = () => {
     setIsModalOpen(true);
   };
 
@@ -69,7 +47,11 @@ const CardDropdown: FC<CardDropdownProps> = ({
   };
 
   const handleModalDelete = async () => {
-    await deleteMutation.mutateAsync(); // 삭제 요청
+    await deleteCard.mutateAsync(cardId, {
+      onSuccess: () => {
+        onDelete(); // CardDetailsModal을 닫는 콜백 호출
+      },
+    });
   };
 
   const handleEdit = () => {
@@ -116,7 +98,7 @@ const CardDropdown: FC<CardDropdownProps> = ({
           <div>
             <li className='p-[8px]'>
               <button
-                onClick={handleDelete}
+                onClick={handleDeleteClick}
                 className='focus:bg-purple-bg w-full rounded-[4px] px-4 py-2 text-left text-center hover:bg-purple-10 hover:text-purple focus:outline-none'
               >
                 삭제하기
